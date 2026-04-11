@@ -47,4 +47,22 @@ class UserRepository extends Repository {
             $user->getRole()
         ]);
     }
+
+    // Retrieves user profile details (name, bio, avatar) from user_details table
+    public function getUserDetails(int $userId): ?array {
+        $stmt = $this->database->prepare('
+            SELECT * FROM user_details WHERE user_id = :userId
+        ');
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $details = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // If the user has not yet completed their profile, we return null
+        if (!$details) {
+            return null;
+        }
+
+        return $details;
+    }
 }

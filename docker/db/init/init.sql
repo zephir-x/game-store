@@ -121,7 +121,7 @@ INSERT INTO users (username, email, password_hash, role)
 VALUES ('admin', 'admin@gmail.com', '$2y$10$il9iJULRoOJWqY4L9PmOGeL32WJnLdPYWjtWtS3KnxWBXxWK6dQnG', 'ADMIN');
 
 INSERT INTO user_details (user_id, name, surname, bio) 
-VALUES (1, 'Main', 'Administrator', 'I am the owner of GameNest.');
+VALUES (1, 'Main', 'Administrator', 'I am the owner of GameNest');
 
 -- A few games to start with
 INSERT INTO games (title, description, category, price, specification, graphics) VALUES 

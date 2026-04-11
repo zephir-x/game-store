@@ -1,25 +1,36 @@
 <?php
 
 require_once 'AppController.php';
+require_once __DIR__ . '/../repository/UserRepository.php';
+require_once __DIR__ . '/../repository/LibraryRepository.php';
 
 class DashboardController extends AppController {
-    
+    private UserRepository $userRepository;
+    private LibraryRepository $libraryRepository;
+
+    public function __construct() {
+        $this->userRepository = new UserRepository();
+        $this->libraryRepository = new LibraryRepository();
+    }
+
     // Main dashboard view handler
     public function index($id = null) {
         // Path Security - kicks out non-logged-in users to /login
         $this->checkAuth();
 
-        // Since we passed checkAuth, this means the user is logged in - we can safely retrieve their data from the session
-        $data = [
-            "username" => $_SESSION['username'],
-            "role" => $_SESSION['user_role'],
-            "selectedId" => $id
-        ];
+        $userId = $_SESSION['user_id'];
+
+        // Downloading data
+        $userDetails = $this->userRepository->getUserDetails($userId);
+        $userLibrary = $this->libraryRepository->getUserLibrary($userId);
 
         // Render dashboard view with passed variables
         return $this->render("dashboard", [
-            "title" => "Dashboard",
-            "data" => $data
+            "title" => "Profile & Library - GameNest",
+            "username" => $_SESSION['username'],
+            "role" => $_SESSION['user_role'],
+            "details" => $userDetails,
+            "library" => $userLibrary
         ]);
     }
 }
