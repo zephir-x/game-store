@@ -118,10 +118,10 @@ GROUP BY g.id, g.title, g.average_rating;
 
 -- Start by adding an admin (the password is "admin123" hashed with the BCRYPT algorithm)
 INSERT INTO users (username, email, password_hash, role) 
-VALUES ('admin', 'admin@gamenest.com', '$2y$10$Kq1Z.jA2U6bN7M.XvT6/u.f5xV.r5i.YgX4.r.r/f.r.r.r.r.r.r', 'ADMIN');
+VALUES ('admin', 'admin@gmail.com', '$2y$10$Kq1Z.jA2U6bN7M.XvT6/u.f5xV.r5i.YgX4.r.r/f.r.r.r.r.r.r', 'ADMIN');
 
 INSERT INTO user_details (user_id, name, surname, bio) 
-VALUES (1, 'Główny', 'Administrator', 'Zarządzam GameNest!');
+VALUES (1, 'Main', 'Administrator', 'I am the owner of GameNest.');
 
 -- A few games to start with
 INSERT INTO games (title, description, category, price, specification, graphics) VALUES 

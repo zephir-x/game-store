@@ -11,6 +11,19 @@ class AppController {
         return $_SERVER["REQUEST_METHOD"] === 'POST';
     }
 
+    // Checks if the user is authenticated - if not, redirects them to the login page
+    protected function checkAuth(): void {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        // If user_id is not present in session, they are not logged in
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit();
+        }
+    }
+
     // Render view template with optional variables
     protected function render(string $template = null, array $variables = []) {
         $templatePath = 'public/views/' . $template . '.html';

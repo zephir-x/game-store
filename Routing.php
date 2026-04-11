@@ -13,6 +13,14 @@ class Routing {
             "controller" => "SecurityController",
             "action" => "login"
         ],
+        "register" => [
+            "controller" => "SecurityController",
+            "action" => "register"
+        ],
+        "logout" => [
+            "controller" => "SecurityController",
+            "action" => "logout"
+        ],
         "dashboard" => [
             "controller" => "DashboardController",
             "action" => "index"
@@ -20,7 +28,7 @@ class Routing {
         "" => [
             "controller" => "SecurityController",
             "action" => "login"
-        ],
+        ]
     ];
 
     // Return existing or create new controller instance

@@ -2,24 +2,25 @@
 <html lang="en">
   <head>
     <?php include __DIR__ . '/partials/head.html'; ?>
-    <title>LOGIN</title>
+    <title>REGISTER</title>
   </head>
   <body>
     <div class="container">
-        <h1>LOGIN</h1>
-        
+        <h1>REGISTER</h1>
+
         <?php if(isset($messages)): ?>
             <?php foreach($messages as $message): ?>
                 <div style="color: red;"><?= $message ?></div>
             <?php endforeach; ?>
         <?php endif; ?>
 
-        <form action="/login" method="POST">
+        <form action="/register" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
             <input type="email" name="email" placeholder="example@gmail.com" required>
             <input type="password" name="password" placeholder="password" required>
-            <button type="submit">Login</button>
+            <button type="submit">Register</button>
         </form>
-        <p>Don't have an account? <a href="/register">Register here</a></p>
+        <p>Already have an account? <a href="/login">Login here</a></p>
     </div>
   </body>
 </html>
