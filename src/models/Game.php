@@ -9,9 +9,10 @@ class Game {
     private float $price;
     private string $graphics;
     private float $averageRating;
+    private ?string $specification;
 
     // Game constructor
-    public function __construct(int $id, string $title, string $description, string $category, float $price, string $graphics, float $averageRating) {
+    public function __construct(int $id, string $title, string $description, string $category, float $price, string $graphics, float $averageRating, ?string $specification = null) {
         $this->id = $id;
         $this->title = $title;
         $this->description = $description;
@@ -19,6 +20,7 @@ class Game {
         $this->price = $price;
         $this->graphics = $graphics;
         $this->averageRating = $averageRating;
+        $this->specification = $specification;
     }
 
     // Getters
@@ -29,4 +31,5 @@ class Game {
     public function getPrice(): float { return $this->price; }
     public function getGraphics(): string { return $this->graphics; }
     public function getAverageRating(): float { return $this->averageRating; }
+    public function getSpecification(): ?string { return $this->specification; }
 }

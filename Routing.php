@@ -3,6 +3,7 @@
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/DashboardController.php';
 require_once 'src/controllers/StoreController.php';
+require_once 'src/controllers/GameController.php';
 
 class Routing {
     // Store controller instances (Singleton-like behavior)
@@ -25,6 +26,14 @@ class Routing {
         "dashboard" => [
             "controller" => "DashboardController",
             "action" => "index"
+        ],
+        "game" => [
+            "controller" => "GameController",
+            "action" => "show"
+        ],
+        "buy" => [
+            "controller" => "GameController",
+            "action" => "buy"
         ],
         "" => [
             "controller" => "StoreController",

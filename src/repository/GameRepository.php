@@ -21,10 +21,35 @@ class GameRepository extends Repository {
                 $game['category'],
                 (float)$game['price'],
                 $game['graphics'],
-                (float)$game['average_rating']
+                (float)$game['average_rating'],
+                $game['specification']
             );
         }
 
         return $result;
+    }
+
+    // Retrieves a single game by its ID.
+    public function getGameById(int $id): ?Game {
+        $stmt = $this->database->prepare('SELECT * FROM games WHERE id = :id');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $game = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$game) {
+            return null;
+        }
+
+        return new Game(
+            $game['id'],
+            $game['title'],
+            $game['description'],
+            $game['category'],
+            (float)$game['price'],
+            $game['graphics'],
+            (float)$game['average_rating'],
+            $game['specification']
+        );
     }
 }

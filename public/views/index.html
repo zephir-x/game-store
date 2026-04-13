@@ -14,7 +14,7 @@
         <div class="game-grid">
             <?php foreach($games as $game): ?>
                 <div class="game-card">
-                    <h2><?= htmlspecialchars($game->getTitle()); ?></h2>
+                    <h2><a href="/game/<?= $game->getId() ?>" style="color: inherit; text-decoration: none;"><?= htmlspecialchars($game->getTitle()); ?></a></h2>
                     <div class="game-category"><?= htmlspecialchars($game->getCategory()); ?></div>
                     <p><?= htmlspecialchars($game->getDescription()); ?></p>
                     
