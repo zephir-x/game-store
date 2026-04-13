@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <?php include __DIR__ . '/partials/head.html'; ?>
+    <title><?= $title; ?></title>
+  </head>
+  <body>
+    <?php include __DIR__ . '/partials/nav.html'; ?>
+    
+    <div class="container layout">
+      <main>
+        <h2><i class="fa-solid fa-layer-group"></i> My Library (<?= count($library) ?>)</h2>
+        
+        <?php if(empty($library)): ?>
+            <p class="text-muted">Your library is empty. Go to the <a href="/">Store</a> to add some games!</p>
+        <?php else: ?>
+            <div class="game-grid">
+                <?php foreach($library as $game): ?>
+                    <div class="game-card">
+                        <h2><a href="/game/<?= $game['game_id'] ?>" style="color: inherit; text-decoration: none;"><?= htmlspecialchars($game['title']); ?></a></h2>
+                        <div class="game-category"><?= htmlspecialchars($game['category']); ?></div>
+                        
+                        <div class="game-price-row">
+                            <span class="text-muted" style="font-size: 0.85rem;">Added: <?= date('d M Y', strtotime($game['purchased_at'])) ?></span>
+                            <button>Play</button>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+      </main>
+    </div>
+  </body>
+</html>

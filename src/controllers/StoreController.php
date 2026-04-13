@@ -16,7 +16,7 @@ class StoreController extends AppController {
 
         // We are passing them to the view
         return $this->render("index", [
-            "title" => "GameNest - Store",
+            "title" => "Store - GameNest",
             "games" => $games
         ]);
     }

@@ -1,9 +1,11 @@
 <?php
 
+// Central routing class responsible for directing HTTP requests to appropriate controllers and actions
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/DashboardController.php';
 require_once 'src/controllers/StoreController.php';
 require_once 'src/controllers/GameController.php';
+require_once 'src/controllers/LibraryController.php';
 
 class Routing {
     // Store controller instances (Singleton-like behavior)
@@ -27,6 +29,10 @@ class Routing {
             "controller" => "DashboardController",
             "action" => "index"
         ],
+        "library" => [
+            "controller" => "LibraryController",
+            "action" => "index"
+        ],
         "game" => [
             "controller" => "GameController",
             "action" => "show"
@@ -34,6 +40,10 @@ class Routing {
         "buy" => [
             "controller" => "GameController",
             "action" => "buy"
+        ],
+        "add-review" => [
+            "controller" => "GameController",
+            "action" => "addReview"
         ],
         "" => [
             "controller" => "StoreController",

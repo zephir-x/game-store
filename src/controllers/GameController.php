@@ -3,14 +3,17 @@
 require_once 'AppController.php';
 require_once __DIR__ . '/../repository/GameRepository.php';
 require_once __DIR__ . '/../repository/LibraryRepository.php';
+require_once __DIR__ . '/../repository/ReviewRepository.php';
 
 class GameController extends AppController {
     private GameRepository $gameRepository;
     private LibraryRepository $libraryRepository;
+    private ReviewRepository $reviewRepository;
 
     public function __construct() {
         $this->gameRepository = new GameRepository();
         $this->libraryRepository = new LibraryRepository();
+        $this->reviewRepository = new ReviewRepository();
     }
 
     // Displaying the game details page (e.g., /game/1)
@@ -27,16 +30,50 @@ class GameController extends AppController {
 
         // We check if the user is logged in and if he already owns the game
         $isOwned = false;
+        $hasReviewed = false;
+
         if (session_status() === PHP_SESSION_NONE) session_start();
+
         if (isset($_SESSION['user_id'])) {
-            $isOwned = $this->libraryRepository->isGameOwned($_SESSION['user_id'], $game->getId());
+            $userId = $_SESSION['user_id'];
+            $isOwned = $this->libraryRepository->isGameOwned($userId, $game->getId());
+            $hasReviewed = $this->reviewRepository->hasUserReviewed($userId, $game->getId());
         }
+
+        $reviews = $this->reviewRepository->getReviewsForGame($game->getId());
 
         return $this->render("game_details", [
             "title" => $game->getTitle() . " - GameNest",
             "game" => $game,
-            "isOwned" => $isOwned
+            "isOwned" => $isOwned,
+            "hasReviewed" => $hasReviewed,
+            "reviews" => $reviews
         ]);
+    }
+
+    // Classic review submission form
+    public function addReview() {
+        $this->checkAuth();
+
+        if (!$this->isPost()) {
+            header("Location: /");
+            exit();
+        }
+
+        $gameId = (int)$_POST['game_id'];
+        $rating = (int)$_POST['rating'];
+        $content = trim($_POST['content']);
+        $userId = $_SESSION['user_id'];
+
+        // Validation: whether the rating is 1-5, whether the player owns the game and whether they haven't rated it yet
+        if ($rating >= 1 && $rating <= 5 && $this->libraryRepository->isGameOwned($userId, $gameId) && !$this->reviewRepository->hasUserReviewed($userId, $gameId)) {
+            $review = new Review($userId, $gameId, $rating, $content);
+            $this->reviewRepository->addReview($review);
+        }
+
+        // Redirection back to the game page
+        header("Location: /game/" . $gameId);
+        exit();
     }
 
     // Endpoint for Fetch API (asynchronous addition to library)

@@ -6,11 +6,9 @@ require_once __DIR__ . '/../repository/LibraryRepository.php';
 
 class DashboardController extends AppController {
     private UserRepository $userRepository;
-    private LibraryRepository $libraryRepository;
 
     public function __construct() {
         $this->userRepository = new UserRepository();
-        $this->libraryRepository = new LibraryRepository();
     }
 
     // Main dashboard view handler
@@ -22,15 +20,13 @@ class DashboardController extends AppController {
 
         // Downloading data
         $userDetails = $this->userRepository->getUserDetails($userId);
-        $userLibrary = $this->libraryRepository->getUserLibrary($userId);
 
         // Render dashboard view with passed variables
         return $this->render("dashboard", [
-            "title" => "Profile & Library - GameNest",
+            "title" => "Profile - GameNest",
             "username" => $_SESSION['username'],
             "role" => $_SESSION['user_role'],
-            "details" => $userDetails,
-            "library" => $userLibrary
+            "details" => $userDetails
         ]);
     }
 }

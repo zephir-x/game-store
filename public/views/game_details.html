@@ -8,85 +8,101 @@
     <?php include __DIR__ . '/partials/nav.html'; ?>
     
     <div class="container layout">
-      <main style="max-width: 800px; margin: 0 auto;">
+      <main class="content-narrow">
         
-        <div style="background-color: #1e1e1e; padding: 40px; border-radius: 8px; margin-top: 20px;">
-            <h1 style="font-size: 2.5rem; margin-top: 0;"><?= htmlspecialchars($game->getTitle()); ?></h1>
-            <div class="game-category" style="margin-bottom: 20px;"><?= htmlspecialchars($game->getCategory()); ?></div>
+        <div class="game-details-wrapper">
+            <h1><?= htmlspecialchars($game->getTitle()); ?></h1>
+            <div class="game-category"><?= htmlspecialchars($game->getCategory()); ?></div>
             
-            <p style="font-size: 1.1rem; line-height: 1.6; color: #ccc;">
-                <?= htmlspecialchars($game->getDescription()); ?>
+            <p class="text-muted">
+                <?= nl2br(htmlspecialchars($game->getDescription())); ?>
             </p>
 
-            <div style="margin: 30px 0; padding: 20px; background: #2c2c2c; border-left: 4px solid #bb86fc;">
-                <h3 style="margin-top: 0;">System Requirements:</h3>
-                <p style="margin: 0; font-family: monospace; color: #03dac6;">
+            <div class="requirements-box">
+                <h3>System Requirements:</h3>
+                <p class="requirements-text">
                     <?= htmlspecialchars($game->getSpecification() ?? 'Not specified'); ?>
                 </p>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #444; padding-top: 20px;">
-                <span class="price" style="font-size: 1.5rem;"><?= number_format($game->getPrice(), 2); ?> PLN</span>
+            <div class="purchase-row">
+                <span class="price"><?= number_format($game->getPrice(), 2); ?> PLN</span>
                 
                 <div id="buy-section">
                     <?php if(!isset($_SESSION['user_id'])): ?>
-                        <a href="/login" style="color: #bb86fc;">Log in to add to library</a>
+                        <a href="/login">Log in to add to library</a>
                     <?php elseif($isOwned): ?>
-                        <button disabled style="background-color: #333; color: #888; cursor: not-allowed;">Already in Library</button>
+                        <button disabled class="btn-disabled">Already in Library</button>
                     <?php else: ?>
                         <button id="buy-button" onclick="buyGame('<?= $game->getId() ?>')">Add to Library</button>
                     <?php endif; ?>
                 </div>
                 
-                <span id="response-message" style="margin-left: 15px; font-weight: bold;"></span>
+                <span id="response-message"></span>
+            </div>
+        </div>
+
+        <div class="game-details-wrapper">
+            <h2>Community Reviews</h2>
+
+            <?php if(isset($_SESSION['user_id'])): ?>
+                <?php if($isOwned && !$hasReviewed): ?>
+                    <div class="review-form-box">
+                        <h3>Leave a Review</h3>
+                        <form action="/add-review" method="POST" class="clean-form">
+                            <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
+                            
+                            <div class="form-group">
+                                <label class="form-label">Rating (1-5):</label>
+                                <select name="rating" required class="form-input">
+                                    <option value="5">⭐⭐⭐⭐⭐ - Masterpiece</option>
+                                    <option value="4">⭐⭐⭐⭐ - Great</option>
+                                    <option value="3">⭐⭐⭐ - Good</option>
+                                    <option value="2">⭐⭐ - Poor</option>
+                                    <option value="1">⭐ - Terrible</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Comment:</label>
+                                <textarea name="content" required rows="4" class="form-input"></textarea>
+                            </div>
+                            
+                            <button type="submit">Submit Review</button>
+                        </form>
+                    </div>
+                <?php elseif($isOwned && $hasReviewed): ?>
+                    <p class="review-box-msg">You have already reviewed this game. Thank you!</p>
+                <?php else: ?>
+                    <p class="review-box-msg text-muted">You must own this game in your Library to leave a review.</p>
+                <?php endif; ?>
+            <?php else: ?>
+                <p class="review-box-msg text-muted"><a href="/login">Log in</a> and purchase the game to leave a review.</p>
+            <?php endif; ?>
+
+            <div>
+                <?php if(empty($reviews)): ?>
+                    <p class="text-muted" style="font-style: italic;">No reviews yet. Be the first to review this game!</p>
+                <?php else: ?>
+                    <?php foreach($reviews as $review): ?>
+                        <div class="review-item">
+                            <div class="review-header">
+                                <strong class="review-author"><i class="fa-solid fa-user"></i> <?= htmlspecialchars($review->getUsername()) ?></strong>
+                                <span class="review-stars">
+                                    <?= str_repeat('⭐', $review->getRating()) ?>
+                                </span>
+                            </div>
+                            <p class="text-muted">
+                                <?= nl2br(htmlspecialchars($review->getContent())) ?>
+                            </p>
+                            <small class="text-muted"><?= date('d F Y', strtotime($review->getCreatedAt())) ?></small>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
 
       </main>
     </div>
-
-    <script>
-        function buyGame(gameId) {
-            const button = document.getElementById('buy-button');
-            const messageSpan = document.getElementById('response-message');
-            
-            // Lock the button to prevent double-clicking
-            button.disabled = true;
-            button.innerText = "Processing...";
-
-            // We send an asynchronous POST request to the address /buy
-            fetch('/buy', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ gameId: gameId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // We change the interface after success (green message)
-                    button.style.backgroundColor = "#333";
-                    button.style.color = "#888";
-                    button.innerText = "In Library";
-                    messageSpan.style.color = "#03dac6";
-                    messageSpan.innerText = "Added successfully!";
-                } else {
-                    // Handling errors from the server
-                    button.disabled = false;
-                    button.innerText = "Add to Library";
-                    messageSpan.style.color = "red";
-                    messageSpan.innerText = data.error || "An error occurred";
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                button.disabled = false;
-                button.innerText = "Add to Library";
-                messageSpan.style.color = "red";
-                messageSpan.innerText = "Connection error";
-            });
-        }
-    </script>
   </body>
 </html>

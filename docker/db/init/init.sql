@@ -46,7 +46,7 @@ CREATE TABLE library (
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     game_id INTEGER REFERENCES games(id) ON DELETE CASCADE,
     purchased_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, game_id) -- Composite primary key (prevents duplicates)
+    PRIMARY KEY (user_id, game_id) -- composite primary key (prevents duplicates)
 );
 
 -- Review table (1:N ratio with users and games)
@@ -54,7 +54,7 @@ CREATE TABLE reviews (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     game_id INTEGER REFERENCES games(id) ON DELETE CASCADE,
-    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5), -- Scale 1-5
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5), -- scale 1-5
     content TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(user_id, game_id) -- User can only add one review per game
@@ -86,8 +86,8 @@ EXECUTE FUNCTION update_game_average_rating();
 
 -- Views
 
--- View 1: User Library Details (Join of 3 tables)
--- Ideal for displaying on the user's profile under the "Library" tab
+-- User Library Details (Join of 3 tables)
+-- For displaying on the user's profile under the "Library" tab
 CREATE OR REPLACE VIEW v_user_library_details AS
 SELECT 
     l.user_id,
@@ -100,8 +100,8 @@ SELECT
 FROM library l
 JOIN games g ON l.game_id = g.id;
 
--- View 2: Game Statistics (Join of 2 tables)
--- Ideal for the store - shows the number of reviews and the average rating
+-- Game Statistics (Join of 2 tables)
+-- For the store - shows the number of reviews and the average rating
 CREATE OR REPLACE VIEW v_game_statistics AS
 SELECT 
     g.id AS game_id,

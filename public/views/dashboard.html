@@ -7,55 +7,23 @@
   <body>
     <?php include __DIR__ . '/partials/nav.html'; ?>
     
-    <div class="container layout" style="flex-direction: column; gap: 40px;">
-      
-      <section style="background: #1e1e1e; padding: 30px; border-radius: 8px; margin-top: 40px; display: flex; gap: 30px; align-items: center;">
-        <div style="width: 120px; height: 120px; background: #333; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 3rem; color: #bb86fc;">
-            <i class="fa-solid fa-user-astronaut"></i>
-        </div>
+    <div class="container layout">
+      <section class="profile-section">
+        <div class="profile-avatar"><i class="fa-solid fa-user-astronaut"></i></div>
         
         <div>
-            <h1 style="margin: 0 0 10px 0; color: #e0e0e0;"><?= htmlspecialchars($username); ?> 
-                <?php if($role === 'ADMIN'): ?>
-                    <span style="font-size: 0.8rem; background: red; padding: 3px 8px; border-radius: 5px; vertical-align: middle;">ADMIN</span>
-                <?php endif; ?>
+            <h1><?= htmlspecialchars($username); ?> 
+                <?php if($role === 'ADMIN'): ?><span class="profile-badge">ADMIN</span><?php endif; ?>
             </h1>
             
             <?php if($details): ?>
-                <p style="color: #bbb; margin: 0 0 5px 0;">
-                    <strong>Name:</strong> <?= htmlspecialchars($details['name'] . ' ' . $details['surname']) ?>
-                </p>
-                <p style="color: #bbb; margin: 0; font-style: italic;">"<?= htmlspecialchars($details['bio']) ?>"</p>
+                <p class="text-muted"><strong>Name:</strong> <?= htmlspecialchars($details['name'] . ' ' . $details['surname']) ?></p>
+                <p class="text-muted">"<?= htmlspecialchars($details['bio']) ?>"</p>
             <?php else: ?>
-                <p style="color: #bbb;">Welcome to GameNest! You haven't set up your detailed profile yet.</p>
+                <p class="text-muted">Welcome! You haven't set up your detailed profile yet.</p>
             <?php endif; ?>
         </div>
       </section>
-
-      <section>
-        <h2><i class="fa-solid fa-layer-group"></i> My Library (<?= count($library) ?>)</h2>
-        
-        <?php if(empty($library)): ?>
-            <p style="color: #bbb;">Your library is empty. Go to the <a href="/" style="color: #bb86fc;">Store</a> to add some games!</p>
-        <?php else: ?>
-            <div class="game-grid">
-                <?php foreach($library as $game): ?>
-                    <div class="game-card" style="border-color: #03dac6;">
-                        <h2><?= htmlspecialchars($game['title']); ?></h2>
-                        <div class="game-category"><?= htmlspecialchars($game['category']); ?></div>
-                        
-                        <div class="game-price-row" style="margin-top: 15px;">
-                            <span style="color: #888; font-size: 0.85rem;">
-                                Added: <?= date('d M Y', strtotime($game['purchased_at'])) ?>
-                            </span>
-                            <button style="padding: 8px 15px; font-size: 0.9rem;">Play</button>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-      </section>
-
     </div>
   </body>
 </html>
