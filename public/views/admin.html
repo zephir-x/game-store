@@ -9,7 +9,7 @@
     <div class="container layout">
       <main>
         <h1><i class="fa-solid fa-hammer"></i> Admin Dashboard</h1>
-        <p class="text-muted">Manage platform users, games, and resources.</p>
+        <p class="text-muted">Manage platform users and games.</p>
 
         <div class="game-details-wrapper" style="padding: 20px;">
             <h2>Users Management</h2>
@@ -50,6 +50,49 @@
                                         
                                         <form action="/delete-user" method="POST" class="action-form" style="margin: 0;" onsubmit="return confirm('Are you sure you want to delete this user?');">
                                             <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                                            <button type="submit" class="btn-danger admin-action-element" style="border: none;"><i class="fa-solid fa-trash" style="margin-right: 5px;"></i> Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="game-details-wrapper" style="padding: 20px; margin-top: 40px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="margin: 0;">Games Management</h2>
+                <a href="/add-game" class="btn-outline admin-action-element" style="text-decoration: none; border-color: #bb86fc; color: #bb86fc;"><i class="fa-solid fa-plus" style="margin-right: 5px;"></i> Add New Game</a>
+            </div>
+            
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Rating</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($games as $game): ?>
+                            <tr>
+                                <td><?= $game->getId() ?></td>
+                                <td><strong><?= htmlspecialchars($game->getTitle()) ?></strong></td>
+                                <td><?= htmlspecialchars($game->getCategory()) ?></td>
+                                <td><?= number_format($game->getPrice(), 2) ?> PLN</td>
+                                <td><?= number_format($game->getAverageRating(), 2) ?> ⭐</td>
+                                <td>
+                                    <div style="display: flex; gap: 10px; align-items: center;">
+                                        <a href="/edit-game/<?= $game->getId() ?>" class="btn-outline admin-action-element" style="text-decoration: none;"><i class="fa-solid fa-pen" style="margin-right: 5px;"></i> Edit</a>
+                                        
+                                        <form action="/delete-game" method="POST" class="action-form" style="margin: 0;" onsubmit="return confirm('Are you sure you want to delete this game? All users will lose it from their libraries!');">
+                                            <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
                                             <button type="submit" class="btn-danger admin-action-element" style="border: none;"><i class="fa-solid fa-trash" style="margin-right: 5px;"></i> Delete</button>
                                         </form>
                                     </div>

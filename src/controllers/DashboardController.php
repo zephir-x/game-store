@@ -51,8 +51,14 @@ class DashboardController extends AppController {
             try {
                 $this->userRepository->updateFullProfile($userId, $data);
                 $_SESSION['username'] = $data['username']; 
-            } catch (Exception $e) {
-                // Database error
+                $_SESSION['success_message'] = "Profile updated successfully!"; // Sukces!
+            } catch (PDOException $e) {
+                // Code 23505 indicates a duplicate value (UNIQUE constraint)
+                if ($e->getCode() == 23505) {
+                    $_SESSION['error_message'] = "This email or username is already taken!";
+                } else {
+                    $_SESSION['error_message'] = "Failed to update profile. Please try again.";
+                }
             }
         }
         

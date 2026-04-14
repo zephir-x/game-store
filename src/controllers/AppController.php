@@ -19,6 +19,7 @@ class AppController {
 
         // If user_id is not present in session, they are not logged in
         if (!isset($_SESSION['user_id'])) {
+            $_SESSION['error_message'] = "You must be logged in to access this page.";
             header("Location: /login");
             exit();
         }
@@ -30,7 +31,8 @@ class AppController {
 
         if ($_SESSION['user_role'] !== 'ADMIN') {
             http_response_code(403);
-            die("403 Forbidden: You do not have permission to access this page."); 
+            $this->render('403', ['title' => '403 Forbidden']);
+            exit();
         }
     }
 

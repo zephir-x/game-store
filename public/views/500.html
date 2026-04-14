@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <?php include __DIR__ . '/partials/head.html'; ?>
+    <title><?= $title ?? '500 - Server Error' ?></title>
+  </head>
+  <body>
+    <?php include __DIR__ . '/partials/nav.html'; ?>
+    <div class="container layout" style="justify-content: center; align-items: center; text-align: center;">
+      <main>
+        <h1 style="font-size: 6rem; color: #cf6679; margin: 0;"><i class="fa-solid fa-server"></i> 500</h1>
+        <h2>Internal Server Error</h2>
+        <p class="text-muted">Something went terribly wrong on our end. Our engineers have been notified.</p>
+        <a href="/" class="btn-outline admin-action-element" style="text-decoration: none; margin-top: 20px;">Try Again Later</a>
+      </main>
+    </div>
+  </body>
+</html>

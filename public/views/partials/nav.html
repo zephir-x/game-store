@@ -35,4 +35,15 @@
       <?php endif; ?>
     </ul>
   </div>
+  <?php if(isset($_SESSION['success_message'])): ?>
+    <div class="container"><div class="alert alert-success">
+        <i class="fa-solid fa-circle-check"></i> <?= $_SESSION['success_message']; unset($_SESSION['success_message']); ?>
+    </div></div>
+  <?php endif; ?>
+
+  <?php if(isset($_SESSION['error_message'])): ?>
+    <div class="container"><div class="alert alert-error">
+        <i class="fa-solid fa-circle-exclamation"></i> <?= $_SESSION['error_message']; unset($_SESSION['error_message']); ?>
+    </div></div>
+  <?php endif; ?>
 </nav>

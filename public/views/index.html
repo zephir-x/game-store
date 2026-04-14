@@ -14,6 +14,10 @@
         <div class="game-grid">
             <?php foreach($games as $game): ?>
                 <div class="game-card">
+                    <a href="/game/<?= $game->getId() ?>">
+                        <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" class="game-cover" alt="<?= htmlspecialchars($game->getTitle()); ?>">
+                    </a>
+                    
                     <h2><a href="/game/<?= $game->getId() ?>" style="color: inherit; text-decoration: none;"><?= htmlspecialchars($game->getTitle()); ?></a></h2>
                     <div class="game-category"><?= htmlspecialchars($game->getCategory()); ?></div>
                     <p><?= htmlspecialchars($game->getDescription()); ?></p>
@@ -25,7 +29,6 @@
                 </div>
             <?php endforeach; ?>
         </div>
-
       </main>
     </div>
   </body>

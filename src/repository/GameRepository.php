@@ -52,4 +52,45 @@ class GameRepository extends Repository {
             $game['specification']
         );
     }
+
+    // Adds a new game to the database
+    public function addGame(Game $game): void {
+        $stmt = $this->database->prepare('
+            INSERT INTO games (title, description, category, price, graphics, specification)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ');
+        $stmt->execute([
+            $game->getTitle(),
+            $game->getDescription(),
+            $game->getCategory(),
+            $game->getPrice(),
+            $game->getGraphics(),
+            $game->getSpecification()
+        ]);
+    }
+
+    // Updates an existing game in the database
+    public function updateGame(Game $game): void {
+        $stmt = $this->database->prepare('
+            UPDATE games 
+            SET title = ?, description = ?, category = ?, price = ?, graphics = ?, specification = ?
+            WHERE id = ?
+        ');
+        $stmt->execute([
+            $game->getTitle(),
+            $game->getDescription(),
+            $game->getCategory(),
+            $game->getPrice(),
+            $game->getGraphics(),
+            $game->getSpecification(),
+            $game->getId()
+        ]);
+    }
+
+    // Deletes a game from the database
+    public function deleteGame(int $id): void {
+        $stmt = $this->database->prepare('DELETE FROM games WHERE id = :id');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
 }

@@ -62,13 +62,29 @@ class Routing {
             "controller" => "AdminController", 
             "action" => "updateUser"
         ],
+        "change-role" => [
+            "controller" => "AdminController", 
+            "action" => "changeRole"
+        ],
         "delete-user" => [
             "controller" => "AdminController", 
             "action" => "deleteUser"
         ],
-        "change-role" => [
+        "add-game" => [
             "controller" => "AdminController", 
-            "action" => "changeRole"
+            "action" => "addGame"
+        ],
+        "edit-game" => [
+            "controller" => "AdminController", 
+            "action" => "editGame"
+        ],
+        "save-game" => [
+            "controller" => "AdminController", 
+            "action" => "saveGame"
+        ],
+        "delete-game" => [
+            "controller" => "AdminController", 
+            "action" => "deleteGame"
         ],
         "" => [
             "controller" => "StoreController",
@@ -106,6 +122,8 @@ class Routing {
 
         } else {
             // Fallback 404 page
+            http_response_code(404);
+            $title = "404 - Page Not Found";
             include 'public/views/404.html';
         }
     }

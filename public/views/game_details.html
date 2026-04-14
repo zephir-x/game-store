@@ -11,6 +11,8 @@
       <main class="content-narrow">
         
         <div class="game-details-wrapper">
+            <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" class="game-details-cover" alt="<?= htmlspecialchars($game->getTitle()); ?>">
+
             <h1><?= htmlspecialchars($game->getTitle()); ?></h1>
             <div class="game-category"><?= htmlspecialchars($game->getCategory()); ?></div>
             

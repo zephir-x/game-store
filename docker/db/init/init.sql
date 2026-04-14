@@ -125,6 +125,6 @@ VALUES (1, 'Main', 'Administrator', 'I am the owner of GameNest', 'gaming-consol
 
 -- A few games to start with
 INSERT INTO games (title, description, category, price, specification, graphics) VALUES 
-('CyberStrike 2077', 'Futuristic RPG game.', 'RPG', 199.99, 'CPU: i7, RAM: 16GB, GPU: RTX 3060', 'cyberstrike.jpg'),
-('Witch Hunter 3', 'Epic fantasy game with an open world.', 'RPG', 99.50, 'CPU: i5, RAM: 8GB, GPU: GTX 1060', 'witchhunter.jpg'),
-('Space Marines', 'Futuristic FPS filled with action.', 'FPS', 120.00, 'CPU: i5, RAM: 8GB, GPU: GTX 1650', 'spacemarines.jpg');
+('CyberStrike 2077', 'Futuristic RPG game.', 'RPG', 199.99, 'CPU: i7, RAM: 16GB, GPU: RTX 3060', 'default.jpg'),
+('Witch Hunter 3', 'Epic fantasy game with an open world.', 'RPG', 99.50, 'CPU: i5, RAM: 8GB, GPU: GTX 1060', 'default.jpg'),
+('Space Marines', 'Futuristic FPS filled with action.', 'FPS', 120.00, 'CPU: i5, RAM: 8GB, GPU: GTX 1650', 'default.jpg');

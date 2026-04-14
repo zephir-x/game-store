@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <?php include __DIR__ . '/partials/head.html'; ?>
+    <title><?= $title; ?></title>
+  </head>
+  <body>
+    <?php include __DIR__ . '/partials/nav.html'; ?>
+    
+    <div class="container layout">
+      <section class="profile-section" style="flex-direction: column; align-items: flex-start; max-width: 800px; margin: 40px auto; width: 100%;">
+        <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 20px;">
+            <h2 style="margin: 0;"><i class="fa-solid fa-gamepad"></i> <?= $game ? 'Edit Game: ' . htmlspecialchars($game->getTitle()) : 'Add New Game' ?></h2>
+            <a href="/admin" class="btn-outline admin-action-element" style="text-decoration: none;"><i class="fa-solid fa-arrow-left" style="margin-right: 5px;"></i> Back</a>
+        </div>
+        
+        <form action="/save-game" method="POST" enctype="multipart/form-data" class="clean-form" style="width: 100%;">
+            
+            <input type="hidden" name="game_id" value="<?= $game ? $game->getId() : '' ?>">
+            <input type="hidden" name="existing_graphics" value="<?= $game ? htmlspecialchars($game->getGraphics()) : '' ?>">
+
+            <div style="display: flex; gap: 20px;">
+                <div class="form-group" style="flex: 2;">
+                    <label class="form-label">Game Title *</label>
+                    <input type="text" name="title" value="<?= $game ? htmlspecialchars($game->getTitle()) : '' ?>" class="form-input" required>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label class="form-label">Price (PLN) *</label>
+                    <input type="number" step="0.01" name="price" value="<?= $game ? $game->getPrice() : '' ?>" class="form-input" required>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px;">
+                <div class="form-group" style="flex: 1;">
+                    <label class="form-label">Category *</label>
+                    <select name="category" class="form-input" required>
+                        <option value="Action" <?= ($game && $game->getCategory() == 'Action') ? 'selected' : '' ?>>Action</option>
+                        <option value="RPG" <?= ($game && $game->getCategory() == 'RPG') ? 'selected' : '' ?>>RPG</option>
+                        <option value="Strategy" <?= ($game && $game->getCategory() == 'Strategy') ? 'selected' : '' ?>>Strategy</option>
+                        <option value="Adventure" <?= ($game && $game->getCategory() == 'Adventure') ? 'selected' : '' ?>>Adventure</option>
+                        <option value="Shooter" <?= ($game && $game->getCategory() == 'Shooter') ? 'selected' : '' ?>>Shooter</option>
+                        <option value="Indie" <?= ($game && $game->getCategory() == 'Indie') ? 'selected' : '' ?>>Indie</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" style="flex: 2;">
+                    <label class="form-label">Upload Cover Image (Leave empty to keep current)</label>
+                    <input type="file" name="graphics" accept="image/*" class="form-input" style="padding: 9px;">
+                    <?php if($game && $game->getGraphics()): ?>
+                        <small style="color: #00fc69; display: block; margin-top: 5px;">Current: <?= htmlspecialchars($game->getGraphics() ?: 'default.jpg') ?></small>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description *</label>
+                <textarea name="description" rows="4" class="form-input" required><?= $game ? htmlspecialchars($game->getDescription()) : '' ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">System Requirements (Specification)</label>
+                <textarea name="specification" rows="3" class="form-input"><?= $game ? htmlspecialchars($game->getSpecification() ?? '') : '' ?></textarea>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button type="submit" style="width: 100%;"><i class="fa-solid fa-floppy-disk" style="margin-right: 5px;"></i> <?= $game ? 'Update Game' : 'Save New Game' ?></button>
+            </div>
+        </form>
+      </section>
+    </div>
+  </body>
+</html>

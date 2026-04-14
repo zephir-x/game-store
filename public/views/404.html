@@ -1,10 +1,18 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
+  <head>
     <?php include __DIR__ . '/partials/head.html'; ?>
-    <title>404</title>
-</head>
-<body>
-    <h1>404</h1>
-</body>
+    <title><?= $title ?? '404 - Not Found' ?></title>
+  </head>
+  <body>
+    <?php include __DIR__ . '/partials/nav.html'; ?>
+    <div class="container layout" style="justify-content: center; align-items: center; text-align: center;">
+      <main>
+        <h1 style="font-size: 6rem; color: #cf6679; margin: 0;"><i class="fa-solid fa-ghost"></i> 404</h1>
+        <h2>Page Not Found</h2>
+        <p class="text-muted">The page you are looking for does not exist or has been moved.</p>
+        <a href="/" class="btn-outline admin-action-element" style="text-decoration: none; margin-top: 20px;">Return to Store</a>
+      </main>
+    </div>
+  </body>
 </html>
