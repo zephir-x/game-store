@@ -34,6 +34,29 @@ button:hover {
     background-color: #00cc55;
 }
 
+/* Centered Auth Pages (Login / Register) */
+.auth-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.auth-page-wrapper h1 {
+    margin-bottom: 25px;
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+.auth-page-wrapper p {
+    margin-top: 20px;
+    text-align: center;
+}
+
 /* Reset global form styles for inline table actions */
 form.action-form {
     display: block;

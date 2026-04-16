@@ -9,26 +9,32 @@
     
     <div class="container layout">
       <main>
-        <h1>Welcome to GameNest Store</h1>
-        
-        <div class="game-grid">
-            <?php foreach($games as $game): ?>
-                <a href="/game/<?= $game->getId() ?>" style="text-decoration: none; color: inherit; display: block;">
-                    <div class="game-card">
-                        <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" class="game-cover" alt="<?= htmlspecialchars($game->getTitle()); ?>">
-                        
-                        <h2><?= htmlspecialchars($game->getTitle()); ?></h2>
-                        <div class="game-category"><?= htmlspecialchars($game->getCategory()); ?></div>
-                        <p><?= htmlspecialchars($game->getDescription()); ?></p>
-                        
-                        <div class="game-price-row">
-                            <span class="price"><?= number_format($game->getPrice(), 2); ?> PLN</span>
-                            <span class="rating">⭐ <?= number_format($game->getAverageRating(), 2); ?></span>
-                        </div>
-                    </div>
-                </a>
-            <?php endforeach; ?>
-        </div>
+        <?php if(empty($games)): ?>
+            <div style="text-align: center; margin-top: 50px;">
+                <i class="fa-solid fa-ghost" style="font-size: 4rem; color: #555;"></i>
+                <h2 style="color: #888;">No games found matching "<?= $searchQuery ?>"</h2>
+                <p class="text-muted">Try a different title or clear your search.</p>
+            </div>
+        <?php else: ?>
+          <div class="game-grid">
+              <?php foreach($games as $game): ?>
+                  <a href="/game/<?= $game->getId() ?>" style="text-decoration: none; color: inherit; display: block;">
+                      <div class="game-card">
+                          <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" class="game-cover" alt="<?= htmlspecialchars($game->getTitle()); ?>">
+                          
+                          <h2><?= htmlspecialchars($game->getTitle()); ?></h2>
+                          <div class="game-category"><?= htmlspecialchars($game->getCategory()); ?></div>
+                          <p><?= htmlspecialchars($game->getDescription()); ?></p>
+                          
+                          <div class="game-price-row">
+                              <span class="price"><?= number_format($game->getPrice(), 2); ?> PLN</span>
+                              <span class="rating">⭐ <?= number_format($game->getAverageRating(), 2); ?></span>
+                          </div>
+                      </div>
+                  </a>
+              <?php endforeach; ?>
+          </div>
+        <?php endif; ?>
       </main>
     </div>
   </body>

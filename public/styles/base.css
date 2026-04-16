@@ -1,18 +1,32 @@
+/* Global variables */
+:root {
+    --bg-main: #121212;
+    --bg-card: #1e1e1e;
+    --bg-input: #2c2c2c;
+    --primary: #00fc69;
+    --primary-hover: #00cc55;
+    --error: #cf6679;
+    --success: #03dac6;
+    --text-main: #e0e0e0;
+    --text-muted: #888888;
+    --border-color: #333333;
+}
+
 /* Base - Dark theme */
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #121212;
-    color: #e0e0e0;
+    background-color: var(--bg-main);
+    color: var(--text-main);
 }
 
 h1, h2, h3 {
-    color: #00fc69;
+    color: var(--primary);
     font-weight: 700;
 }
 
 a {
-    color: #00fc69;
+    color: var(--primary);
     text-decoration: none;
 }
 

@@ -49,6 +49,83 @@ nav a:hover {
     text-decoration: none;
 }
 
+/* Global Search Bar in Navbar */
+.nav-search-wrapper {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    max-width: 450px;
+    margin: 0 20px;
+}
+
+/* We override global form styles */
+form.nav-search-form {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background-color: #121212;
+    border: 1px solid #333;
+    border-radius: 15px;
+    padding: 5px 5px 5px 15px;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    max-width: 100%;
+    box-shadow: none; 
+}
+
+.nav-search-form i {
+    color: #00fc69;
+}
+
+.nav-search-input {
+    flex-grow: 1;
+    border: none;
+    background: transparent;
+    color: #e0e0e0;
+    outline: none;
+    padding: 5px 0;
+    font-size: 0.95rem;
+}
+
+/* Unified buttons (Search / Clear) */
+.btn-search, .btn-clear {
+    height: 32px; 
+    padding: 0 16px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border: none;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-search {
+    background-color: #00fc69;
+    color: #121212;
+}
+
+.btn-search:hover {
+    background-color: #00cc55;
+}
+
+.btn-clear {
+    background-color: transparent;
+    color: #cf6679;
+    border: 1px solid #cf6679;
+}
+
+.btn-clear:hover {
+    background-color: #cf6679;
+    color: white;
+    text-decoration: none;
+}
+
 /* Containers */
 .container {
     max-width: 1200px;

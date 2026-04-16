@@ -6,14 +6,30 @@ require_once __DIR__ . '/../models/Game.php';
 // Handles all database operations related to the Game entity
 class GameRepository extends Repository {
     // Retrieves all games from the database
-    public function getGames(): array {
-        $stmt = $this->database->prepare('
+    public function getGames(?string $searchString = null): array {
+        $baseQuery = '
             SELECT g.id, g.title, g.description, g.category, g.price, g.graphics, g.specification, 
                    v.calculated_rating AS average_rating
             FROM games g
             LEFT JOIN v_game_statistics v ON g.id = v.game_id
-            ORDER BY g.title ASC
-        ');
+        ';
+
+        // If a search string is provided, add a condition to the SQL
+        if ($searchString) {
+            // ILIKE is a PostgreSQL-specific operator that ignores case
+            $baseQuery .= ' WHERE g.title ILIKE :search';
+        }
+
+        $baseQuery .= ' ORDER BY g.title ASC';
+
+        $stmt = $this->database->prepare($baseQuery);
+
+        // If there is a phrase, we bind it with the percent symbol (it searches for a string of characters anywhere)
+        if ($searchString) {
+            $searchParam = '%' . $searchString . '%';
+            $stmt->bindParam(':search', $searchParam, PDO::PARAM_STR);
+        }
+
         $stmt->execute();
 
         $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -25,9 +41,9 @@ class GameRepository extends Repository {
                 $game['title'],
                 $game['description'],
                 $game['category'],
-                $game['price'],
+                (float)$game['price'],
                 $game['graphics'],
-                (float)$game['average_rating'],
+                (float)($game['average_rating'] ?? 0),
                 $game['specification']
             );
         }

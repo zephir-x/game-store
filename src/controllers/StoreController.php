@@ -11,13 +11,16 @@ class StoreController extends AppController {
     }
 
     public function index() {
-        // We are extracting games from the database
-        $games = $this->gameRepository->getGames();
-
-        // We are passing them to the view
+        // Protection against XSS attacks - if it exists, we clear the string
+        $searchQuery = isset($_GET['search']) ? htmlspecialchars(trim($_GET['search'])) : null;
+        
+        // Retrieve games, passing our cleaned string (or null)
+        $games = $this->gameRepository->getGames($searchQuery);
+        
         return $this->render("store", [
-            "title" => "Store - GameNest",
-            "games" => $games
+            "title" => "GameNest - Store",
+            "games" => $games,
+            "searchQuery" => $searchQuery // we pass this to the view so it doesn't disappear from the bar
         ]);
     }
 }
