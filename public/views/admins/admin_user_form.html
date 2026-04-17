@@ -7,68 +7,78 @@
   <body>
     <?php include __DIR__ . '/../partials/nav.html'; ?>
     
-    <div class="container layout">
-      <section class="profile-section" style="flex-direction: column; align-items: flex-start; max-width: 800px; margin: 40px auto; width: 100%;">
-        <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 20px;">
-            <h2 style="margin: 0;"><i class="fa-solid fa-user-pen"></i> Edit User: <span style="color: #e0e0e0;"><?= htmlspecialchars($editedUser->getUsername()) ?></span></h2>
-            <a href="/admin" class="btn-outline" style="padding: 8px 15px; text-decoration: none;"><i class="fa-solid fa-arrow-left"></i> Back to Admin</a>
+    <main class="store-layout">
+        <div class="admin-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>
+                <i class="fa-solid fa-user-pen" style="color: var(--primary); margin-right: 10px;"></i> 
+                Edit User: <span style="color: var(--text-main);"><?= htmlspecialchars($editedUser->getUsername()) ?></span>
+            </h1>
+            <a href="/admin" class="btn-outline btn-sm"><i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back to Admin</a>
         </div>
         
-        <form action="/update-user" method="POST" class="clean-form" style="width: 100%;">
-            <input type="hidden" name="user_id" value="<?= $editedUser->getId() ?>">
-            
-            <h3 style="color: #ccc; font-size: 1rem;">1. Choose Avatar</h3>
-            <div class="avatar-grid">
-                <input type="hidden" name="avatar" id="avatar-input" value="<?= htmlspecialchars($details['avatar'] ?? 'gaming-console.png') ?>">
+        <div class="admin-card edit-card">
+            <form action="/update-user" method="POST" class="clean-form">
+                <input type="hidden" name="user_id" value="<?= $editedUser->getId() ?>">
                 
-                <?php foreach($avatars as $av): ?>
-                    <img src="/public/resources/avatars/<?= $av ?>" 
-                         class="avatar-option <?= ($details['avatar'] ?? 'gaming-console.png') === $av ? 'selected' : '' ?>" 
-                         onclick="selectAvatar('<?= $av ?>')" 
-                         alt="avatar option">
-                <?php endforeach; ?>
-            </div>
-
-            <h3 style="color: #ccc; font-size: 1rem; border-top: 1px solid #333; padding-top: 20px;">2. Account Details</h3>
-            <div style="display: flex; gap: 20px;">
-                <div class="form-group" style="flex: 1;">
-                    <label class="form-label">Username</label>
-                    <input type="text" name="username" value="<?= htmlspecialchars($editedUser->getUsername()) ?>" class="form-input" required>
+                <div class="edit-section">
+                    <h3>1. Force Avatar Override</h3>
+                    <div class="avatar-grid">
+                        <input type="hidden" name="avatar" id="avatar-input" value="<?= htmlspecialchars($details['avatar'] ?? 'gaming-console.png') ?>">
+                        
+                        <?php foreach($avatars as $av): ?>
+                            <img src="/public/resources/avatars/<?= $av ?>" 
+                                 class="avatar-option <?= ($details['avatar'] ?? 'gaming-console.png') === $av ? 'selected' : '' ?>" 
+                                 onclick="selectAvatar('<?= $av ?>')" 
+                                 alt="avatar option">
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-                <div class="form-group" style="flex: 1;">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" value="<?= htmlspecialchars($editedUser->getEmail()) ?>" class="form-input" required>
+
+                <div class="edit-section">
+                    <h3>2. Credentials & Security</h3>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" name="username" value="<?= htmlspecialchars($editedUser->getUsername()) ?>" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" value="<?= htmlspecialchars($editedUser->getEmail()) ?>" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label>Force New Password (leave blank to keep current)</label>
+                        <input type="password" name="password" class="form-input" placeholder="Type new password to override...">
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="form-label">Force New Password (leave blank to keep current)</label>
-                <input type="password" name="password" class="form-input" placeholder="Enter new password to overwrite...">
-            </div>
+                <div class="edit-section">
+                    <h3>3. Public Identity</h3>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" name="name" value="<?= htmlspecialchars($details['name'] ?? '') ?>" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" name="surname" value="<?= htmlspecialchars($details['surname'] ?? '') ?>" class="form-input">
+                        </div>
+                    </div>
 
-            <h3 style="color: #ccc; font-size: 1rem; border-top: 1px solid #333; padding-top: 20px;">3. Public Profile</h3>
-            <div style="display: flex; gap: 20px;">
-                <div class="form-group" style="flex: 1;">
-                    <label class="form-label">First Name</label>
-                    <input type="text" name="name" value="<?= htmlspecialchars($details['name'] ?? '') ?>" class="form-input">
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label>Biography</label>
+                        <textarea name="bio" rows="4" class="form-input"><?= htmlspecialchars($details['bio'] ?? '') ?></textarea>
+                    </div>
                 </div>
-                <div class="form-group" style="flex: 1;">
-                    <label class="form-label">Last Name</label>
-                    <input type="text" name="surname" value="<?= htmlspecialchars($details['surname'] ?? '') ?>" class="form-input">
+
+                <div class="edit-actions">
+                    <button type="submit" class="btn-primary btn-block" style="font-size: 1.1rem; padding: 15px;">
+                        <i class="fa-solid fa-user-shield" style="margin-right: 8px;"></i> Save User Modifications
+                    </button>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Bio</label>
-                <textarea name="bio" rows="3" class="form-input"><?= htmlspecialchars($details['bio'] ?? '') ?></textarea>
-            </div>
-
-            <div style="margin-top: 20px;">
-                <button type="submit" style="width: 100%;">Save All Changes</button>
-            </div>
-        </form>
-      </section>
-    </div>
-
-    </body>
+            </form>
+        </div>
+    </main>
+  </body>
 </html>

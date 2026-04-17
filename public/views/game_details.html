@@ -7,125 +7,169 @@
   <body>
     <?php include __DIR__ . '/partials/nav.html'; ?>
     
-    <div class="container layout">
-      <main class="content-narrow">
+    <main class="store-layout">
         
-        <div class="game-details-wrapper">
-            <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" class="game-details-cover" alt="<?= htmlspecialchars($game->getTitle()); ?>">
+        <div class="game-hero">
+            <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" alt="<?= htmlspecialchars($game->getTitle()); ?>">
+        </div>
 
-            <h1><?= htmlspecialchars($game->getTitle()); ?></h1>
-            <div class="game-category"><?= htmlspecialchars($game->getCategory()); ?></div>
+        <div class="game-content-grid">
             
-            <p class="text-muted">
-                <?= nl2br(htmlspecialchars($game->getDescription())); ?>
-            </p>
+            <div class="game-main-col">
+                <h1 class="game-title"><?= htmlspecialchars($game->getTitle()); ?></h1>
+                
+                <div class="game-tags">
+                    <span class="tag-pill"><?= htmlspecialchars($game->getCategory()); ?></span>
+                </div>
 
-            <div class="requirements-box">
-                <h3>System Requirements:</h3>
-                <p class="requirements-text">
-                    <?= htmlspecialchars($game->getSpecification() ?? 'Not specified'); ?>
-                </p>
+                <div class="game-description">
+                    <?= nl2br(htmlspecialchars($game->getDescription())); ?>
+                </div>
+
+                <div class="req-box">
+                    <h3><i class="fa-solid fa-microchip" style="color: var(--primary); margin-right: 8px;"></i> System Specifications (Minimum)</h3>
+                    <p class="req-text">
+                        <?= htmlspecialchars($game->getSpecification() ?? 'System requirements not specified for this title.'); ?>
+                    </p>
+                </div>
             </div>
 
-            <div class="purchase-row">
-                <span class="price"><?= number_format($game->getPrice(), 2); ?> PLN</span>
-                
-                <div id="buy-section">
-                    <?php if(!isset($_SESSION['user_id'])): ?>
-                        <a href="/login">Log in to add to library</a>
-                    <?php elseif($isOwned): ?>
-                        <button disabled class="btn-disabled">Already in Library</button>
-                    <?php else: ?>
-                        <button id="buy-button" onclick="buyGame('<?= $game->getId() ?>')">Add to Library</button>
-                    <?php endif; ?>
+            <div class="game-sidebar">
+                <div class="buy-card">
+                    <div class="buy-price">
+                        <?= number_format($game->getPrice(), 2); ?> PLN
+                    </div>
+                    
+                    <div id="buy-section">
+                        <?php if(!isset($_SESSION['user_id'])): ?>
+                            <a href="/login" class="btn-primary btn-block">Log in to Get</a>
+                        <?php elseif($isOwned): ?>
+                            <button disabled class="btn-primary btn-block" style="background-color: var(--bg-input); color: var(--text-muted) !important;">Already in Library</button>
+                        <?php else: ?>
+                            <button id="buy-button" class="btn-primary btn-block" onclick="buyGame('<?= $game->getId() ?>')">
+                                <i class="fa-solid fa-cart-shopping" style="margin-right: 8px;"></i> Get Now
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <div id="response-message" style="display: block; text-align: center; margin-top: 10px; font-size: 0.85rem;"></div>
+
+                    <div class="game-stats-list">
+                        <div class="stat-row">
+                            <span>Rating</span>
+                            <span class="stat-value rating-value"><i class="fa-solid fa-star"></i> <?= number_format($game->getAverageRating(), 1); ?></span>
+                        </div>
+                    </div>
                 </div>
-                
-                <span id="response-message"></span>
             </div>
         </div>
 
-        <div class="game-details-wrapper">
-            <h2>Community Reviews</h2>
+        <div class="reviews-section">
+            <div class="reviews-header">
+                <h2>User Reviews</h2>
+                <div></div>
+            </div>
 
             <?php if(isset($_SESSION['user_id'])): ?>
                 <?php if($isOwned && !$hasReviewed): ?>
-                    <div class="review-form-box">
+                    <div class="review-form-card">
                         <h3>Leave a Review</h3>
-                        <form action="/add-review" method="POST" class="clean-form">
+                        <form action="/add-review" method="POST">
                             <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
                             
                             <div class="form-group">
-                                <label class="form-label">Rating (1-5):</label>
+                                <label>Rating (1-5)</label>
                                 <select name="rating" required class="form-input">
-                                    <option value="5">⭐⭐⭐⭐⭐ - Masterpiece</option>
-                                    <option value="4">⭐⭐⭐⭐ - Great</option>
-                                    <option value="3">⭐⭐⭐ - Good</option>
-                                    <option value="2">⭐⭐ - Poor</option>
-                                    <option value="1">⭐ - Terrible</option>
+                                    <option value="5">5 - Masterpiece</option>
+                                    <option value="4">4 - Great</option>
+                                    <option value="3">3 - Good</option>
+                                    <option value="2">2 - Poor</option>
+                                    <option value="1">1 - Terrible</option>
                                 </select>
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label">Comment:</label>
-                                <textarea name="content" required rows="4" class="form-input"></textarea>
+                                <label>Comment</label>
+                                <textarea name="content" required rows="4" class="form-input" placeholder="What did you think of the game?"></textarea>
                             </div>
                             
-                            <button type="submit">Submit Review</button>
+                            <button type="submit" class="btn-primary">Submit Review</button>
                         </form>
                     </div>
                 <?php elseif($isOwned && $hasReviewed): ?>
-                    <p class="review-box-msg">You have already reviewed this game. Thank you!</p>
+                    <div class="review-alert">
+                        <i class="fa-solid fa-check-circle"></i> You have already reviewed this game. Thank you!
+                    </div>
                 <?php else: ?>
-                    <p id="must-own-msg" class="review-box-msg text-muted">You must own this game in your Library to leave a review.</p>
+                    <div id="must-own-msg" class="review-alert">
+                        <i class="fa-solid fa-lock"></i> You must own this game in your Library to leave a review.
+                    </div>
                     
-                    <div id="hidden-review-form" class="review-form-box" style="display: none;">
+                    <div id="hidden-review-form" class="review-form-card hidden">
                         <h3>Leave a Review</h3>
-                        <form action="/add-review" method="POST" class="clean-form">
+                        <form action="/add-review" method="POST">
                             <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
                             <div class="form-group">
-                                <label class="form-label">Rating (1-5):</label>
+                                <label>Rating (1-5)</label>
                                 <select name="rating" required class="form-input">
-                                    <option value="5">⭐⭐⭐⭐⭐ - Masterpiece</option>
-                                    <option value="4">⭐⭐⭐⭐ - Great</option>
-                                    <option value="3">⭐⭐⭐ - Good</option>
-                                    <option value="2">⭐⭐ - Poor</option>
-                                    <option value="1">⭐ - Terrible</option>
+                                    <option value="5">5 - Masterpiece</option>
+                                    <option value="4">4 - Great</option>
+                                    <option value="3">3 - Good</option>
+                                    <option value="2">2 - Poor</option>
+                                    <option value="1">1 - Terrible</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Comment:</label>
-                                <textarea name="content" required rows="4" class="form-input"></textarea>
+                                <label>Comment</label>
+                                <textarea name="content" required rows="4" class="form-input" placeholder="What did you think of the game?"></textarea>
                             </div>
-                            <button type="submit">Submit Review</button>
+                            <button type="submit" class="btn-primary">Submit Review</button>
                         </form>
                     </div>
                 <?php endif; ?>
             <?php else: ?>
-                <p class="review-box-msg text-muted"><a href="/login">Log in</a> and purchase the game to leave a review.</p>
+                <div class="review-alert">
+                    <i class="fa-solid fa-circle-info"></i> <a href="/login">Log in</a> and purchase the game to leave a review.
+                </div>
             <?php endif; ?>
 
-            <div>
+            <div class="review-list">
                 <?php if(empty($reviews)): ?>
-                    <p class="text-muted" style="font-style: italic;">No reviews yet. Be the first to review this game!</p>
+                    <p class="text-muted" style="font-style: italic; text-align: center; margin-top: 40px;">No reviews yet. Be the first to review this game!</p>
                 <?php else: ?>
                     <?php foreach($reviews as $review): ?>
-                        <div class="review-item">
-                            <div class="review-header">
-                                <strong class="review-author"><i class="fa-solid fa-user"></i> <?= htmlspecialchars($review->getUsername()) ?></strong>
-                                <span class="review-stars">
-                                    <?= str_repeat('⭐', $review->getRating()) ?>
-                                </span>
+                        <div class="review-card">
+                            <div class="review-card-header">
+                                <div class="review-user">
+                                    <div class="review-avatar" style="background-color: transparent;">
+                                        <img src="/public/resources/avatars/<?= htmlspecialchars($review->getAvatar() ?? 'gaming-console.png') ?>" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                    </div>
+                                    <div class="review-user-info">
+                                        <strong><?= htmlspecialchars($review->getUsername()) ?></strong>
+                                        <span><?= date('d M Y', strtotime($review->getCreatedAt())) ?></span>
+                                    </div>
+                                </div>
+                                <div class="review-stars">
+                                    <?php 
+                                        $rating = $review->getRating();
+                                        for($i=1; $i<=5; $i++) {
+                                            echo $i <= $rating ? '<i class="fa-solid fa-star active"></i>' : '<i class="fa-solid fa-star"></i>';
+                                        }
+                                    ?>
+                                </div>
                             </div>
-                            <p class="text-muted">
-                                <?= nl2br(htmlspecialchars($review->getContent())) ?>
-                            </p>
-                            <small class="text-muted"><?= date('d F Y', strtotime($review->getCreatedAt())) ?></small>
+                            <div class="review-text">
+                                "<?= nl2br(htmlspecialchars($review->getContent())) ?>"
+                            </div>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
         </div>
-      </main>
-    </div>
+    </main>
+
+    <footer class="main-footer">
+        &copy; 2026 GameNest &mdash; Built for players, not publishers.
+    </footer>
   </body>
 </html>

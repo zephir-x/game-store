@@ -107,7 +107,7 @@ class GameController extends AppController {
 
         // Validation: whether the rating is 1-5, whether the player owns the game and whether they haven't rated it yet
         if ($rating >= 1 && $rating <= 5 && $this->libraryRepository->isGameOwned($userId, $gameId) && !$this->reviewRepository->hasUserReviewed($userId, $gameId)) {
-            $review = new Review($userId, $gameId, $rating, $content);
+            $review = new Review(null, $userId, $gameId, null, null, $rating, $content, null);
             $this->reviewRepository->addReview($review);
         }
 

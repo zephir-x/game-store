@@ -6,36 +6,57 @@
   </head>
   <body>
     <?php include __DIR__ . '/partials/nav.html'; ?>
-    
-    <div class="container layout">
-      <main>
-        <?php if(empty($games)): ?>
-            <div style="text-align: center; margin-top: 50px;">
-                <i class="fa-solid fa-ghost" style="font-size: 4rem; color: #555;"></i>
-                <h2 style="color: #888;">No games found matching "<?= $searchQuery ?>"</h2>
-                <p class="text-muted">Try a different title or clear your search.</p>
+
+    <main class="store-layout">
+        <?php if(isset($_GET['search']) && !empty($_GET['search'])): ?>
+            <div class="section-header">
+                <h2>Results: "<?= htmlspecialchars($_GET['search']) ?>"</h2>
             </div>
+            
+            <?php if(empty($games)): ?>
+                <div class="empty-state">
+                    <i class="fa-solid fa-ghost"></i>
+                    <h3>No games found</h3>
+                    <p>Try a different title or clear your search.</p>
+                    <a href="/" class="btn-outline">Clear Search</a>
+                </div>
+            <?php endif; ?>
+            
         <?php else: ?>
-          <div class="game-grid">
-              <?php foreach($games as $game): ?>
-                  <a href="/game/<?= $game->getId() ?>" style="text-decoration: none; color: inherit; display: block;">
-                      <div class="game-card">
-                          <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" class="game-cover" alt="<?= htmlspecialchars($game->getTitle()); ?>">
-                          
-                          <h2><?= htmlspecialchars($game->getTitle()); ?></h2>
-                          <div class="game-category"><?= htmlspecialchars($game->getCategory()); ?></div>
-                          <p><?= htmlspecialchars($game->getDescription()); ?></p>
-                          
-                          <div class="game-price-row">
-                              <span class="price"><?= number_format($game->getPrice(), 2); ?> PLN</span>
-                              <span class="rating">⭐ <?= number_format($game->getAverageRating(), 2); ?></span>
-                          </div>
-                      </div>
-                  </a>
-              <?php endforeach; ?>
-          </div>
+            <div class="section-header">
+                <h2>Browse All Games</h2>
+            </div>
         <?php endif; ?>
-      </main>
-    </div>
+
+        <?php if(!empty($games)): ?>
+            <div class="game-grid" id="store-grid">
+                <?php foreach($games as $index => $game): ?>
+                    <a href="/game/<?= $game->getId() ?>" class="game-card <?= ($index >= 4 && empty($_GET['search'])) ? 'hidden-game' : '' ?>">
+                        <div class="game-card-image-wrapper">
+                            <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" alt="<?= htmlspecialchars($game->getTitle()); ?>">
+                        </div>
+                        <div class="game-card-content">
+                            <div class="game-card-meta">
+                                <span class="game-card-category"><?= htmlspecialchars($game->getCategory()); ?></span>
+                                <span class="game-card-rating"><i class="fa-solid fa-star"></i> <?= number_format($game->getAverageRating(), 1); ?></span>
+                            </div>
+                            <h3 class="game-card-title"><?= htmlspecialchars($game->getTitle()); ?></h3>
+                            <p class="game-card-price"><?= number_format($game->getPrice(), 2); ?> PLN</p>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+
+            <?php if(count($games) > 4 && empty($_GET['search'])): ?>
+                <div class="load-more-wrapper">
+                    <button id="load-more-btn" class="btn-load-more">Load More Games <i class="fa-solid fa-chevron-down"></i></button>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+    </main>
+
+    <footer class="main-footer">
+        &copy; 2026 GameNest &mdash; Built for players, not publishers.
+    </footer>
   </body>
 </html>

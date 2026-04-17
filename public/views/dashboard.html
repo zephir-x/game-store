@@ -7,91 +7,115 @@
   <body>
     <?php include __DIR__ . '/partials/nav.html'; ?>
     
-    <div class="container layout">
-      <section class="profile-section" id="profile-view" style="flex-direction: column; align-items: flex-start; position: relative;">
-        <button onclick="toggleEditMode()" class="btn-outline" style="position: absolute; right: 30px; top: 30px;"><i class="fa-solid fa-pen"></i> Edit Profile</button>
-        
-        <div style="display: flex; gap: 30px; align-items: center; width: 100%;">
-            <img src="/public/resources/avatars/<?= htmlspecialchars($details['avatar'] ?? 'gaming-console.png') ?>" alt="Avatar" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid #00fc69;">
-            
-            <div>
-                <h1 style="margin: 0;"><?= htmlspecialchars($username); ?> 
-                    <?php if($role === 'ADMIN'): ?><span class="profile-badge">ADMIN</span><?php endif; ?>
-                </h1>
-                
-                <?php if(!empty($details['name']) || !empty($details['surname']) || !empty($details['bio'])): ?>
-                    
-                    <?php if(!empty($details['name']) || !empty($details['surname'])): ?>
-                        <p class="text-muted" style="margin-top: 10px;"><strong>Name:</strong> <?= htmlspecialchars(trim(($details['name'] ?? '') . ' ' . ($details['surname'] ?? ''))) ?></p>
-                    <?php endif; ?>
+    <main class="store-layout">
+        <?php include __DIR__ . '/partials/messages.html'; ?>
 
-                    <?php if(!empty($details['bio'])): ?>
-                        <p class="text-muted" style="margin-top: 5px;">"<?= htmlspecialchars($details['bio']) ?>"</p>
-                    <?php endif; ?>
+        <div class="profile-wrapper">
+            <h1 class="profile-page-title">Account Settings</h1>
 
-                <?php else: ?>
-                    <p class="text-muted" style="margin-top: 10px;">Welcome! Click 'Edit Profile' to set up your account.</p>
-                <?php endif; ?>
+            <div id="profile-view">
+                <div class="profile-card">
+                    <div class="profile-info-row">
+                        <img src="/public/resources/avatars/<?= htmlspecialchars($details['avatar'] ?? 'gaming-console.png') ?>" alt="Avatar" class="profile-avatar-large">
+                        <div class="profile-text-content">
+                            <h2 class="profile-name">
+                                <?php if(!empty($details['name']) || !empty($details['surname'])): ?>
+                                    <?= htmlspecialchars(trim(($details['name'] ?? '') . ' ' . ($details['surname'] ?? ''))) ?>
+                                <?php else: ?>
+                                    <?= htmlspecialchars($username) ?>
+                                <?php endif; ?>
+                            </h2>
+                            <div class="profile-role">
+                                <i class="fa-solid fa-user-astronaut"></i> 
+                                <?= htmlspecialchars($role === 'ADMIN' ? 'Administrator' : 'Verified Member') ?>
+                            </div>
+                            <?php if(!empty($details['bio'])): ?>
+                                <p class="profile-bio">"<?= htmlspecialchars($details['bio']) ?>"</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <button onclick="toggleEditMode()" class="btn-outline btn-sm">Edit Profile</button>
+                </div>
+
+                <div class="profile-mini-cards">
+                    <div class="mini-card">
+                        <div class="mini-card-label">EMAIL ADDRESS</div>
+                        <div class="mini-card-value"><?= htmlspecialchars($email ?? '') ?></div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mini-card-label">USERNAME</div>
+                        <div class="mini-card-value"><?= htmlspecialchars($username) ?></div>
+                    </div>
+                </div>
             </div>
+
+            <div id="profile-edit" class="hidden">
+                <div class="profile-card edit-card">
+                    <form action="/update-profile" method="POST">
+                        
+                        <div class="edit-section">
+                            <h3>Choose Avatar</h3>
+                            <div class="avatar-grid">
+                                <input type="hidden" name="avatar" id="avatar-input" value="<?= htmlspecialchars($details['avatar'] ?? 'gaming-console.png') ?>">
+                                
+                                <?php foreach($avatars as $av): ?>
+                                    <img src="/public/resources/avatars/<?= $av ?>" 
+                                         class="avatar-option <?= ($details['avatar'] ?? 'gaming-console.png') === $av ? 'selected' : '' ?>" 
+                                         onclick="selectAvatar('<?= $av ?>')" 
+                                         alt="avatar option">
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+
+                        <div class="edit-section">
+                            <h3>Account Details</h3>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    <input type="text" name="username" value="<?= htmlspecialchars($username) ?>" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email Address</label>
+                                    <input type="email" name="email" value="<?= htmlspecialchars($email) ?>" class="form-input" required>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top: 20px;">
+                                <label>New Password (leave blank to keep current)</label>
+                                <input type="password" name="password" class="form-input" placeholder="••••••••">
+                            </div>
+                        </div>
+
+                        <div class="edit-section">
+                            <h3>Public Profile</h3>
+                            <div class="form-grid-2">
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    <input type="text" name="name" value="<?= htmlspecialchars($details['name'] ?? '') ?>" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    <input type="text" name="surname" value="<?= htmlspecialchars($details['surname'] ?? '') ?>" class="form-input">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top: 20px;">
+                                <label>Bio</label>
+                                <textarea name="bio" rows="3" class="form-input" placeholder="Tell us about your gaming setup..."><?= htmlspecialchars($details['bio'] ?? '') ?></textarea>
+                            </div>
+                        </div>
+
+                        <div class="edit-actions">
+                            <button type="submit" class="btn-primary">Save Changes</button>
+                            <button type="button" class="btn-outline" onclick="toggleEditMode()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
-      </section>
+    </main>
 
-      <section class="profile-section hidden" id="profile-edit" style="flex-direction: column; align-items: flex-start;">
-        <h2 style="margin-top: 0;">Edit Your Profile</h2>
-        
-        <form action="/update-profile" method="POST" class="clean-form" style="width: 100%;">
-            <h3 style="color: #ccc; font-size: 1rem;">1. Choose Avatar</h3>
-            <div class="avatar-grid">
-                <input type="hidden" name="avatar" id="avatar-input" value="<?= htmlspecialchars($details['avatar'] ?? 'gaming-console.png') ?>">
-                
-                <?php foreach($avatars as $av): ?>
-                    <img src="/public/resources/avatars/<?= $av ?>" 
-                         class="avatar-option <?= ($details['avatar'] ?? 'gaming-console.png') === $av ? 'selected' : '' ?>" 
-                         onclick="selectAvatar('<?= $av ?>')" 
-                         alt="avatar option">
-                <?php endforeach; ?>
-            </div>
-
-            <h3 style="color: #ccc; font-size: 1rem; border-top: 1px solid #333; padding-top: 20px;">2. Account Details</h3>
-            <div style="display: flex; gap: 20px;">
-                <div class="form-group" style="flex: 1;">
-                    <label class="form-label">Username</label>
-                    <input type="text" name="username" value="<?= htmlspecialchars($username) ?>" class="form-input" required>
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" value="<?= htmlspecialchars($email) ?>" class="form-input" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">New Password (leave blank to keep current)</label>
-                <input type="password" name="password" class="form-input" placeholder="Enter new password...">
-            </div>
-
-            <h3 style="color: #ccc; font-size: 1rem; border-top: 1px solid #333; padding-top: 20px;">3. Public Profile</h3>
-            <div style="display: flex; gap: 20px;">
-                <div class="form-group" style="flex: 1;">
-                    <label class="form-label">First Name</label>
-                    <input type="text" name="name" value="<?= htmlspecialchars($details['name'] ?? '') ?>" class="form-input">
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <label class="form-label">Last Name</label>
-                    <input type="text" name="surname" value="<?= htmlspecialchars($details['surname'] ?? '') ?>" class="form-input">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Bio</label>
-                <textarea name="bio" rows="3" class="form-input"><?= htmlspecialchars($details['bio'] ?? '') ?></textarea>
-            </div>
-
-            <div style="display: flex; gap: 15px; margin-top: 20px;">
-                <button type="submit">Save Changes</button>
-                <button type="button" class="btn-outline" onclick="toggleEditMode()">Cancel</button>
-            </div>
-        </form>
-      </section>
-    </div>
+    <footer class="main-footer">
+        &copy; 2026 GameNest &mdash; Built for players, not publishers.
+    </footer>
   </body>
 </html>

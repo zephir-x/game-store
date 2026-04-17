@@ -55,8 +55,9 @@ class DashboardController extends AppController {
 
             try {
                 $this->userRepository->updateFullProfile($userId, $data);
+                $_SESSION['user_avatar'] = $_POST['avatar'];
                 $_SESSION['username'] = $data['username']; 
-                $_SESSION['success_message'] = "Profile updated successfully!"; // Sukces!
+                $_SESSION['success_message'] = "Profile updated successfully!";
             } catch (PDOException $e) {
                 // Code 23505 indicates a duplicate value (UNIQUE constraint)
                 if ($e->getCode() == 23505) {

@@ -1,50 +1,41 @@
 <?php include __DIR__ . '/messages.html'; ?>
-<nav>
-  <div class="container">
-    <span class="logo"><a href="/"><i class="fa-solid fa-gamepad"></i> GameNest</a></span>
+<nav class="main-nav">
+    <div class="nav-container">
+        <a href="/" class="logo"><i class="fa-solid fa-gamepad"></i> GAMENEST</a>
 
-    <i class="display-mobile fa-solid fa-bars"></i>
+        <div class="nav-search">
+            <form action="/" method="GET">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" name="search" placeholder="Search for games, publishers, or tags..." value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
+                
+                <button type="submit" class="btn-search">Search</button>
+                <?php if(!empty($_GET['search'])): ?>
+                    <a href="/" class="btn-clear">Clear</a>
+                <?php endif; ?>
+            </form>
+        </div>
 
-    <div class="nav-search-wrapper">
-        <form action="/" method="GET" class="nav-search-form">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" name="search" placeholder="Search games..." value="<?= htmlspecialchars($_GET['search'] ?? '') ?>" class="nav-search-input">
+        <div class="nav-links">
+            <a href="/" class="<?= ($_SERVER['REQUEST_URI'] == '/' || isset($_GET['search'])) ? 'active' : '' ?>">STORE</a>
             
-            <button type="submit" class="btn-search">Search</button>
-            <?php if(!empty($_GET['search'])): ?>
-                <a href="/" class="btn-clear">Clear</a>
+            <?php if(isset($_SESSION['user_id'])): ?>
+                <a href="/library" class="<?= ($_SERVER['REQUEST_URI'] == '/library') ? 'active' : '' ?>">LIBRARY</a>
+                
+                <?php if(isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'ADMIN'): ?>
+                    <a href="/admin" class="<?= ($_SERVER['REQUEST_URI'] == '/admin') ? 'active' : '' ?>">ADMIN</a>
+                <?php endif; ?>
             <?php endif; ?>
-        </form>
-    </div>
+        </div>
 
-    <ul>
-      <li>
-        <a href="/"><i class="fa-solid fa-store"></i> Store</a>
-      </li>
-      
-      <?php if(isset($_SESSION['user_id'])): ?>
-        <?php if(isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'ADMIN'): ?>
-          <li>
-            <a href="/admin" style="color: #cf6679;"><i class="fa-solid fa-hammer"></i> Admin</a>
-          </li>
-        <?php endif; ?>
-        <li>
-          <a href="/dashboard"><i class="fa-solid fa-user"></i> Profile</a>
-        </li>
-        <li>
-          <a href="/library"><i class="fa-solid fa-layer-group"></i> Library</a> 
-        </li>
-        <li>
-          <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-        </li>
-      <?php else: ?>
-        <li>
-          <a href="/login"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
-        </li>
-        <li>
-          <a href="/register"><i class="fa-solid fa-user-plus"></i> Register</a>
-        </li>
-      <?php endif; ?>
-    </ul>
-  </div>
+        <div class="nav-user">
+            <?php if(isset($_SESSION['user_id'])): ?>
+                <a href="/dashboard" class="nav-avatar-link">
+                    <img src="/public/resources/avatars/<?= htmlspecialchars($_SESSION['user_avatar'] ?? 'gaming-console.png') ?>" alt="Profile">
+                </a>
+                <a href="/logout" class="nav-logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+            <?php else: ?>
+                <a href="/login" class="btn-primary btn-sm">Sign In</a>
+            <?php endif; ?>
+        </div>
+    </div>
 </nav>

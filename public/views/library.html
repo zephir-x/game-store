@@ -6,33 +6,45 @@
   </head>
   <body>
     <?php include __DIR__ . '/partials/nav.html'; ?>
-    
-    <div class="container layout">
-      <main>
-        <h2><i class="fa-solid fa-layer-group"></i> My Library (<?= count($library) ?>)</h2>
-        
+
+    <main class="store-layout">
+        <div class="library-header">
+            <h1>My Library</h1>
+            <div class="library-stats">
+                <span class="stat-pill"><?= count($library) ?> GAMES OWNED</span>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2><i class="fa-solid fa-border-all" style="margin-right: 8px;"></i> All Titles</h2>
+        </div>
+
         <?php if(empty($library)): ?>
-            <p class="text-muted">Your library is empty. Go to the <a href="/">Store</a> to add some games!</p>
+            <div class="empty-state">
+                <i class="fa-solid fa-box-open"></i>
+                <h3>Your library is empty</h3>
+                <p>Go to the Store to add some games to your collection.</p>
+                <a href="/" class="btn-primary">Browse Store</a>
+            </div>
         <?php else: ?>
             <div class="game-grid">
                 <?php foreach($library as $game): ?>
-                    <a href="/game/<?= $game['game_id'] ?>" style="text-decoration: none; color: inherit; display: block;">
-                        <div class="game-card">
-                            <img src="/public/resources/covers/<?= htmlspecialchars($game['graphics'] ?? 'default.jpg'); ?>" class="game-cover" alt="<?= htmlspecialchars($game['title']); ?>">
-                            
-                            <h2><?= htmlspecialchars($game['title']); ?></h2>
-                            <div class="game-category"><?= htmlspecialchars($game['category']); ?></div>
-                            
-                            <div class="game-price-row">
-                                <span class="text-muted" style="font-size: 0.85rem;">Added: <?= date('d M Y', strtotime($game['purchased_at'])) ?></span>
-                                <button onclick="event.preventDefault(); alert('Starting game...');">Play</button>
-                            </div>
+                    <a href="/game/<?= $game['game_id'] ?>" class="game-card">
+                        <div class="game-card-image-wrapper">
+                            <img src="/public/resources/covers/<?= htmlspecialchars($game['graphics'] ?? 'default.jpg'); ?>" alt="<?= htmlspecialchars($game['title']); ?>">
+                        </div>
+                        <div class="game-card-content">
+                            <h3 class="game-card-title"><?= htmlspecialchars($game['title']); ?></h3>
+                            <p class="game-card-meta-green">Added: <?= date('d M Y', strtotime($game['purchased_at'])) ?></p>
                         </div>
                     </a>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-      </main>
-    </div>
+    </main>
+
+    <footer class="main-footer">
+        &copy; 2026 GameNest &mdash; Built for players, not publishers.
+    </footer>
   </body>
 </html>

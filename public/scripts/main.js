@@ -95,3 +95,22 @@ function selectAvatar(filename) {
     const avatarInput = document.getElementById('avatar-input');
     if(avatarInput) avatarInput.value = filename;
 }
+
+// Load More Games (Store)
+document.addEventListener('DOMContentLoaded', () => {
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', () => {
+            const hiddenGames = document.querySelectorAll('.hidden-game');
+            
+            hiddenGames.forEach((game, index) => {
+                game.classList.remove('hidden-game');
+                game.classList.add('fade-in-card');
+                
+                game.style.animationDelay = `${index * 0.1}s`; 
+            });
+            
+            loadMoreBtn.style.display = 'none';
+        });
+    }
+});

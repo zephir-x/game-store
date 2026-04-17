@@ -1,68 +1,169 @@
-/* Forms & Buttons */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    max-width: 400px;
-    background-color: #1e1e1e;
-    padding: 30px;
+/* Global Buttons */
+button, .btn-primary, .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-}
-
-input, select, textarea {
-    padding: 12px;
-    background-color: #2c2c2c;
-    border: 1px solid #444;
-    color: white;
-    border-radius: 4px;
-    font-family: inherit;
-}
-
-button {
-    padding: 12px;
-    background-color: #00fc69;
-    color: #121212;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
+    font-size: 0.95rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
+    border: none;
+    transition: all 0.2s ease;
+    text-decoration: none;
 }
 
-button:hover {
-    background-color: #00cc55;
+.btn-primary { background-color: var(--primary); color: #000 !important; }
+.btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+
+.btn-outline { background-color: transparent; border: 1px solid var(--border-subtle); color: var(--text-main); }
+.btn-outline:hover { background-color: var(--border-subtle); }
+
+.btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+.btn-block { width: 100%; }
+
+/* Icon Buttons */
+.btn-icon {
+    background-color: transparent;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    padding: 0;
 }
 
-/* Centered Auth Pages (Login / Register) */
+.btn-icon:hover {
+    background-color: var(--border-subtle);
+}
+
+/* Auth Page Layout*/
 .auth-page-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    width: 100%;
     padding: 20px;
+}
+
+.auth-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.auth-card-header { text-align: center; margin-bottom: 30px; }
+.auth-card-header h1 { font-size: 1.5rem; color: var(--text-main); margin-bottom: 8px; }
+.auth-card-header p { font-size: 0.9rem; color: var(--text-muted); margin: 0; }
+
+/* Forms and Inputs */
+form { display: flex; flex-direction: column; gap: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+
+label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+
+/* Wrapper dla inputów z ikoną */
+.input-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Wspólne style dla WSZYSTKICH inputów */
+.input-icon-wrapper input, 
+.form-input {
+    width: 100%;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
     box-sizing: border-box;
 }
 
-.auth-page-wrapper h1 {
-    margin-bottom: 25px;
-    font-size: 2.5rem;
-    text-align: center;
+/* Różne paddingi dla inputów z ikoną i bez ikony */
+.input-icon-wrapper input { 
+    padding: 12px 15px 12px 40px; /* Zwiększony lewy padding na ikonę */
 }
 
-.auth-page-wrapper p {
-    margin-top: 20px;
-    text-align: center;
+.form-input { 
+    padding: 12px 15px; /* Standardowy padding dla edycji profilu itp. */
 }
 
-/* Reset global form styles for inline table actions */
-form.action-form {
+/* Efekty Focus i Placeholder (wspólne) */
+.input-icon-wrapper input:focus, 
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--border-focus);
+}
+
+.input-icon-wrapper input::placeholder, 
+.form-input::placeholder { 
+    color: #4a5568; 
+}
+
+/* Textarea specyfika */
+textarea.form-input { 
+    resize: vertical; 
+    min-height: 100px; 
+}
+
+/* Stopka logowania */
+.auth-footer { 
+    margin-top: 40px; 
+    font-size: 0.75rem; 
+    color: #4a5568; 
+    text-align: center; 
+}
+
+/* --- Danger Button (Delete Actions) --- */
+.btn-danger { 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent; 
+    border: 1px solid var(--error) !important;
+    color: var(--error); 
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-danger:hover { 
+    background-color: var(--error); 
+    color: #fff !important; 
+}
+
+/* --- Table Action Forms (Reset) --- */
+/* Zabezpiecza przed rozpychaniem tabeli przez globalny tag form */
+form.table-action-form {
     display: block;
     background-color: transparent;
     padding: 0;
     margin: 0;
     box-shadow: none;
     max-width: none;
+    border: none;
 }

@@ -5,17 +5,48 @@
     <title>GameNest - Register</title>
   </head>
   <body>
-    <?php include __DIR__ . '/partials/messages.html'; ?>
-    <div class="auth-page-wrapper">
-        <h1>REGISTER</h1>
+    <header class="auth-top-bar">
+        <a href="/" class="logo"><i class="fa-solid fa-gamepad"></i> GAMENEST</a>
+        <a href="/login" class="btn-outline btn-sm">Sign In</a>
+    </header>
 
-        <form action="/register" method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="email" name="email" placeholder="example@gmail.com" required>
-            <input type="password" name="password" placeholder="password" required>
-            <button type="submit">Register</button>
-        </form>
-        <p>Already have an account? <a href="/login">Login here</a></p>
+    <?php include __DIR__ . '/partials/messages.html'; ?>
+    
+    <div class="auth-page-wrapper">
+        <div class="auth-card">
+            <div class="auth-card-header">
+                <h1>Create Account</h1>
+                <p>Join the ultimate gaming platform</p>
+            </div>
+
+            <form action="/register" method="POST">
+                <div class="form-group">
+                    <label>Username</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fa-regular fa-user input-icon"></i>
+                        <input type="text" name="username" placeholder="Player" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fa-regular fa-envelope input-icon"></i>
+                        <input type="email" name="email" placeholder="name@example.com" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" name="password" placeholder="••••••••" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-primary btn-block">Forge Account</button>
+            </form>
+        </div>
     </div>
   </body>
 </html>

@@ -39,32 +39,33 @@ class ReviewRepository extends Repository {
     public function getReviewsForGame(int $gameId): array {
         // Retrieves all reviews for a specific game along with the username of the reviewer
         $stmt = $this->database->prepare('
-            SELECT r.*, u.username 
+            SELECT r.id, r.user_id, r.game_id, u.username, ud.avatar, r.rating, r.content, r.created_at
             FROM reviews r
             JOIN users u ON r.user_id = u.id
-            WHERE r.game_id = :gameId
+            LEFT JOIN user_details ud ON u.id = ud.user_id
+            WHERE r.game_id = :game_id
             ORDER BY r.created_at DESC
         ');
 
         // Binding game ID securely to prevent SQL injection
-        $stmt->bindParam(':gameId', $gameId, PDO::PARAM_INT);
+        $stmt->bindParam(':game_id', $gameId, PDO::PARAM_INT);
         $stmt->execute();
 
-        $reviews = [];
-
-        // Mapping database rows into Review model objects
-        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
-            $reviews[] = new Review(
-                $row['user_id'],
-                $row['game_id'],
-                $row['rating'],
-                $row['content'],
-                $row['id'],
-                $row['created_at'],
-                $row['username']
+        $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = [];
+        
+        foreach ($reviews as $review) {
+            $result[] = new Review(
+                $review['id'],
+                $review['user_id'],
+                $review['game_id'],
+                $review['username'],
+                $review['avatar'],
+                $review['rating'],
+                $review['content'],
+                $review['created_at']
             );
         }
-
-        return $reviews;
+        return $result;
     }
 }
