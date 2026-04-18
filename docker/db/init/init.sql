@@ -120,6 +120,9 @@ INSERT INTO user_details (user_id, name, surname, bio) VALUES
 (2, 'Just', 'User', 'I love RPG games.');
 
 INSERT INTO games (title, description, category, price, graphics, specification) VALUES 
-('CyberStrike 2077', 'Futuristic RPG game.', 'RPG', 199.99, 'default.jpg', 'OS: Win 10, GPU: RTX 3060, CPU: i7-12700K, RAM: 16GB'),
-('Witch Hunter 3', 'Epic fantasy game with an open world.', 'RPG', 99.99, 'default.jpg', 'OS: Win 10, GPU: GTX 1060, CPU: i5-12400F, RAM: 8GB'),
-('Space Marines', 'Futuristic FPS filled with action.', 'Shooter', 119.99, 'default.jpg', 'OS: Win 10, GPU: RTX 2060, CPU: i5-12700K, RAM: 16GB');
+('CyberStrike 2077', 'Futuristic RPG game.', 'RPG', 199.99, 'cyber.jpg', 'OS: Win 10, GPU: RTX 3060, CPU: i7-12700K, RAM: 16GB'),
+('Witch Hunter 3', 'Epic fantasy game with an open world.', 'RPG', 99.99, 'witch.jpg', 'OS: Win 10, GPU: GTX 1060, CPU: i5-12400F, RAM: 8GB'),
+('Space Marines', 'Futuristic FPS filled with action.', 'Shooter', 119.99, 'space.jpg', 'OS: Win 10, GPU: RTX 2060, CPU: i5-12700K, RAM: 16GB'),
+('Neon Racers', 'High-speed futuristic racing in neon cities.', 'Racing', 79.99, 'neon.jpg', 'OS: Win 10, GPU: GTX 1660, CPU: i5-11400F, RAM: 8GB'),
+('Kingdoms Reborn', 'Strategy game about building and managing your empire.', 'Strategy', 89.99, 'kingdom.jpg', 'OS: Win 10, GPU: GTX 1050 Ti, CPU: i3-10100, RAM: 8GB'),
+('Dark Survival', 'Horror survival game in a post-apocalyptic world.', 'Horror', 69.99, 'survival.jpg', 'OS: Win 10, GPU: GTX 1650, CPU: i5-10400F, RAM: 8GB');

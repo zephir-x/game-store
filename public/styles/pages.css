@@ -45,7 +45,7 @@
     margin-bottom: 30px;
 }
 
-/* View Mode Cards */
+/* Profile View Mode Cards */
 .profile-card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-subtle);
@@ -93,7 +93,6 @@
     line-height: 1.5;
 }
 
-/* Mini Cards Grid */
 .profile-mini-cards {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -122,7 +121,7 @@
     font-weight: 500;
 }
 
-/* Edit Profile Mode */
+/* Profile Edit Mode */
 .edit-card {
     flex-direction: column;
     align-items: stretch;
@@ -188,8 +187,7 @@
     box-shadow: 0 0 15px rgba(52, 211, 153, 0.4);
 }
 
-/* --- Game Details Page --- */
-
+/* Game Details Page */
 .game-hero {
     width: 100%;
     height: 400px;
@@ -224,7 +222,7 @@
     font-size: 1.5rem;
     cursor: pointer;
     transition: transform 0.2s ease;
-    padding-left: 5px; /* Wyśrodkowanie trójkąta play */
+    padding-left: 5px;
 }
 
 .hero-play-btn:hover {
@@ -236,6 +234,12 @@
     grid-template-columns: 1fr 350px;
     gap: 50px;
     align-items: stretch;
+}
+
+.game-main-col {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .game-title {
@@ -291,7 +295,39 @@
     margin: 0;
 }
 
-/* Sidebar Buy Card */
+/* Helper classes */
+.req-icon {
+    color: var(--primary);
+    margin-right: 8px;
+}
+
+.buy-response-msg {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.85rem;
+}
+
+.empty-reviews-msg {
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+    margin-top: 40px;
+}
+
+/* Avatar Image Reset */
+.review-avatar {
+    background-color: transparent;
+}
+
+.review-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Game Details Sidebar (Buy Card) */
 .buy-card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-subtle);
@@ -399,12 +435,10 @@
     width: 40px;
     height: 40px;
     background-color: var(--primary);
-    color: #000;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.2rem;
 }
 
 .review-user-info {
@@ -439,7 +473,7 @@
     font-style: italic;
 }
 
-/* Responsywność */
+/* Responsiveness for Game Details */
 @media screen and (max-width: 1000px) {
     .game-content-grid {
         grid-template-columns: 1fr;
@@ -459,7 +493,7 @@
     }
 }
 
-/* --- Admin Dashboard --- */
+/* Admin Dashboard */
 .admin-header {
     margin-bottom: 40px;
 }
@@ -493,7 +527,7 @@
     color: var(--text-main);
 }
 
-/* --- Admin Tables --- */
+/* Admin Tables */
 .table-responsive {
     width: 100%;
     overflow-x: auto;
@@ -503,7 +537,15 @@
     width: 100%;
     border-collapse: collapse;
     text-align: left;
+    table-layout: fixed;
 }
+
+.admin-table th:nth-child(1) { width: 10%; }  /* ID */
+.admin-table th:nth-child(2) { width: 15%; } /* Username / Title */
+.admin-table th:nth-child(3) { width: 15%; } /* Email / Price */
+.admin-table th:nth-child(4) { width: 15%; } /* Role / Reviews */
+.admin-table th:nth-child(5) { width: 15%; } /* Registered / Rating */
+.admin-table th:nth-child(6) { width: 20%; } /* Actions */
 
 .admin-table th {
     padding: 15px 20px;
@@ -520,13 +562,15 @@
     vertical-align: middle;
     font-size: 0.95rem;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .admin-table tbody tr:hover {
     background-color: rgba(255, 255, 255, 0.02);
 }
 
-/* --- Admin Table Components --- */
+/* Admin Table Components */
 .admin-select {
     background-color: var(--bg-input);
     color: var(--text-main);
@@ -538,7 +582,7 @@
     font-weight: 600;
     cursor: pointer;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s ease;
 }
 
 .admin-select:focus {
@@ -561,6 +605,14 @@
     align-items: center;
 }
 
-/* Text helpers */
-.fw-bold { font-weight: 700; }
-.highlight-green { color: var(--primary); }
+/* Text Helpers */
+.fw-bold { 
+    font-weight: 700; 
+}
+
+.text-muted { 
+    color: var(--text-muted); 
+}
+.highlight-green { 
+    color: var(--primary); 
+}

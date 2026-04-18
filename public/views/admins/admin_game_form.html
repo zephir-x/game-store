@@ -8,12 +8,12 @@
     <?php include __DIR__ . '/../partials/nav.html'; ?>
     
     <main class="store-layout">
-        <div class="admin-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="admin-header flex-between">
             <h1>
-                <i class="fa-solid fa-gamepad" style="color: var(--primary); margin-right: 10px;"></i> 
-                <?= $game ? 'Edit Game: <span style="color: var(--text-main);">' . htmlspecialchars($game->getTitle()) . '</span>' : 'Add New Game' ?>
+                <i class="fa-solid fa-gamepad text-primary btn-icon-margin"></i> 
+                <?= $game ? 'Edit Game: <span class="text-main">' . htmlspecialchars($game->getTitle()) . '</span>' : 'Add New Game' ?>
             </h1>
-            <a href="/admin" class="btn-outline btn-sm"><i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back to Admin</a>
+            <a href="/admin" class="btn-outline btn-sm"><i class="fa-solid fa-arrow-left btn-icon-margin"></i> Back to Admin</a>
         </div>
         
         <div class="admin-card edit-card">
@@ -52,9 +52,9 @@
                         
                         <div class="form-group">
                             <label>Upload Cover Image (Leave empty to keep current)</label>
-                            <input type="file" name="graphics" accept="image/*" class="form-input" style="padding: 9px 15px;">
+                            <input type="file" name="graphics" accept="image/*" class="form-input form-input-file">
                             <?php if($game && $game->getGraphics()): ?>
-                                <small style="color: var(--primary); margin-top: 8px; display: block;">
+                                <small class="text-primary" style="display: block; margin-top: 8px;">
                                     <i class="fa-solid fa-image"></i> Current: <?= htmlspecialchars($game->getGraphics() ?: 'default.jpg') ?>
                                 </small>
                             <?php endif; ?>
@@ -69,15 +69,15 @@
                         <textarea name="description" rows="5" class="form-input" required><?= $game ? htmlspecialchars($game->getDescription()) : '' ?></textarea>
                     </div>
 
-                    <div class="form-group" style="margin-top: 20px;">
+                    <div class="form-group mt-20">
                         <label>System Requirements (Specification)</label>
                         <textarea name="specification" rows="3" class="form-input" placeholder="OS: Windows 10, CPU: i5..."><?= $game ? htmlspecialchars($game->getSpecification() ?? '') : '' ?></textarea>
                     </div>
                 </div>
 
                 <div class="edit-actions">
-                    <button type="submit" class="btn-primary btn-block" style="font-size: 1.1rem; padding: 15px;">
-                        <i class="fa-solid fa-floppy-disk" style="margin-right: 8px;"></i> <?= $game ? 'Update Game Database' : 'Publish New Game' ?>
+                    <button type="submit" class="btn-primary btn-block btn-lg">
+                        <i class="fa-solid fa-floppy-disk btn-icon-margin"></i> <?= $game ? 'Update Game Database' : 'Publish New Game' ?>
                     </button>
                 </div>
             </form>

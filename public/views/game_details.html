@@ -14,7 +14,6 @@
         </div>
 
         <div class="game-content-grid">
-            
             <div class="game-main-col">
                 <h1 class="game-title"><?= htmlspecialchars($game->getTitle()); ?></h1>
                 
@@ -27,7 +26,7 @@
                 </div>
 
                 <div class="req-box">
-                    <h3><i class="fa-solid fa-microchip" style="color: var(--primary); margin-right: 8px;"></i> System Specifications (Minimum)</h3>
+                    <h3><i class="fa-solid fa-microchip req-icon"></i> System Specifications (Minimum)</h3>
                     <p class="req-text">
                         <?= htmlspecialchars($game->getSpecification() ?? 'System requirements not specified for this title.'); ?>
                     </p>
@@ -44,15 +43,15 @@
                         <?php if(!isset($_SESSION['user_id'])): ?>
                             <a href="/login" class="btn-primary btn-block">Log in to Get</a>
                         <?php elseif($isOwned): ?>
-                            <button disabled class="btn-primary btn-block" style="background-color: var(--bg-input); color: var(--text-muted) !important;">Already in Library</button>
+                            <button disabled class="btn-primary btn-block btn-disabled">Already in Library</button>
                         <?php else: ?>
                             <button id="buy-button" class="btn-primary btn-block" onclick="buyGame('<?= $game->getId() ?>')">
-                                <i class="fa-solid fa-cart-shopping" style="margin-right: 8px;"></i> Get Now
+                                <i class="fa-solid fa-cart-shopping btn-icon-margin"></i> Get Now
                             </button>
                         <?php endif; ?>
                     </div>
                     
-                    <div id="response-message" style="display: block; text-align: center; margin-top: 10px; font-size: 0.85rem;"></div>
+                    <div id="response-message" class="buy-response-msg"></div>
 
                     <div class="game-stats-list">
                         <div class="stat-row">
@@ -135,14 +134,14 @@
 
             <div class="review-list">
                 <?php if(empty($reviews)): ?>
-                    <p class="text-muted" style="font-style: italic; text-align: center; margin-top: 40px;">No reviews yet. Be the first to review this game!</p>
+                    <p class="empty-reviews-msg">No reviews yet. Be the first to review this game!</p>
                 <?php else: ?>
                     <?php foreach($reviews as $review): ?>
                         <div class="review-card">
                             <div class="review-card-header">
                                 <div class="review-user">
-                                    <div class="review-avatar" style="background-color: transparent;">
-                                        <img src="/public/resources/avatars/<?= htmlspecialchars($review->getAvatar() ?? 'gaming-console.png') ?>" alt="Avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                    <div class="review-avatar">
+                                        <img src="/public/resources/avatars/<?= htmlspecialchars($review->getAvatar() ?? 'gaming-console.png') ?>" alt="Avatar">
                                     </div>
                                     <div class="review-user-info">
                                         <strong><?= htmlspecialchars($review->getUsername()) ?></strong>

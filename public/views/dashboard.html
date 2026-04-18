@@ -52,7 +52,6 @@
             <div id="profile-edit" class="hidden">
                 <div class="profile-card edit-card">
                     <form action="/update-profile" method="POST">
-                        
                         <div class="edit-section">
                             <h3>Choose Avatar</h3>
                             <div class="avatar-grid">
@@ -79,7 +78,7 @@
                                     <input type="email" name="email" value="<?= htmlspecialchars($email) ?>" class="form-input" required>
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-top: 20px;">
+                            <div class="form-group mt-20">
                                 <label>New Password (leave blank to keep current)</label>
                                 <input type="password" name="password" class="form-input" placeholder="••••••••">
                             </div>
@@ -97,7 +96,7 @@
                                     <input type="text" name="surname" value="<?= htmlspecialchars($details['surname'] ?? '') ?>" class="form-input">
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-top: 20px;">
+                            <div class="form-group mt-20">
                                 <label>Bio</label>
                                 <textarea name="bio" rows="3" class="form-input" placeholder="Tell us about your gaming setup..."><?= htmlspecialchars($details['bio'] ?? '') ?></textarea>
                             </div>

@@ -8,12 +8,12 @@
     <?php include __DIR__ . '/../partials/nav.html'; ?>
     
     <main class="store-layout">
-        <div class="admin-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="admin-header flex-between">
             <h1>
-                <i class="fa-solid fa-user-pen" style="color: var(--primary); margin-right: 10px;"></i> 
-                Edit User: <span style="color: var(--text-main);"><?= htmlspecialchars($editedUser->getUsername()) ?></span>
+                <i class="fa-solid fa-user-pen text-primary btn-icon-margin"></i> 
+                Edit User: <span class="text-main"><?= htmlspecialchars($editedUser->getUsername()) ?></span>
             </h1>
-            <a href="/admin" class="btn-outline btn-sm"><i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back to Admin</a>
+            <a href="/admin" class="btn-outline btn-sm"><i class="fa-solid fa-arrow-left btn-icon-margin"></i> Back to Admin</a>
         </div>
         
         <div class="admin-card edit-card">
@@ -47,7 +47,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-top: 20px;">
+                    <div class="form-group mt-20">
                         <label>Force New Password (leave blank to keep current)</label>
                         <input type="password" name="password" class="form-input" placeholder="Type new password to override...">
                     </div>
@@ -66,15 +66,15 @@
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-top: 20px;">
+                    <div class="form-group mt-20">
                         <label>Biography</label>
                         <textarea name="bio" rows="4" class="form-input"><?= htmlspecialchars($details['bio'] ?? '') ?></textarea>
                     </div>
                 </div>
 
                 <div class="edit-actions">
-                    <button type="submit" class="btn-primary btn-block" style="font-size: 1.1rem; padding: 15px;">
-                        <i class="fa-solid fa-user-shield" style="margin-right: 8px;"></i> Save User Modifications
+                    <button type="submit" class="btn-primary btn-block btn-lg">
+                        <i class="fa-solid fa-user-shield btn-icon-margin"></i> Save User Modifications
                     </button>
                 </div>
             </form>

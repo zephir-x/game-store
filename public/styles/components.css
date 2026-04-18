@@ -26,6 +26,16 @@
     background-color: var(--msg-bg);
 }
 
+.alert-success {
+    border: 1px solid var(--msg-success);
+    color: var(--msg-success);
+}
+
+.alert-error {
+    border: 1px solid var(--msg-error);
+    color: var(--msg-error);
+}
+
 /* Section Headers */
 .section-header {
     display: flex;
@@ -39,16 +49,6 @@
     color: var(--text-main);
 }
 
-.sort-dropdown {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    cursor: pointer;
-}
-
 /* Game Grid & Cards */
 .game-grid {
     display: grid;
@@ -56,7 +56,6 @@
     gap: 25px;
 }
 
-/* Responsiveness for grid */
 @media screen and (max-width: 1100px) {
     .game-grid { grid-template-columns: repeat(3, 1fr); }
 }
@@ -97,7 +96,7 @@
     height: 100%;
     object-fit: cover;
     opacity: 0.85;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s ease;
 }
 
 .game-card:hover .game-card-image-wrapper img {
@@ -126,14 +125,10 @@
     letter-spacing: 0.5px;
 }
 
-.game-card-rating {
-    color: var(--primary);
+.game-card-rating, .game-card-rating i {
+    color: var(--primary) !important;
     font-weight: 700;
-}
-
-.game-card-rating i {
-    color: var(--primary);
-    margin-right: 4px;
+    margin-right: 2px;
 }
 
 .game-card-title {
@@ -150,7 +145,7 @@
     color: var(--text-main);
 }
 
-/* Hidden elements & Load More */
+/* Load More Button */
 .hidden-game {
     display: none !important;
 }
@@ -179,7 +174,7 @@
     background-color: var(--border-subtle);
 }
 
-/* Empty State */
+/* Empty States */
 .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -203,18 +198,6 @@
     margin-bottom: 25px;
 }
 
-/* Success version */
-.alert-success {
-    border: 1px solid var(--msg-success);
-    color: var(--msg-success);
-}
-
-/* Error version */
-.alert-error {
-    border: 1px solid var(--msg-error);
-    color: var(--msg-error);
-}
-
 /* Animations */
 @keyframes slideDown {
     from { opacity: 0; transform: translateY(-20px); }
@@ -222,14 +205,8 @@
 }
 
 @keyframes revealCard {
-    from { 
-        opacity: 0; 
-        transform: translateY(30px); 
-    }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .fade-in-card {

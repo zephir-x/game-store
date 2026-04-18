@@ -10,7 +10,7 @@ class Review {
     private string $content;
     private ?string $createdAt;
 
-    public function __construct(?int $id = null, int $userId, int $gameId, ?string $username = null, $avatar = null, int $rating, string $content, ?string $createdAt = null) {
+    public function __construct(?int $id, int $userId, int $gameId, ?string $username, $avatar, int $rating, string $content, ?string $createdAt) {
         $this->id = $id;
         $this->userId = $userId;
         $this->gameId = $gameId;
