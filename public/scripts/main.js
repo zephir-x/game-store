@@ -88,6 +88,10 @@ function buyGame(gameId) {
             messageSpan.className = "buy-response-msg highlight-green fw-bold";
             messageSpan.innerHTML = '<i class="fa-solid fa-check"></i> Added successfully!';
             
+            // If purchased successfully, hide the Wishlist button (if present)
+            const wishlistBtn = document.getElementById('wishlist-btn');
+            if (wishlistBtn) wishlistBtn.style.display = 'none';
+
             // Review Form Disclosure
             const mustOwnMsg = document.getElementById('must-own-msg');
             const hiddenReviewForm = document.getElementById('hidden-review-form');
@@ -152,4 +156,49 @@ function selectAvatar(filename) {
     
     const avatarInput = document.getElementById('avatar-input');
     if(avatarInput) avatarInput.value = filename;
+}
+
+// Wishlist Toggle Action
+function toggleWishlist(gameId) {
+    const btn = document.getElementById('wishlist-btn');
+    const icon = btn.querySelector('i');
+    
+    // Multi-click protection
+    if (btn.disabled) return;
+    btn.disabled = true;
+
+    fetch('/toggle-wishlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gameId: gameId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        btn.disabled = false;
+        
+        if (data.success) {
+            if (data.action === 'added') {
+                btn.classList.add('active');
+                icon.classList.remove('fa-regular');
+                icon.classList.add('fa-solid');
+                btn.innerHTML = '<i class="fa-solid fa-heart btn-icon-margin"></i> On Wishlist';
+            } else if (data.action === 'removed') {
+                btn.classList.remove('active');
+                icon.classList.remove('fa-solid');
+                icon.classList.add('fa-regular');
+                btn.innerHTML = '<i class="fa-regular fa-heart btn-icon-margin"></i> Add to Wishlist';
+            }
+        } else {
+            // If the user is not logged in
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            } else {
+                alert(data.error || "Something went wrong!");
+            }
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        btn.disabled = false;
+    });
 }

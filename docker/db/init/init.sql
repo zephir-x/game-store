@@ -56,6 +56,13 @@ CREATE TABLE user_library (
     PRIMARY KEY (user_id, game_id)
 );
 
+CREATE TABLE wishlist (
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    game_id INTEGER REFERENCES games(id) ON DELETE CASCADE,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, game_id)
+);
+
 -- Table for saving logs by trigger
 CREATE TABLE audit_log (
     id SERIAL PRIMARY KEY,

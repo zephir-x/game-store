@@ -23,10 +23,15 @@ class LibraryController extends AppController {
         // Get the list of games assigned to the user
         $library = $this->libraryRepository->getUserLibrary($userId);
 
+        // We download the wishlist
+        $gameRepo = new GameRepository();
+        $wishlist = $gameRepo->getUserWishlist($userId);
+
         // Render the library view + pass data to the view
         return $this->render("library", [
             "title" => "Library - GameNest",
-            "library" => $library
+            "library" => $library,
+            "wishlist" => $wishlist
         ]);
     }
 }

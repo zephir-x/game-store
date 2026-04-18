@@ -16,7 +16,7 @@
         </div>
 
         <div class="section-header">
-            <h2><i class="fa-solid fa-border-all btn-icon-margin"></i> All Titles</h2>
+            <h2><i class="fa-solid fa-border-all btn-icon-margin"></i> Purchased Titles</h2>
         </div>
 
         <?php if(empty($library)): ?>
@@ -27,7 +27,7 @@
                 <a href="/" class="btn-primary">Browse Store</a>
             </div>
         <?php else: ?>
-            <div class="game-grid">
+            <div class="game-grid" style="margin-bottom: 60px;">
                 <?php foreach($library as $game): ?>
                     <a href="/game/<?= $game['game_id'] ?>" class="game-card">
                         <div class="game-card-image-wrapper">
@@ -36,6 +36,42 @@
                         <div class="game-card-content">
                             <h3 class="game-card-title"><?= htmlspecialchars($game['title']); ?></h3>
                             <p class="game-card-meta-green">Added: <?= date('d M Y', strtotime($game['purchased_at'])) ?></p>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="section-header" style="margin-top: 40px; border-top: 1px solid var(--border-subtle); padding-top: 40px;">
+            <h2><i class="fa-solid fa-heart btn-icon-margin text-primary"></i> My Wishlist</h2>
+            <div class="library-stats">
+                <span class="stat-pill"><?= count($wishlist) ?> SAVED</span>
+            </div>
+        </div>
+
+        <?php if(empty($wishlist)): ?>
+            <div class="empty-state">
+                <i class="fa-regular fa-heart"></i>
+                <h3>Your wishlist is empty</h3>
+                <p>Save games you'd like to buy later by clicking the heart icon on their store page.</p>
+                <a href="/" class="btn-outline">Explore Games</a>
+            </div>
+        <?php else: ?>
+            <div class="game-grid">
+                <?php foreach($wishlist as $w_game): ?>
+                    <a href="/game/<?= $w_game['game_id'] ?>" class="game-card">
+                        <div class="game-card-image-wrapper">
+                            <img src="/public/resources/covers/<?= htmlspecialchars($w_game['graphics'] ?? 'default.jpg'); ?>" alt="<?= htmlspecialchars($w_game['title']); ?>">
+                        </div>
+                        <div class="game-card-content">
+                            <div class="game-card-meta">
+                                <span class="game-card-category"><?= htmlspecialchars($w_game['category']); ?></span>
+                            </div>
+                            <h3 class="game-card-title"><?= htmlspecialchars($w_game['title']); ?></h3>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+                                <p class="game-card-price" style="margin: 0;"><?= number_format($w_game['price'], 2) ?> PLN</p>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">Added: <?= date('d M', strtotime($w_game['added_at'])) ?></span>
+                            </div>
                         </div>
                     </a>
                 <?php endforeach; ?>

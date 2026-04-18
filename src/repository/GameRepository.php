@@ -132,4 +132,37 @@ class GameRepository extends Repository {
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
     }
+
+    // Checks if the game is on the user's wishlist
+    public function isGameOnWishlist(int $userId, int $gameId): bool {
+        $stmt = $this->database->prepare('SELECT 1 FROM wishlist WHERE user_id = :uid AND game_id = :gid');
+        $stmt->execute(['uid' => $userId, 'gid' => $gameId]);
+        return (bool)$stmt->fetch();
+    }
+
+    // Adds or removes a game from the wishlist (returns information about the action performed)
+    public function toggleWishlist(int $userId, int $gameId): string {
+        if ($this->isGameOnWishlist($userId, $gameId)) {
+            $stmt = $this->database->prepare('DELETE FROM wishlist WHERE user_id = :uid AND game_id = :gid');
+            $stmt->execute(['uid' => $userId, 'gid' => $gameId]);
+            return 'removed';
+        } else {
+            $stmt = $this->database->prepare('INSERT INTO wishlist (user_id, game_id) VALUES (:uid, :gid)');
+            $stmt->execute(['uid' => $userId, 'gid' => $gameId]);
+            return 'added';
+        }
+    }
+
+    // Retrieves all games from the user's wishlist
+    public function getUserWishlist(int $userId): array {
+        $stmt = $this->database->prepare('
+            SELECT w.added_at, g.id AS game_id, g.title, g.category, g.graphics, g.price 
+            FROM wishlist w
+            JOIN games g ON w.game_id = g.id
+            WHERE w.user_id = :uid
+            ORDER BY w.added_at DESC
+        ');
+        $stmt->execute(['uid' => $userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

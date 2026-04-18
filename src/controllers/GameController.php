@@ -31,6 +31,7 @@ class GameController extends AppController {
         // We check if the user is logged in and if he already owns the game
         $isOwned = false;
         $hasReviewed = false;
+        $isOnWishlist = false;
 
         if (session_status() === PHP_SESSION_NONE) session_start();
 
@@ -38,6 +39,7 @@ class GameController extends AppController {
             $userId = $_SESSION['user_id'];
             $isOwned = $this->libraryRepository->isGameOwned($userId, $game->getId());
             $hasReviewed = $this->reviewRepository->hasUserReviewed($userId, $game->getId());
+            $isOnWishlist = $this->gameRepository->isGameOnWishlist($userId, $game->getId());
         }
 
         $reviews = $this->reviewRepository->getReviewsForGame($game->getId());
@@ -47,6 +49,7 @@ class GameController extends AppController {
             "game" => $game,
             "isOwned" => $isOwned,
             "hasReviewed" => $hasReviewed,
+            "isOnWishlist" => $isOnWishlist,
             "reviews" => $reviews
         ]);
     }
@@ -114,5 +117,40 @@ class GameController extends AppController {
         // Redirection back to the game page
         header("Location: /game/" . $gameId);
         exit();
+    }
+
+    // Endpoint for handling heart clicks (Fetch API)
+    public function toggleWishlist() {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        
+        // If not logged in, we return an error and a link to log in
+        if (!isset($_SESSION['user_id'])) {
+            http_response_code(401);
+            echo json_encode(['error' => 'Unauthorized', 'redirect' => '/login']);
+            return;
+        }
+
+        if (!$this->isPost()) {
+            http_response_code(405);
+            return;
+        }
+
+        $data = json_decode(file_get_contents('php://input'), true);
+        $gameId = $data['gameId'] ?? null;
+
+        if (!$gameId) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid game ID']);
+            return;
+        }
+
+        try {
+            $action = $this->gameRepository->toggleWishlist($_SESSION['user_id'], $gameId);
+            http_response_code(200);
+            echo json_encode(['success' => true, 'action' => $action]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Server error']);
+        }
     }
 }

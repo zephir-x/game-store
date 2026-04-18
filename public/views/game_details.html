@@ -51,6 +51,16 @@
                         <?php endif; ?>
                     </div>
                     
+                    <?php if(isset($_SESSION['user_id']) && !$isOwned): ?>
+                        <button id="wishlist-btn" class="btn-block btn-wishlist <?= $isOnWishlist ? 'active' : '' ?>" onclick="toggleWishlist('<?= $game->getId() ?>')">
+                            <?php if($isOnWishlist): ?>
+                                <i class="fa-solid fa-heart btn-icon-margin"></i> On Wishlist
+                            <?php else: ?>
+                                <i class="fa-regular fa-heart btn-icon-margin"></i> Add to Wishlist
+                            <?php endif; ?>
+                        </button>
+                    <?php endif; ?>
+
                     <div id="response-message" class="buy-response-msg"></div>
 
                     <div class="game-stats-list">

@@ -46,6 +46,10 @@ class Routing {
             "controller" => "GameController",
             "action" => "buy"
         ],
+        "toggle-wishlist" => [
+            "controller" => "GameController",
+            "action" => "toggleWishlist"
+        ],
         "add-review" => [
             "controller" => "GameController",
             "action" => "addReview"
