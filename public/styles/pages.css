@@ -365,7 +365,17 @@
 }
 
 .review-form-card h3 {
+    margin-top: 0;
     margin-bottom: 20px;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.6rem;
+}
+
+.review-form-card h3 i {
+    color: var(--primary);
 }
 
 .review-list {

@@ -72,19 +72,31 @@
             <div class="game-sidebar" style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
                 <div class="buy-card" style="display: flex; flex-direction: column; flex-grow: 1;">
                     <div class="buy-price">
-                        <?= number_format($game->getPrice(), 2); ?> PLN
+                        <?= $game->getFormattedPrice(); ?>
                     </div>
                     
                     <div id="buy-section">
                         <?php if(!isset($_SESSION['user_id'])): ?>
                             <a href="/login" class="btn-primary btn-block">Log in to Get</a>
+                        
                         <?php elseif($isOwned): ?>
                             <button disabled class="btn-primary btn-block btn-disabled btn-library-owned">
                                 <i class="fa-solid fa-check btn-icon-margin"></i> Already in Library
                             </button>
-                        <?php else: ?>
+                        
+                        <?php elseif(!$game->isReleased()): ?>
+                            <button disabled class="btn-outline btn-block btn-disabled" style="padding: 20px; font-size: 1.1rem; margin-bottom: 20px;">
+                                <i class="fa-solid fa-clock btn-icon-margin"></i> Coming Soon
+                            </button>
+                        
+                        <?php elseif($game->isFree()): ?>
                             <button id="buy-button" class="btn-primary btn-block" onclick="buyGame('<?= $game->getId() ?>')">
-                                <i class="fa-solid fa-cart-shopping btn-icon-margin"></i> Get Now
+                                <i class="fa-solid fa-plus btn-icon-margin"></i> Add to Library
+                            </button>
+                        
+                        <?php else: ?>
+                            <button id="buy-button" class="btn-primary btn-block" onclick="openPaymentModal('<?= $game->getId() ?>', '<?= number_format($game->getPrice(), 2) ?>')">
+                                <i class="fa-solid fa-cart-shopping btn-icon-margin"></i> Buy Game
                             </button>
                         <?php endif; ?>
                     </div>
@@ -252,6 +264,25 @@
             <?php endif; ?>
         </div>
     </main>
+
+    <div id="payment-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;">
+        <div class="admin-card" style="max-width: 450px; width: 100%; text-align: center; padding: 40px; transform: translateY(20px); transition: transform 0.3s ease;" id="payment-modal-content">
+            <div style="font-size: 3rem; color: var(--text-muted); margin-bottom: 20px; display: flex; justify-content: center; gap: 15px;">
+                <i class="fa-brands fa-cc-stripe"></i> 
+                <i class="fa-brands fa-paypal"></i>
+                <i class="fa-brands fa-cc-visa"></i>
+            </div>
+            <h2 style="margin-bottom: 10px;">Payment Gateway</h2>
+            <p class="text-muted" style="margin-bottom: 30px;">You are simulating a secure payment. Total amount to pay: <br><strong id="modal-price" style="font-size: 1.5rem; color: var(--primary);">0.00 PLN</strong></p>
+            
+            <div class="form-grid-2">
+                <button class="btn-outline" onclick="closePaymentModal(true)">Cancel</button>
+                <button class="btn-primary" id="confirm-payment-btn">
+                    <i class="fa-solid fa-lock btn-icon-margin"></i> Pay Now
+                </button>
+            </div>
+        </div>
+    </div>
 
     <footer class="main-footer">
         &copy; 2026 GameNest &mdash; Built for players, not publishers.

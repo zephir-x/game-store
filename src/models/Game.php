@@ -38,4 +38,21 @@ class Game {
     public function getSpecification(): ?string { return $this->specification; }
     public function getDeveloper(): string { return $this->developer; }
     public function getReleaseDate(): string { return $this->releaseDate; }
+
+    // Helpers
+
+    // Checks if the game is free
+    public function isFree(): bool { 
+        return $this->price <= 0; 
+    }
+
+    // Checks if the game has been released
+    public function isReleased(): bool { 
+        return strtotime($this->releaseDate) <= strtotime('today'); 
+    }
+
+    // Returns the formatted price (e.g., "Free" or "199.99 PLN")
+    public function getFormattedPrice(): string { 
+        return $this->isFree() ? 'Free' : number_format($this->price, 2) . ' PLN'; 
+    }
 }

@@ -93,7 +93,9 @@
                             <tr class="admin-table-row <?= $index >= 3 ? 'hidden-admin-row' : '' ?>">
                                 <td class="text-muted">#<?= $game['game_id'] ?></td>
                                 <td class="fw-bold"><?= htmlspecialchars($game['title']) ?></td>
-                                <td><?= number_format($game['price'], 2) ?> PLN</td>
+                                <td>
+                                    <?= $game['price'] <= 0 ? '<span class="highlight-green">Free</span>' : number_format($game['price'], 2) . ' PLN' ?>
+                                </td>
                                 <td>
                                     <span class="highlight-green"><?= $game['total_reviews'] ?></span> <span class="text-muted">reviews</span>
                                 </td>

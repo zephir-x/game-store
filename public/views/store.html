@@ -41,7 +41,7 @@
                                 <span class="game-card-rating"><i class="fa-solid fa-star"></i> <?= number_format($game->getAverageRating(), 1); ?></span>
                             </div>
                             <h3 class="game-card-title"><?= htmlspecialchars($game->getTitle()); ?></h3>
-                            <p class="game-card-price"><?= number_format($game->getPrice(), 2); ?> PLN</p>
+                            <p class="game-card-price"><?= $game->getFormattedPrice(); ?></p>
                         </div>
                     </a>
                 <?php endforeach; ?>

@@ -71,8 +71,8 @@ class GameController extends AppController {
         }
 
         // We receive raw JSON data sent via Fetch API from the browser
-        $data = json_decode(file_get_contents('php://input'), true);
         $gameId = (int)($_POST['game_id'] ?? 0);
+        $userId = $_SESSION['user_id'];
 
         if (!$gameId) {
             http_response_code(400); // Bad Request
@@ -80,7 +80,18 @@ class GameController extends AppController {
             return;
         }
 
-        $userId = $_SESSION['user_id'];
+        // Download the game to check the release date
+        $game = $this->gameRepository->getGameById($gameId);
+        if (!$game) {
+            echo json_encode(['error' => 'Game not found']);
+            return;
+        }
+
+        // Security: The game is not released yet
+        if (!$game->isReleased()) {
+            echo json_encode(['success' => false, 'message' => 'This game is not released yet.']);
+            return;
+        }
 
         // Extra security: does the player already have it?
         if ($this->libraryRepository->isGameOwned($userId, $gameId)) {

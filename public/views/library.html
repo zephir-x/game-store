@@ -69,7 +69,9 @@
                             </div>
                             <h3 class="game-card-title"><?= htmlspecialchars($w_game['title']); ?></h3>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
-                                <p class="game-card-price" style="margin: 0;"><?= number_format($w_game['price'], 2) ?> PLN</p>
+                                <p class="game-card-price" style="margin: 0;">
+                                    <?= $w_game['price'] <= 0 ? 'Free' : number_format($w_game['price'], 2) . ' PLN' ?>
+                                </p>
                                 <span style="font-size: 0.75rem; color: var(--text-muted);">Added: <?= date('d M', strtotime($w_game['added_at'])) ?></span>
                             </div>
                         </div>

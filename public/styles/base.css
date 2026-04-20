@@ -217,9 +217,15 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
 }
 
 .btn-library-owned {
-    padding: 20px;
-    font-size: 1.1rem;
-    margin-bottom: 20px;
+    padding: 20px !important;
+    font-size: 1.1rem !important;
+    margin-bottom: 20px !important;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: default;
+    opacity: 0.8;
 }
 
 .game-meta-details {

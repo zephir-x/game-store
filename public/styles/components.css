@@ -27,13 +27,46 @@
 }
 
 .alert-success {
+    background-color: rgba(52, 211, 153, 0.30);
     border: 1px solid var(--msg-success);
     color: var(--msg-success);
 }
 
 .alert-error {
+    background-color: rgba(255, 71, 87, 0.30);
     border: 1px solid var(--msg-error);
     color: var(--msg-error);
+}
+
+/* A class for Toast (floating) messages */
+.alert-toast {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    min-width: 320px;
+    max-width: 450px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); 
+    pointer-events: none;
+    opacity: 0;
+}
+
+.toast-slide-down {
+    animation: slideDownIn 0.5s ease-out forwards;
+}
+
+@keyframes slideDownIn {
+    from {
+        opacity: 0;
+        top: 60px;
+        transform: translateX(-50%);
+    }
+    to {
+        opacity: 1;
+        top: 100px;
+        transform: translateX(-50%);
+    }
 }
 
 /* Section Headers */
