@@ -59,31 +59,19 @@
                             <h3>Choose Avatar</h3>
                             <div class="avatar-grid">
                                 <input type="hidden" name="avatar" id="avatar-input" value="<?= htmlspecialchars($details['avatar'] ?? 'gaming-console.jpg') ?>">
-                                
                                 <?php foreach($avatars as $av): ?>
                                     <img src="/public/resources/avatars/<?= $av ?>" 
                                          class="avatar-option <?= ($details['avatar'] ?? 'gaming-console.jpg') === $av ? 'selected' : '' ?>" 
-                                         onclick="selectAvatar('<?= $av ?>')" 
-                                         alt="avatar option">
+                                         onclick="selectAvatar('<?= $av ?>')" alt="avatar option">
                                 <?php endforeach; ?>
                             </div>
                         </div>
 
                         <div class="edit-section">
-                            <h3>Account Details</h3>
-                            <div class="form-grid-2">
-                                <div class="form-group">
-                                    <label>Username</label>
-                                    <input type="text" name="username" value="<?= htmlspecialchars($username) ?>" class="form-input" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Email Address</label>
-                                    <input type="email" name="email" value="<?= htmlspecialchars($email) ?>" class="form-input" required>
-                                </div>
-                            </div>
-                            <div class="form-group mt-20">
-                                <label>New Password (leave blank to keep current)</label>
-                                <input type="password" name="password" class="form-input" placeholder="••••••••">
+                            <h3>Account Identity</h3>
+                            <div class="form-group max-w-400">
+                                <label>Username (Display Name)</label>
+                                <input type="text" name="username" value="<?= htmlspecialchars($username) ?>" class="form-input" required>
                             </div>
                         </div>
 
@@ -106,7 +94,7 @@
                         </div>
 
                         <div class="edit-actions">
-                            <button type="submit" class="btn-primary">Save Changes</button>
+                            <button type="submit" class="btn-primary">Save Profile Changes</button>
                             <button type="button" class="btn-outline" onclick="toggleEditMode()">Cancel</button>
                         </div>
                     </form>
@@ -114,39 +102,69 @@
             </div>
         </div>
 
-        <?php if ($role !== 'ADMIN'): ?>
-        <div class="danger-zone">
-            <div style="margin-bottom: 15px;">
-                <h2 style="color: var(--error); font-size: 1.2rem; margin-bottom: 5px;">
-                    <i class="fa-solid fa-triangle-exclamation"></i> Danger Zone
+        <div class="security-zone fade-in-card delayed-fade">
+            <div class="mb-20">
+                <h2 class="section-title">
+                    <i class="fa-solid fa-shield-halved text-primary"></i> Security Zone
                 </h2>
-                <p class="text-muted" style="font-size: 0.9rem;">Once you delete your account, there is no going back.</p>
+                <p class="text-muted section-subtitle">Manage your sensitive credentials. You will need your current password to make changes here.</p>
             </div>
 
-            <div id="delete-account-view">
-                <button type="button" onclick="toggleDeleteForm()" class="btn-danger" style="padding: 8px 16px; font-size: 0.9rem;">
-                    <i class="fa-solid fa-trash"></i> Delete Account
-                </button>
+            <div class="security-actions-nav">
+                <button type="button" onclick="toggleSecurityForm('email')" class="btn-outline btn-sm">Change Email</button>
+                <button type="button" onclick="toggleSecurityForm('password')" class="btn-outline btn-sm">Change Password</button>
+                
+                <?php if ($role !== 'ADMIN'): ?>
+                    <button type="button" onclick="toggleSecurityForm('delete')" class="btn-danger btn-sm ml-auto">Delete Account</button>
+                <?php endif; ?>
             </div>
 
-            <div id="delete-account-form" class="hidden">
-                <form action="/delete-account" method="POST" class="clean-form">
-                    <p style="margin-bottom: 10px; color: var(--text-main); font-size: 0.95rem;">Please enter your password to confirm:</p>
-                    
+            <div id="security-forms-container" class="hidden security-forms-wrapper">
+                <form id="sec-form-email" action="/change-email" method="POST" class="clean-form sec-form hidden max-w-400">
                     <div class="form-group">
-                        <input type="password" name="password" class="form-input" placeholder="Confirm password" required>
+                        <label>New Email Address</label>
+                        <input type="email" name="new_email" class="form-input" required>
                     </div>
-                    
-                    <div class="danger-zone-actions">
-                        <button type="submit" class="btn-danger-solid">
-                            <i class="fa-solid fa-skull btn-icon-margin"></i> Confirm Deletion
-                        </button>
-                        <button type="button" class="btn-outline" onclick="toggleDeleteForm()">Cancel</button>
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" name="current_password" class="form-input" required>
+                    </div>
+                    <div class="edit-actions mt-20">
+                        <button type="submit" class="btn-primary">Update Email</button>
+                        <button type="button" class="btn-outline" onclick="toggleSecurityForm('none')">Cancel</button>
                     </div>
                 </form>
+
+                <form id="sec-form-password" action="/change-password" method="POST" class="clean-form sec-form hidden max-w-400">
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" name="new_password" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" name="current_password" class="form-input" required>
+                    </div>
+                    <div class="edit-actions mt-20">
+                        <button type="submit" class="btn-primary">Update Password</button>
+                        <button type="button" class="btn-outline" onclick="toggleSecurityForm('none')">Cancel</button>
+                    </div>
+                </form>
+
+                <?php if ($role !== 'ADMIN'): ?>
+                <form id="sec-form-delete" action="/delete-account" method="POST" class="clean-form sec-form hidden max-w-400">
+                    <p class="warning-text">Warning: This action is irreversible!</p>
+                    <div class="form-group">
+                        <label>Confirm Current Password</label>
+                        <input type="password" name="password" class="form-input" required>
+                    </div>
+                    <div class="edit-actions mt-20">
+                        <button type="submit" class="btn-danger-solid">Permanently Delete Account</button>
+                        <button type="button" class="btn-outline" onclick="toggleSecurityForm('none')">Cancel</button>
+                    </div>
+                </form>
+                <?php endif; ?>
             </div>
         </div>
-        <?php endif; ?>
     </main>
 
     <footer class="main-footer">

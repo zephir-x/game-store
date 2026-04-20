@@ -34,6 +34,14 @@ class Routing {
             "controller" => "DashboardController", 
             "action" => "updateProfile"
         ],
+        "change-email" => [
+            "controller" => "DashboardController",
+            "action" => "changeEmail"
+        ],
+        "change-password" => [
+            "controller" => "DashboardController",
+            "action" => "changePassword"
+        ],
         "delete-account" => [
             "controller" => "DashboardController",
             "action" => "deleteAccount"
@@ -53,6 +61,10 @@ class Routing {
         "toggle-wishlist" => [
             "controller" => "GameController",
             "action" => "toggleWishlist"
+        ],
+        "toggle-like" => [
+            "controller" => "GameController",
+            "action" => "toggleReviewLike"
         ],
         "add-review" => [
             "controller" => "GameController",

@@ -38,8 +38,8 @@ class DashboardController extends AppController {
         $this->checkAuth();
         
         if ($this->isPost()) {
-            // 400: Does the request really have a username and email?
-            if (!isset($_POST['username']) || !isset($_POST['email'])) {
+            // 400: Does the request really have a username?
+            if (!isset($_POST['username'])) {
                 $this->abort(400);
             }
 
@@ -47,8 +47,6 @@ class DashboardController extends AppController {
             
             $data = [
                 'username' => trim($_POST['username'] ?? ''),
-                'email' => trim($_POST['email'] ?? ''),
-                'password' => $_POST['password'] ?? '', 
                 'name' => trim($_POST['name'] ?? ''),
                 'surname' => trim($_POST['surname'] ?? ''),
                 'bio' => trim($_POST['bio'] ?? ''),
@@ -63,11 +61,67 @@ class DashboardController extends AppController {
             } catch (PDOException $e) {
                 // Code 23505 indicates a duplicate value (UNIQUE constraint)
                 if ($e->getCode() == 23505) {
-                    $_SESSION['error_message'] = "This email or username is already taken!";
+                    $_SESSION['error_message'] = "This username is already taken!";
                 } else {
                     $_SESSION['error_message'] = "Failed to update profile. Please try again.";
                 }
-            }
+            } 
+        }
+        
+        header("Location: /dashboard");
+        exit();
+    }
+
+    public function changeEmail() {
+        $this->checkAuth();
+        if (!$this->isPost()) return;
+
+        $newEmail = trim($_POST['new_email'] ?? '');
+        $currentPassword = $_POST['current_password'] ?? '';
+        $userId = $_SESSION['user_id'];
+
+        $user = $this->userRepository->getUserById($userId);
+
+        if (!$user || !password_verify($currentPassword, $user->getPassword())) {
+            $_SESSION['error_message'] = "Incorrect current password. Email update failed.";
+            header("Location: /dashboard");
+            exit();
+        }
+
+        try {
+            $this->userRepository->updateEmail($userId, $newEmail);
+            $_SESSION['email'] = $newEmail; // we update the email in the session
+            $_SESSION['success_message'] = "Email updated successfully!";
+        } catch (Exception $e) {
+            $_SESSION['error_message'] = "Email update failed. This email might already be in use.";
+        }
+        
+        header("Location: /dashboard");
+        exit();
+    }
+
+    public function changePassword() {
+        $this->checkAuth();
+        if (!$this->isPost()) return;
+
+        $newPassword = $_POST['new_password'] ?? '';
+        $currentPassword = $_POST['current_password'] ?? '';
+        $userId = $_SESSION['user_id'];
+
+        $user = $this->userRepository->getUserById($userId);
+
+        if (!$user || !password_verify($currentPassword, $user->getPassword())) {
+            $_SESSION['error_message'] = "Incorrect current password. Password update failed.";
+            header("Location: /dashboard");
+            exit();
+        }
+
+        try {
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+            $this->userRepository->updatePassword($userId, $hashedPassword);
+            $_SESSION['success_message'] = "Password updated securely!";
+        } catch (Exception $e) {
+            $_SESSION['error_message'] = "Server error updating password.";
         }
         
         header("Location: /dashboard");

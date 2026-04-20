@@ -8,7 +8,7 @@ class GameRepository extends Repository {
     // Retrieves all games from the database
     public function getGames(?string $searchString = null): array {
         $baseQuery = '
-            SELECT g.id, g.title, g.description, g.category, g.price, g.graphics, g.specification, 
+            SELECT g.id, g.title, g.description, g.category, g.price, g.graphics, g.specification, g.developer, g.release_date,
                    v.calculated_rating AS average_rating
             FROM games g
             LEFT JOIN v_game_statistics v ON g.id = v.game_id
@@ -44,7 +44,9 @@ class GameRepository extends Repository {
                 (float)$game['price'],
                 $game['graphics'],
                 (float)($game['average_rating'] ?? 0),
-                $game['specification']
+                $game['specification'],
+                $game['developer'], 
+                $game['release_date']
             );
         }
 
@@ -76,7 +78,9 @@ class GameRepository extends Repository {
             (float)$game['price'],
             $game['graphics'],
             (float)($game['average_rating'] ?? 0),
-            $game['specification']
+            $game['specification'],
+            $game['developer'],
+            $game['release_date']
         );
     }
 
@@ -95,8 +99,8 @@ class GameRepository extends Repository {
     // Adds a new game to the database
     public function addGame(Game $game): void {
         $stmt = $this->database->prepare('
-            INSERT INTO games (title, description, category, price, graphics, specification)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO games (title, description, category, price, graphics, specification, developer, release_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ');
         $stmt->execute([
             $game->getTitle(),
@@ -104,7 +108,9 @@ class GameRepository extends Repository {
             $game->getCategory(),
             $game->getPrice(),
             $game->getGraphics(),
-            $game->getSpecification()
+            $game->getSpecification(),
+            $game->getDeveloper(),
+            $game->getReleaseDate()
         ]);
     }
 
@@ -112,7 +118,7 @@ class GameRepository extends Repository {
     public function updateGame(Game $game): void {
         $stmt = $this->database->prepare('
             UPDATE games 
-            SET title = ?, description = ?, category = ?, price = ?, graphics = ?, specification = ?
+            SET title = ?, description = ?, category = ?, price = ?, graphics = ?, specification = ?, developer = ?, release_date = ?
             WHERE id = ?
         ');
         $stmt->execute([
@@ -122,6 +128,8 @@ class GameRepository extends Repository {
             $game->getPrice(),
             $game->getGraphics(),
             $game->getSpecification(),
+            $game->getDeveloper(),
+            $game->getReleaseDate(),
             $game->getId()
         ]);
     }
@@ -164,5 +172,12 @@ class GameRepository extends Repository {
         ');
         $stmt->execute(['uid' => $userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Checks if the game is on the user's wishlist
+    public function isOnWishlist(int $gameId, int $userId): bool {
+        $stmt = $this->database->prepare('SELECT 1 FROM wishlist WHERE game_id = :game_id AND user_id = :user_id');
+        $stmt->execute(['game_id' => $gameId, 'user_id' => $userId]);
+        return (bool)$stmt->fetchColumn();
     }
 }

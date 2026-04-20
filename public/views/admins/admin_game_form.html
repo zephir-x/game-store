@@ -54,7 +54,7 @@
                             <label>Upload Cover Image (Leave empty to keep current)</label>
                             <input type="file" name="graphics" accept="image/*" class="form-input form-input-file">
                             <?php if($game && $game->getGraphics()): ?>
-                                <small class="text-primary" style="display: block; margin-top: 8px;">
+                                <small class="text-primary file-current-info">
                                     <i class="fa-solid fa-image"></i> Current: <?= htmlspecialchars($game->getGraphics() ?: 'default.jpg') ?>
                                 </small>
                             <?php endif; ?>
@@ -69,9 +69,44 @@
                         <textarea name="description" rows="5" class="form-input" required><?= $game ? htmlspecialchars($game->getDescription()) : '' ?></textarea>
                     </div>
 
-                    <div class="form-group mt-20">
-                        <label>System Requirements (Specification)</label>
-                        <textarea name="specification" rows="3" class="form-input" placeholder="OS: Windows 10, CPU: i5..."><?= $game ? htmlspecialchars($game->getSpecification() ?? '') : '' ?></textarea>
+                    <div class="form-group mt-15">
+                        <label>System Specifications</label>
+                        <div class="specs-grid-edit">
+                            <div></div>
+                            <div class="spec-header-label">Minimum</div>
+                            <div class="spec-header-label">Recommended</div>
+
+                            <div class="spec-row-label">OS <span class="text-error">*</span></div>
+                            <input type="text" name="min_os" class="form-input" placeholder="e.g. Windows 10" required>
+                            <input type="text" name="rec_os" class="form-input" placeholder="e.g. Windows 11">
+
+                            <div class="spec-row-label">CPU <span class="text-error">*</span></div>
+                            <input type="text" name="min_cpu" class="form-input" placeholder="e.g. i5-8400" required>
+                            <input type="text" name="rec_cpu" class="form-input" placeholder="e.g. i7-12700">
+
+                            <div class="spec-row-label">GPU <span class="text-error">*</span></div>
+                            <input type="text" name="min_gpu" class="form-input" placeholder="e.g. GTX 1060" required>
+                            <input type="text" name="rec_gpu" class="form-input" placeholder="e.g. RTX 3080">
+
+                            <div class="spec-row-label">RAM</div>
+                            <input type="text" name="min_ram" class="form-input" placeholder="e.g. 8 GB DDR4">
+                            <input type="text" name="rec_ram" class="form-input" placeholder="e.g. 16 GB DDR5">
+
+                            <div class="spec-row-label">Storage</div>
+                            <input type="text" name="min_storage" class="form-input" placeholder="e.g. 100 GB SSD">
+                            <input type="text" name="rec_storage" class="form-input" placeholder="e.g. 250 GB SSD">
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2 mt-15">
+                        <div class="form-group">
+                            <label>Developer</label>
+                            <input type="text" name="developer" value="<?= $game ? htmlspecialchars($game->getDeveloper()) : '' ?>" class="form-input" placeholder="Studio name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Release Date</label>
+                            <input type="date" name="release_date" value="<?= $game ? $game->getReleaseDate() : '' ?>" class="form-input" required>
+                        </div>
                     </div>
                 </div>
 

@@ -2,15 +2,18 @@
 
 require_once 'AppController.php';
 require_once __DIR__ . '/../repository/LibraryRepository.php';
+require_once __DIR__ . '/../repository/GameRepository.php';
 
 class LibraryController extends AppController {
     
     // The repository responsible for operations on the user's library
     private LibraryRepository $libraryRepository;
+    private GameRepository $gameRepository;
 
     public function __construct() {
         // Initialization of the data access layer (DB/library logic)
         $this->libraryRepository = new LibraryRepository();
+        $this->gameRepository = new GameRepository();
     }
 
     public function index() {
@@ -24,8 +27,7 @@ class LibraryController extends AppController {
         $library = $this->libraryRepository->getUserLibrary($userId);
 
         // We download the wishlist
-        $gameRepo = new GameRepository();
-        $wishlist = $gameRepo->getUserWishlist($userId);
+        $wishlist = $this->gameRepository->getUserWishlist($userId);
 
         // Render the library view + pass data to the view
         return $this->render("library", [

@@ -44,8 +44,8 @@ class AdminController extends AppController {
             ];
 
             try {
-                $this->userRepository->updateFullProfile($userId, $data);
-                $_SESSION['success_message'] = "User profile updated!";
+                $this->userRepository->adminUpdateUser($userId, $data);
+                $_SESSION['success_message'] = "User #$userId updated successfully!";
             } catch (PDOException $e) {
                 if ($e->getCode() == 23505) {
                     $_SESSION['error_message'] = "Email or username already in use by another account!";
@@ -55,7 +55,7 @@ class AdminController extends AppController {
             }
         }
         
-        header("Location: /admin");
+        header("Location: /edit-user/$userId");
         exit();
     }
 
@@ -158,7 +158,28 @@ class AdminController extends AppController {
             $description = trim($_POST['description']);
             $category = trim($_POST['category']);
             $price = (float)$_POST['price'];
-            $specification = trim($_POST['specification']) ?: null;
+
+            // We collect individual fields from the form
+            $specsArray = [
+                'minimum' => [
+                    'os' => trim($_POST['min_os'] ?? ''),
+                    'cpu' => trim($_POST['min_cpu'] ?? ''),
+                    'gpu' => trim($_POST['min_gpu'] ?? ''),
+                    'ram' => trim($_POST['min_ram'] ?? '') ?: 'not specified',
+                    'storage' => trim($_POST['min_storage'] ?? '') ?: 'not specified'
+                ],
+                'recommended' => [
+                    'os' => trim($_POST['rec_os'] ?? '') ?: 'not specified',
+                    'cpu' => trim($_POST['rec_cpu'] ?? '') ?: 'not specified',
+                    'gpu' => trim($_POST['rec_gpu'] ?? '') ?: 'not specified',
+                    'ram' => trim($_POST['rec_ram'] ?? '') ?: 'not specified',
+                    'storage' => trim($_POST['rec_storage'] ?? '') ?: 'not specified'
+                ]
+            ];
+        
+            $specification = json_encode($specsArray); // we compress it to JSON format
+            $developer = trim($_POST['developer'] ?? 'Unknown Studio');
+            $releaseDate = trim($_POST['release_date'] ?? date('Y-m-d'));
             
             // Validation: price cannot be negative
             if ($price < 0) {
@@ -186,7 +207,7 @@ class AdminController extends AppController {
             }
 
             // We create an object (the average rating at the start is 0.0, the trigger in the database will overwrite it if necessary)
-            $game = new Game($id ?? 0, $title, $description, $category, $price, $graphics, 0.0, $specification);
+            $game = new Game($id ?? 0, $title, $description, $category, $price, $graphics, 0.0, $specification, $developer, $releaseDate);
 
             try {
                 if ($id) {

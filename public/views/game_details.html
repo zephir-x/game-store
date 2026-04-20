@@ -8,7 +8,6 @@
     <?php include __DIR__ . '/partials/nav.html'; ?>
     
     <main class="store-layout">
-        
         <div class="game-hero">
             <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" alt="<?= htmlspecialchars($game->getTitle()); ?>">
         </div>
@@ -26,15 +25,52 @@
                 </div>
 
                 <div class="req-box">
-                    <h3><i class="fa-solid fa-microchip req-icon"></i> System Specifications (Minimum)</h3>
-                    <p class="req-text">
-                        <?= htmlspecialchars($game->getSpecification() ?? 'System requirements not specified for this title.'); ?>
-                    </p>
+                    <h3>
+                        <i class="fa-solid fa-microchip req-icon"></i> System Specifications
+                    </h3>
+                    
+                    <?php 
+                        $specData = $game->getSpecification();
+                        $specs = json_decode($specData, true);
+                        $isJson = is_array($specs) && json_last_error() === JSON_ERROR_NONE;
+                    ?>
+
+                    <?php if ($isJson): ?>
+                        <div class="specs-wrapper">
+                            <div class="specs-column min">
+                                <h4>Minimum</h4>
+                                <?php $minData = isset($specs['minimum']) ? $specs['minimum'] : $specs; ?>
+                                <div class="specs-grid">
+                                    <div class="spec-row"><span class="spec-label">OS</span><span class="spec-value"><?= htmlspecialchars($minData['os'] ?? 'not specified') ?></span></div>
+                                    <div class="spec-row"><span class="spec-label">CPU</span><span class="spec-value"><?= htmlspecialchars($minData['cpu'] ?? 'not specified') ?></span></div>
+                                    <div class="spec-row"><span class="spec-label">GPU</span><span class="spec-value"><?= htmlspecialchars($minData['gpu'] ?? 'not specified') ?></span></div>
+                                    <div class="spec-row"><span class="spec-label">RAM</span><span class="spec-value"><?= htmlspecialchars($minData['ram'] ?? 'not specified') ?></span></div>
+                                    <div class="spec-row"><span class="spec-label">Storage</span><span class="spec-value"><?= htmlspecialchars($minData['storage'] ?? 'not specified') ?></span></div>
+                                </div>
+                            </div>
+
+                            <div class="specs-column rec">
+                                <h4>Recommended</h4>
+                                <?php $recData = $specs['recommended'] ?? []; ?>
+                                <div class="specs-grid">
+                                    <div class="spec-row"><span class="spec-label">OS</span><span class="spec-value"><?= htmlspecialchars($recData['os'] ?? 'not specified') ?></span></div>
+                                    <div class="spec-row"><span class="spec-label">CPU</span><span class="spec-value"><?= htmlspecialchars($recData['cpu'] ?? 'not specified') ?></span></div>
+                                    <div class="spec-row"><span class="spec-label">GPU</span><span class="spec-value"><?= htmlspecialchars($recData['gpu'] ?? 'not specified') ?></span></div>
+                                    <div class="spec-row"><span class="spec-label">RAM</span><span class="spec-value"><?= htmlspecialchars($recData['ram'] ?? 'not specified') ?></span></div>
+                                    <div class="spec-row"><span class="spec-label">Storage</span><span class="spec-value"><?= htmlspecialchars($recData['storage'] ?? 'not specified') ?></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <p class="req-text">
+                            <?= htmlspecialchars($specData ?? 'System requirements not specified for this title.'); ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
             </div>
 
-            <div class="game-sidebar">
-                <div class="buy-card">
+            <div class="game-sidebar" style="display: flex; flex-direction: column; gap: 20px; height: 100%;">
+                <div class="buy-card" style="display: flex; flex-direction: column; flex-grow: 1;">
                     <div class="buy-price">
                         <?= number_format($game->getPrice(), 2); ?> PLN
                     </div>
@@ -43,7 +79,9 @@
                         <?php if(!isset($_SESSION['user_id'])): ?>
                             <a href="/login" class="btn-primary btn-block">Log in to Get</a>
                         <?php elseif($isOwned): ?>
-                            <button disabled class="btn-primary btn-block btn-disabled">Already in Library</button>
+                            <button disabled class="btn-primary btn-block btn-disabled btn-library-owned">
+                                <i class="fa-solid fa-check btn-icon-margin"></i> Already in Library
+                            </button>
                         <?php else: ?>
                             <button id="buy-button" class="btn-primary btn-block" onclick="buyGame('<?= $game->getId() ?>')">
                                 <i class="fa-solid fa-cart-shopping btn-icon-margin"></i> Get Now
@@ -63,82 +101,96 @@
 
                     <div id="response-message" class="buy-response-msg"></div>
 
+                    <div class="flex-spacer"></div>
+
+                    <div class="game-meta-details">
+                        <div class="meta-row">
+                            <span class="meta-label">Release Date</span>
+                            <span class="meta-value">
+                                <?= date('M d, Y', strtotime($game->getReleaseDate())) ?>
+                            </span>
+                        </div>
+                        
+                        <div class="meta-row">
+                            <span class="meta-label">Developer</span>
+                            <span class="meta-value">
+                                <?= htmlspecialchars($game->getDeveloper()) ?>
+                            </span>
+                        </div>
+                    </div>
+                    
                     <div class="game-stats-list">
                         <div class="stat-row">
                             <span>Rating</span>
-                            <span class="stat-value rating-value"><i class="fa-solid fa-star"></i> <?= number_format($game->getAverageRating(), 1); ?></span>
+                            <span class="highlight-green fw-bold">
+                                <i class="fa-solid fa-star"></i> <?= number_format($game->getAverageRating(), 1); ?>
+                                <span class="rating-count">
+                                    (<?= count($reviews) ?>)
+                                </span>
+                            </span>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
+                <div class="buy-card share-card">
+                    <span class="share-label">Share with your friends</span>
+                    <button class="btn-outline btn-block btn-share" onclick="copyGameLink(this)">
+                        <i class="fa-solid fa-link btn-icon-margin"></i> Copy Link
+                    </button>
+                </div>
+            </div>
+        </div> 
+        
         <div class="reviews-section">
             <div class="reviews-header">
-                <h2>User Reviews</h2>
-                <div></div>
+                <h2 style="margin: 0;">User Reviews</h2>
+                
+                <?php if(isset($_SESSION['user_id'])): ?>
+                    <?php if($isOwned): ?>
+                        <button onclick="toggleReviewForm()" class="btn-outline">
+                            <i class="fa-solid <?= $hasReviewed ? 'fa-pen' : 'fa-plus' ?> btn-icon-margin"></i> 
+                            <?= $hasReviewed ? 'Edit Your Review' : 'Write a Review' ?>
+                        </button>
+                    <?php else: ?>
+                        <span class="text-muted lock-msg"><i class="fa-solid fa-lock"></i> Own this game to review</span>
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
 
             <?php if(isset($_SESSION['user_id'])): ?>
-                <?php if($isOwned && !$hasReviewed): ?>
+                <div id="review-form-container" class="hidden">
                     <div class="review-form-card">
-                        <h3>Leave a Review</h3>
-                        <form action="/add-review" method="POST">
+                        <h3><i class="fa-solid fa-star"></i> <?= $hasReviewed ? 'Update Your Rating' : 'Share Your Thoughts' ?></h3>
+                        
+                        <form action="/add-review" method="POST" class="clean-form">
                             <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
+                            <input type="hidden" name="is_edit" value="<?= $hasReviewed ? '1' : '0' ?>">
                             
                             <div class="form-group">
-                                <label>Rating (1-5)</label>
-                                <select name="rating" required class="form-input">
-                                    <option value="5">5 - Masterpiece</option>
-                                    <option value="4">4 - Great</option>
-                                    <option value="3">3 - Good</option>
-                                    <option value="2">2 - Poor</option>
-                                    <option value="1">1 - Terrible</option>
+                                <label for="rating_input">Rating (1-5)</label>
+                                <?php 
+                                    $currentRating = $userReviewData['rating'] ?? 5; 
+                                ?>
+                                <select id="rating_input" name="rating" required class="form-input w-max-300">
+                                    <option value="5" <?= $currentRating == 5 ? 'selected' : '' ?>>5 - Masterpiece</option>
+                                    <option value="4" <?= $currentRating == 4 ? 'selected' : '' ?>>4 - Great</option>
+                                    <option value="3" <?= $currentRating == 3 ? 'selected' : '' ?>>3 - Good</option>
+                                    <option value="2" <?= $currentRating == 2 ? 'selected' : '' ?>>2 - Poor</option>
+                                    <option value="1" <?= $currentRating == 1 ? 'selected' : '' ?>>1 - Terrible</option>
                                 </select>
                             </div>
                             
                             <div class="form-group">
-                                <label>Comment</label>
-                                <textarea name="content" required rows="4" class="form-input" placeholder="What did you think of the game?"></textarea>
+                                <label for="content_input">Comment</label>
+                                <textarea id="content_input" name="content" required rows="4" class="form-input" placeholder="What did you think of the game?"><?= htmlspecialchars($userReviewData['content'] ?? '') ?></textarea>
                             </div>
                             
-                            <button type="submit" class="btn-primary">Submit Review</button>
+                            <div class="edit-actions mt-20">
+                                <button type="submit" class="btn-primary"><?= $hasReviewed ? 'Save Changes' : 'Submit Review' ?></button>
+                                <button type="button" class="btn-outline" onclick="toggleReviewForm()">Cancel</button>
+                            </div>
                         </form>
                     </div>
-                <?php elseif($isOwned && $hasReviewed): ?>
-                    <div class="review-alert">
-                        <i class="fa-solid fa-check-circle"></i> You have already reviewed this game. Thank you!
-                    </div>
-                <?php else: ?>
-                    <div id="must-own-msg" class="review-alert">
-                        <i class="fa-solid fa-lock"></i> You must own this game in your Library to leave a review.
-                    </div>
-                    
-                    <div id="hidden-review-form" class="review-form-card hidden">
-                        <h3>Leave a Review</h3>
-                        <form action="/add-review" method="POST">
-                            <input type="hidden" name="game_id" value="<?= $game->getId() ?>">
-                            <div class="form-group">
-                                <label>Rating (1-5)</label>
-                                <select name="rating" required class="form-input">
-                                    <option value="5">5 - Masterpiece</option>
-                                    <option value="4">4 - Great</option>
-                                    <option value="3">3 - Good</option>
-                                    <option value="2">2 - Poor</option>
-                                    <option value="1">1 - Terrible</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Comment</label>
-                                <textarea name="content" required rows="4" class="form-input" placeholder="What did you think of the game?"></textarea>
-                            </div>
-                            <button type="submit" class="btn-primary">Submit Review</button>
-                        </form>
-                    </div>
-                <?php endif; ?>
-            <?php else: ?>
-                <div class="review-alert">
-                    <i class="fa-solid fa-circle-info"></i> <a href="/login">Log in</a> and purchase the game to leave a review.
                 </div>
             <?php endif; ?>
 
@@ -155,7 +207,12 @@
                                     </div>
                                     <div class="review-user-info">
                                         <strong><?= htmlspecialchars($review->getUsername()) ?></strong>
-                                        <span><?= date('d M Y', strtotime($review->getCreatedAt())) ?></span>
+                                        <span>
+                                            <?= date('d M Y', strtotime($review->getCreatedAt())) ?>
+                                            <?php if(method_exists($review, 'isEdited') && $review->isEdited()): ?>
+                                                <span class="edited-tag">(Edited)</span>
+                                            <?php endif; ?>
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="review-stars">
@@ -169,6 +226,19 @@
                             </div>
                             <div class="review-text">
                                 "<?= nl2br(htmlspecialchars($review->getContent())) ?>"
+                            </div>
+                            
+                            <div class="review-actions">
+                                <?php if(isset($_SESSION['user_id'])): ?>
+                                    <button class="btn-like <?= $review->isLikedByCurrentUser() ? 'active' : '' ?>" onclick="toggleLike(this, '<?= $review->getId() ?>')">
+                                        <i class="fa-<?= $review->isLikedByCurrentUser() ? 'solid' : 'regular' ?> fa-thumbs-up"></i>
+                                        <span class="like-count"><?= $review->getLikesCount() ?></span> Helpful
+                                    </button>
+                                <?php else: ?>
+                                    <span class="text-muted guest-like-msg" title="Log in to rate this review">
+                                        <i class="fa-regular fa-thumbs-up"></i> <?= $review->getLikesCount() ?> Helpful
+                                    </span>
+                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>

@@ -136,12 +136,12 @@ class UserRepository extends Repository {
         $stmt->execute(['role' => $role, 'id' => $id]);
     }
 
-    // Updates full user profile (users + user_details tables)
-    public function updateFullProfile(int $userId, array $data): void {
+    // Updates everything for a specific user (used only in Admin Panel)
+    public function adminUpdateUser(int $userId, array $data): void {
         $this->database->beginTransaction();
 
         try {
-            // Updating the users table (username, email)
+            // Updating master data (username, email)
             $stmtUser = $this->database->prepare('
                 UPDATE users SET username = :username, email = :email WHERE id = :id
             ');
@@ -151,24 +151,23 @@ class UserRepository extends Repository {
                 'id' => $userId
             ]);
 
-            // If a new password has been entered, we update it
+            // Updating password (only if a new one is provided)
             if (!empty($data['password'])) {
-                $hash = password_hash($data['password'], PASSWORD_BCRYPT);
+                $hash = password_hash($data['password'], PASSWORD_DEFAULT);
                 $stmtPwd = $this->database->prepare('UPDATE users SET password_hash = :hash WHERE id = :id');
                 $stmtPwd->execute(['hash' => $hash, 'id' => $userId]);
             }
 
-            // Updating the user_details table (name, surname, bio, avatar)
+            // Updating profile details
             $stmtDetails = $this->database->prepare('
                 UPDATE user_details 
-                SET name = :name, surname = :surname, bio = :bio, avatar = :avatar 
+                SET name = :name, surname = :surname, bio = :bio 
                 WHERE user_id = :id
             ');
             $stmtDetails->execute([
-                'name' => $data['name'],
-                'surname' => $data['surname'],
-                'bio' => $data['bio'],
-                'avatar' => $data['avatar'] ?? 'gaming-console.jpg',
+                'name' => $data['name'] ?? '',
+                'surname' => $data['surname'] ?? '',
+                'bio' => $data['bio'] ?? '',
                 'id' => $userId
             ]);
 
@@ -177,6 +176,16 @@ class UserRepository extends Repository {
             $this->database->rollBack();
             throw $e;
         }
+    }
+
+    public function updateEmail(int $userId, string $newEmail): void {
+        $stmt = $this->database->prepare('UPDATE users SET email = :email WHERE id = :id');
+        $stmt->execute(['email' => $newEmail, 'id' => $userId]);
+    }
+
+    public function updatePassword(int $userId, string $newHash): void {
+        $stmt = $this->database->prepare('UPDATE users SET password_hash = :hash WHERE id = :id');
+        $stmt->execute(['hash' => $newHash, 'id' => $userId]);
     }
 
     public function deleteUser(int $id): void {

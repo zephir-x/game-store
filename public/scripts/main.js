@@ -90,69 +90,71 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Global Functions (Called from HTML)
-function buyGame(gameId) {
-    const button = document.getElementById('buy-button');
-    const messageSpan = document.getElementById('response-message');
-    
-    if (!button || !messageSpan) return;
 
-    button.disabled = true;
-    button.innerHTML = '<i class="fa-solid fa-spinner fa-spin btn-icon-margin"></i> Processing...';
+// Buy Game Logic
+async function buyGame(gameId) {
+    try {
+        const response = await fetch('/buy', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `game_id=${gameId}`
+        });
 
-    fetch('/buy', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId: gameId })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Update Button
-            button.classList.add('btn-disabled');
-            button.innerText = "Already in Library";
-            
-            // Update Message with proper formatting
-            messageSpan.className = "buy-response-msg highlight-green fw-bold";
-            messageSpan.innerHTML = '<i class="fa-solid fa-check"></i> Added successfully!';
-            
-            // If purchased successfully, hide the Wishlist button (if present)
+        const result = await response.json();
+        const msgDiv = document.getElementById('response-message');
+
+        if (result.success) {
+            // We're changing the purchase button to a large "Already in Library" button
+            const buySection = document.getElementById('buy-section');
+            if (buySection) {
+                buySection.innerHTML = `
+                    <button disabled class="btn-primary btn-block btn-disabled fade-in-card" style="padding: 20px; font-size: 1.1rem; margin-bottom: 20px;">
+                        <i class="fa-solid fa-check btn-icon-margin"></i> Already in Library
+                    </button>
+                `;
+            }
+
+            // We hide the Wishlist button (since we already have the game)
             const wishlistBtn = document.getElementById('wishlist-btn');
             if (wishlistBtn) wishlistBtn.style.display = 'none';
 
-            // Review Form Disclosure
-            const mustOwnMsg = document.getElementById('must-own-msg');
-            const hiddenReviewForm = document.getElementById('hidden-review-form');
-            
-            if (mustOwnMsg && hiddenReviewForm) {
-                mustOwnMsg.classList.add('hidden'); // hide the lock message
-                hiddenReviewForm.classList.remove('hidden'); // show the form
-                hiddenReviewForm.classList.add('fade-in-card'); // add nice animation
-                
-                // Smooth scroll to the newly revealed form
-                setTimeout(() => {
-                    hiddenReviewForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 100);
+            // We activate the reviews section
+            const reviewsHeader = document.querySelector('.reviews-header');
+            if (reviewsHeader) {
+                // We remove the text "Own this game to review" with the lock icon
+                const lockSpan = reviewsHeader.querySelector('.text-muted');
+                if (lockSpan) lockSpan.remove();
+
+                // We are adding a "Write a Review" button
+                const reviewBtnHTML = `
+                    <button onclick="toggleReviewForm()" class="btn-outline fade-in-card">
+                        <i class="fa-solid fa-plus btn-icon-margin"></i> Write a Review
+                    </button>
+                `;
+                reviewsHeader.insertAdjacentHTML('beforeend', reviewBtnHTML);
             }
+
+            // Smooth scrolling to the reviews section
+            const reviewsSection = document.querySelector('.reviews-section');
+            if (reviewsSection) {
+                reviewsSection.scrollIntoView({ behavior: 'smooth' });
+                
+                // We wait 600ms (until it finishes scrolling) and automatically slide out the form
+                setTimeout(() => toggleReviewForm(), 600);
+            }
+
         } else {
-            // Revert on error
-            button.disabled = false;
-            button.innerHTML = '<i class="fa-solid fa-cart-shopping btn-icon-margin"></i> Get Now';
-            messageSpan.className = "buy-response-msg alert-error"; // Reusing our error styling
-            messageSpan.innerText = data.error || "An error occurred";
+            msgDiv.innerHTML = `<span class="error-msg"><i class="fa-solid fa-circle-exclamation"></i> ${result.message}</span>`;
         }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        button.disabled = false;
-        button.innerHTML = '<i class="fa-solid fa-cart-shopping btn-icon-margin"></i> Get Now';
-        messageSpan.className = "buy-response-msg alert-error";
-        messageSpan.innerText = "Connection error";
-    });
+    } catch (error) {
+        console.error("Error during purchase:", error);
+    }
 }
 
 function toggleEditMode() {
     const view = document.getElementById('profile-view');
     const edit = document.getElementById('profile-edit');
+    const secZone = document.querySelector('.security-zone');
     
     if (view && edit) {
         if (view.classList.contains('hidden')) {
@@ -162,6 +164,12 @@ function toggleEditMode() {
             
             view.classList.remove('hidden');
             view.classList.add('fade-in-card');
+
+            if (secZone) {
+                secZone.classList.remove('hidden');
+                void secZone.offsetWidth; // force reflow for animation restart
+                secZone.classList.add('fade-in-card');
+            }
         } else {
             // Let's move on to editing
             view.classList.add('hidden');
@@ -169,18 +177,52 @@ function toggleEditMode() {
             
             edit.classList.remove('hidden');
             edit.classList.add('fade-in-card');
+
+            // We hide the Security Zone
+            if (secZone) {
+                secZone.classList.add('hidden');
+                secZone.classList.remove('fade-in-card');
+            }
         }
     }
 }
 
-function toggleDeleteForm() {
-    const view = document.getElementById('delete-account-view');
-    const form = document.getElementById('delete-account-form');
-    if (view && form) {
-        view.classList.toggle('hidden');
-        form.classList.toggle('hidden');
-        if(!form.classList.contains('hidden')) {
-            form.classList.add('fade-in-card');
+// Security Zone Forms Toggle
+function toggleSecurityForm(targetFormType) {
+    const container = document.getElementById('security-forms-container');
+    const allForms = document.querySelectorAll('.sec-form');
+    
+    // We always hide all forms at the beginning
+    allForms.forEach(form => form.classList.add('hidden'));
+    
+    if (targetFormType === 'none') {
+        container.classList.add('hidden'); // close all
+        return;
+    }
+    
+    // Show container and corresponding form with animation
+    container.classList.remove('hidden');
+    const targetForm = document.getElementById(`sec-form-${targetFormType}`);
+    
+    if (targetForm) {
+        targetForm.classList.remove('hidden');
+        targetForm.classList.remove('fade-in-card'); // reset animation
+        void targetForm.offsetWidth; // force reflow for animation restart
+        targetForm.classList.add('fade-in-card');
+    }
+}
+
+// Toggle Review Form
+function toggleReviewForm() {
+    const container = document.getElementById('review-form-container');
+    if (container) {
+        if (container.classList.contains('hidden')) {
+            container.classList.remove('hidden');
+            void container.offsetWidth;
+            container.classList.add('fade-in-card');
+        } else {
+            container.classList.add('hidden');
+            container.classList.remove('fade-in-card');
         }
     }
 }
@@ -239,5 +281,76 @@ function toggleWishlist(gameId) {
     .catch(error => {
         console.error("Error:", error);
         btn.disabled = false;
+    });
+}
+
+// Toggle Review Like (Helpful) 
+async function toggleLike(buttonElement, reviewId) {
+    // Double-click protection (Anti-spam)
+    if (buttonElement.disabled) return;
+    buttonElement.disabled = true;
+
+    try {
+        const response = await fetch('/toggle-like', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reviewId: reviewId })
+        });
+
+        const data = await response.json();
+        buttonElement.disabled = false; // we unlock the button after the server responds
+
+        if (data.success) {
+            const icon = buttonElement.querySelector('i');
+            const countSpan = buttonElement.querySelector('.like-count');
+            let currentCount = parseInt(countSpan.innerText);
+
+            if (data.action === 'added') {
+                // We light the button and increase the counter
+                buttonElement.classList.add('active');
+                icon.classList.remove('fa-regular');
+                icon.classList.add('fa-solid');
+                countSpan.innerText = currentCount + 1;
+            } else if (data.action === 'removed') {
+                // We dim the button and decrease the counter
+                buttonElement.classList.remove('active');
+                icon.classList.remove('fa-solid');
+                icon.classList.add('fa-regular');
+                countSpan.innerText = currentCount - 1;
+            }
+        } else {
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            } else {
+                alert(data.error || "Could not process your request.");
+            }
+        }
+    } catch (error) {
+        console.error("Error toggling like:", error);
+        buttonElement.disabled = false;
+    }
+}
+
+// Copy Link function
+function copyGameLink(btn) {
+    const url = window.location.href;
+    
+    // Save to clipboard
+    navigator.clipboard.writeText(url).then(() => {
+        const originalHtml = btn.innerHTML;
+        
+        // Change button appearance to success
+        btn.innerHTML = '<i class="fa-solid fa-check btn-icon-margin"></i> Copied!';
+        btn.style.color = 'var(--primary)';
+        btn.style.borderColor = 'var(--primary)';
+        
+        // Return to original state after 2 seconds
+        setTimeout(() => {
+            btn.innerHTML = originalHtml;
+            btn.style.color = '';
+            btn.style.borderColor = '';
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
     });
 }

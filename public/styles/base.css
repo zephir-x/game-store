@@ -44,29 +44,6 @@ a:hover {
     color: var(--primary-hover); 
 }
 
-/* Utility Classes */
-.hidden {
-    display: none !important;
-}
-
-.mt-20 {
-    margin-top: 20px !important;
-}
-
-.flex-between {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.text-primary {
-    color: var(--primary) !important;
-}
-
-.text-main {
-    color: var(--text-main) !important;
-}
-
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 10px; 
@@ -84,4 +61,253 @@ a:hover {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary);
+}
+
+/* Dark Mode Datepicker */
+input[type="date"].form-input {
+    color-scheme: dark;
+}
+
+input[type="date"].form-input::-webkit-calendar-picker-indicator {
+    filter: invert(0.8);
+    cursor: pointer;
+}
+
+/* Utility Classes */
+
+/* Spacing & Layout */
+.mt-15 {
+    margin-top: 15px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-15 {
+    margin-bottom: 15px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.ml-auto {
+    margin-left: auto;
+}
+
+.max-w-400 {
+    max-width: 400px;
+}
+
+.w-max-300 {
+    max-width: 300px;
+}
+
+.flex-spacer {
+    flex-grow: 1;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.text-error {
+    color: var(--error);
+}
+
+.text-primary {
+    color: var(--primary) !important;
+}
+
+.text-main {
+    color: var(--text-main) !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Admin Form Specs Grid */
+.specs-grid-edit {
+    display: grid;
+    grid-template-columns: 60px 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+    background: var(--bg-input);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+}
+
+.spec-header-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.spec-row-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.file-current-info {
+    display: block;
+    margin-top: 8px;
+}
+
+/* Dashboard Security Zone */
+.delayed-fade {
+    animation-delay: 0.1s;
+    animation-fill-mode: both;
+}
+
+.section-title {
+    color: var(--text-main);
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.section-subtitle {
+    font-size: 0.9rem;
+}
+
+.security-forms-wrapper {
+    margin-top: 25px;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 25px;
+}
+
+.warning-text {
+    margin-bottom: 15px;
+    color: var(--error);
+    font-weight: bold;
+}
+
+/* Game Details Sidebar & Meta */
+.req-box {
+    background-color: rgba(52, 211, 153, 0.03);
+    border: 1px solid rgba(52, 211, 153, 0.1);
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: auto;
+    margin-bottom: 0;
+}
+
+.req-box h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.req-icon {
+    color: var(--primary);
+    margin-right: 8px;
+}
+
+.req-text {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-top: 15px;
+}
+
+.btn-library-owned {
+    padding: 20px;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.game-meta-details {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.meta-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+}
+
+.meta-label {
+    color: var(--text-muted);
+}
+
+.meta-value {
+    color: var(--text-main);
+    font-weight: 500;
+}
+
+.game-stats-list {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.stat-row > span:first-child {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.rating-count {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: normal;
+    margin-left: 3px;
+}
+
+.share-card {
+    padding: 20px;
+    text-align: center;
+}
+
+.share-label {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.btn-share {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Reviews Area Fixes */
+.review-actions {
+    margin-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.edited-tag {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-left: 5px;
+}
+
+.guest-like-msg {
+    font-size: 0.85rem;
+    cursor: help;
+}
+
+.lock-msg {
+    font-size: 0.9rem;
 }

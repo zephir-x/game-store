@@ -36,7 +36,9 @@ CREATE TABLE games (
     category VARCHAR(50) NOT NULL,
     price NUMERIC(10, 2) NOT NULL CHECK (price >= 0),
     graphics VARCHAR(255) DEFAULT 'default.jpg',
-    specification TEXT
+    specification TEXT,
+    developer VARCHAR(255) DEFAULT 'Unknown Studio',
+    release_date DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE reviews (
@@ -45,8 +47,16 @@ CREATE TABLE reviews (
     game_id INTEGER REFERENCES games(id) ON DELETE CASCADE,
     rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
     content TEXT NOT NULL,
+    is_edited BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(user_id, game_id) -- the user can only rate the game once
+);
+
+CREATE TABLE review_likes (
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    review_id INT NOT NULL REFERENCES reviews(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, review_id) -- blocks the ability to like multiple times
 );
 
 CREATE TABLE user_library (
@@ -126,10 +136,10 @@ INSERT INTO user_details (user_id, name, surname, bio, avatar) VALUES
 (1, 'System', 'Administrator', 'I rule this place ;D', 'gaming-guy.jpg'),
 (2, 'Just', 'User', 'I love RPG games.', 'gaming-girl.jpg');
 
-INSERT INTO games (title, description, category, price, graphics, specification) VALUES 
-('CyberStrike 2077', 'Futuristic RPG game.', 'RPG', 199.99, 'cyber.jpg', 'OS: Win 10, GPU: RTX 3060, CPU: i7-12700K, RAM: 16GB'),
-('Witch Hunter 3', 'Epic fantasy game with an open world.', 'RPG', 99.99, 'witch.jpg', 'OS: Win 10, GPU: GTX 1060, CPU: i5-12400F, RAM: 8GB'),
-('Space Marines', 'Futuristic FPS filled with action.', 'Shooter', 119.99, 'space.jpg', 'OS: Win 10, GPU: RTX 2060, CPU: i5-12700K, RAM: 16GB'),
-('Neon Racers', 'High-speed futuristic racing in neon cities.', 'Racing', 79.99, 'neon.jpg', 'OS: Win 10, GPU: GTX 1660, CPU: i5-11400F, RAM: 8GB'),
-('Kingdoms Reborn', 'Strategy game about building and managing your empire.', 'Strategy', 89.99, 'kingdom.jpg', 'OS: Win 10, GPU: GTX 1050 Ti, CPU: i3-10100, RAM: 8GB'),
-('Dark Survival', 'Horror survival game in a post-apocalyptic world.', 'Horror', 69.99, 'survival.jpg', 'OS: Win 10, GPU: GTX 1650, CPU: i5-10400F, RAM: 8GB');
+INSERT INTO games (title, description, category, price, graphics, developer, release_date, specification) VALUES 
+('CyberStrike 2077', 'Futuristic RPG game.', 'RPG', 199.99, 'cyber.jpg', 'Nexus Studios', '2077-12-12', '{"minimum":{"os":"Win 10","cpu":"i7-12700K","gpu":"RTX 3060","ram":"16GB","storage":"100GB SSD"},"recommended":{"os":"Win 11","cpu":"i9-13900K","gpu":"RTX 4080","ram":"32GB","storage":"100GB NVMe"}}'),
+('Witch Hunter 3', 'Epic fantasy game with an open world.', 'RPG', 99.99, 'witch.jpg', 'Red Project', '2015-05-19', '{"minimum":{"os":"Win 10","cpu":"i5-12400F","gpu":"GTX 1060","ram":"8GB","storage":"50GB HDD"},"recommended":{"os":"Win 11","cpu":"i7-12700","gpu":"not specified","ram":"16GB","storage":"not specified"}}'),
+('Space Marines', 'Futuristic FPS filled with action.', 'Shooter', 119.99, 'space.jpg', 'Galaxy Games', '2025-10-01', '{"minimum":{"os":"Win 10","cpu":"i5-12700K","gpu":"RTX 2060","ram":"16GB","storage":"60GB SSD"},"recommended":{"os":"Win 11","cpu":"i7-13700K","gpu":"RTX 3080","ram":"32GB","storage":"60GB SSD"}}'),
+('Neon Racers', 'High-speed futuristic racing in neon cities.', 'Racing', 79.99, 'neon.jpg', 'Velocity Labs', '2026-03-15', '{"minimum":{"os":"Win 10","cpu":"i5-11400F","gpu":"GTX 1660","ram":"8GB","storage":"30GB SSD"},"recommended":{"os":"not specified","cpu":"not specified","gpu":"not specified","ram":"not specified","storage":"not specified"}}'),
+('Kingdoms Reborn', 'Strategy game about building and managing your empire.', 'Strategy', 89.99, 'kingdom.jpg', 'Empire Builders', '2023-11-20', '{"minimum":{"os":"Win 10","cpu":"i3-10100","gpu":"GTX 1050 Ti","ram":"not specified","storage":"20GB HDD"},"recommended":{"os":"Win 10","cpu":"i5-10400","gpu":"GTX 1660 Ti","ram":"16GB","storage":"20GB SSD"}}'),
+('Dark Survival', 'Horror survival game in a post-apocalyptic world.', 'Horror', 69.99, 'survival.jpg', 'Nightmare Studios', '2024-08-05', '{"minimum":{"os":"Win 10","cpu":"i5-10400F","gpu":"GTX 1650","ram":"8GB","storage":"40GB"},"recommended":{"os":"not specified","cpu":"not specified","gpu":"RTX 2070","ram":"16GB","storage":"40GB SSD"}}');
