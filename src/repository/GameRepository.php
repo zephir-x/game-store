@@ -96,6 +96,59 @@ class GameRepository extends Repository {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Retrieves filtered and sorted games from the statistics view
+    public function getAllGamesFiltered($filters, $sortColumn, $sortDir) {
+        $sql = "SELECT * FROM v_game_statistics WHERE 1=1";
+        $params = [];
+
+        // Dynamic filter building
+        if (isset($filters['min_id']) && $filters['min_id'] !== '') {
+            $sql .= " AND game_id >= :min_id";
+            $params[':min_id'] = $filters['min_id'];
+        }
+        if (isset($filters['max_id']) && $filters['max_id'] !== '') {
+            $sql .= " AND game_id <= :max_id";
+            $params[':max_id'] = $filters['max_id'];
+        }
+        if (isset($filters['min_price']) && $filters['min_price'] !== '') {
+            $sql .= " AND price >= :min_price";
+            $params[':min_price'] = $filters['min_price'];
+        }
+        if (isset($filters['max_price']) && $filters['max_price'] !== '') {
+            $sql .= " AND price <= :max_price";
+            $params[':max_price'] = $filters['max_price'];
+        }
+        if (isset($filters['min_rating']) && $filters['min_rating'] !== '') {
+            $sql .= " AND calculated_rating >= :min_rating";
+            $params[':min_rating'] = $filters['min_rating'];
+        }
+        if (isset($filters['max_rating']) && $filters['max_rating'] !== '') {
+            $sql .= " AND calculated_rating <= :max_rating";
+            $params[':max_rating'] = $filters['max_rating'];
+        }
+        if (isset($filters['min_reviews']) && $filters['min_reviews'] !== '') {
+            $sql .= " AND total_reviews >= :min_reviews";
+            $params[':min_reviews'] = $filters['min_reviews'];
+        }
+        if (isset($filters['max_reviews']) && $filters['max_reviews'] !== '') {
+            $sql .= " AND total_reviews <= :max_reviews";
+            $params[':max_reviews'] = $filters['max_reviews'];
+        }
+
+        // Whitelist for allowed sorting columns to prevent SQL injection
+        $allowedColumns = ['game_id', 'title', 'price', 'calculated_rating', 'total_reviews'];
+        if (!in_array($sortColumn, $allowedColumns)) {
+            $sortColumn = 'game_id';
+        }
+        
+        $sql .= " ORDER BY " . $sortColumn . " " . $sortDir;
+
+        $stmt = $this->database->prepare($sql);
+        $stmt->execute($params); 
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     // Adds a new game to the database
     public function addGame(Game $game): void {
         $stmt = $this->database->prepare('

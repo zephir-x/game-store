@@ -16,8 +16,60 @@
         </div>
 
         <div class="admin-card">
-            <div class="admin-card-header">
-                <h2>Users Management</h2>
+            <div class="admin-card-header flex-between" style="margin-bottom: 20px;">
+                <h2><i class="fa-solid fa-users text-primary btn-icon-margin"></i> Users Management</h2>
+                
+                <div class="controls-wrapper">
+                    <div class="dropdown">
+                        <button class="btn-outline btn-sm" onclick="toggleDropdown('users-filter-menu')">
+                            <i class="fa-solid fa-filter btn-icon-margin"></i> Filter
+                        </button>
+                        <div id="users-filter-menu" class="dropdown-menu hidden">
+                            <form class="clean-form" id="form-filter-users" onsubmit="event.preventDefault(); applyFilters(this, 'users'); toggleDropdown('users-filter-menu');">
+                                <div class="filter-row">
+                                    <span class="filter-label">Role</span>
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-label"><input type="checkbox" name="role_user" value="USER" checked> USER</label>
+                                        <label class="checkbox-label"><input type="checkbox" name="role_admin" value="ADMIN" checked> ADMIN</label>
+                                    </div>
+                                </div>
+                                <div class="filter-row">
+                                    <span class="filter-label">User ID Range</span>
+                                    <div class="filter-inputs-inline">
+                                        <input type="number" name="min_id" min="1" placeholder="Min" class="form-input">
+                                        <span>-</span>
+                                        <input type="number" name="max_id" min="1" placeholder="Max" class="form-input">
+                                    </div>
+                                </div>
+                                <div class="filter-row">
+                                    <span class="filter-label">Registration Date</span>
+                                    <div class="filter-inputs-inline">
+                                        <input type="date" name="min_date" class="form-input">
+                                        <span>-</span>
+                                        <input type="date" name="max_date" class="form-input">
+                                    </div>
+                                </div>
+                                <div class="flex-between gap-10 mt-15">
+                                    <button type="submit" class="btn-primary btn-block">Apply</button>
+                                    <button type="button" class="btn-outline btn-block" onclick="clearFilters('users')">Clear</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <button class="btn-outline btn-sm" onclick="toggleDropdown('users-sort-menu')">
+                            <i class="fa-solid fa-sort btn-icon-margin"></i> Sort
+                        </button>
+                        <div id="users-sort-menu" class="dropdown-menu hidden">
+                            <div class="sort-list">
+                                <button class="btn-sort-item active" onclick="handleVisualSort(this, 'users', 'id')">ID <i class="fa-solid fa-arrow-up"></i></button>
+                                <button class="btn-sort-item" onclick="handleVisualSort(this, 'users', 'username')">Username <i class="fa-solid fa-sort"></i></button>
+                                <button class="btn-sort-item" onclick="handleVisualSort(this, 'users', 'created_at')">Registration Date <i class="fa-solid fa-sort"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="table-responsive">
@@ -71,9 +123,65 @@
         </div>
 
         <div class="admin-card">
-            <div class="admin-card-header">
-                <h2>Games Management</h2>
-                <a href="/add-game" class="btn-primary btn-sm"><i class="fa-solid fa-plus btn-icon-margin"></i> Add New Game</a>
+            <div class="admin-card-header flex-between" style="margin-bottom: 20px;">
+                <h2><i class="fa-solid fa-gamepad text-primary btn-icon-margin"></i> Games Management</h2>
+                
+                <div class="controls-wrapper">
+                    <a href="/add-game" class="btn-primary btn-sm"><i class="fa-solid fa-plus btn-icon-margin"></i> Add New Game</a>
+
+                    <div class="dropdown">
+                        <button class="btn-outline btn-sm" onclick="toggleDropdown('games-filter-menu')">
+                            <i class="fa-solid fa-filter btn-icon-margin"></i> Filter
+                        </button>
+                        <div id="games-filter-menu" class="dropdown-menu hidden">
+                            <form class="clean-form" id="form-filter-games" onsubmit="event.preventDefault(); applyFilters(this, 'games');">
+                                <div class="filter-row">
+                                    <span class="filter-label">Game ID Range</span>
+                                    <div class="filter-inputs-inline">
+                                        <input type="number" name="min_id" min="1" placeholder="Min" class="form-input">
+                                        <span>-</span>
+                                        <input type="number" name="max_id" min="1" placeholder="Max" class="form-input">
+                                    </div>
+                                </div>
+                                <div class="filter-row">
+                                    <span class="filter-label">Price (PLN)</span>
+                                    <div class="filter-inputs-inline">
+                                        <input type="number" name="min_price" min="0" step="0.01" placeholder="Min" class="form-input">
+                                        <span>-</span>
+                                        <input type="number" name="max_price" min="0" step="0.01" placeholder="Max" class="form-input">
+                                    </div>
+                                </div>
+                                <div class="filter-row">
+                                    <span class="filter-label">Rating (1-5)</span>
+                                    <div class="filter-inputs-inline">
+                                        <input type="number" name="min_rating" step="0.1" min="1" max="5" placeholder="Min" class="form-input">
+                                        <span>-</span>
+                                        <input type="number" name="max_rating" step="0.1" min="1" max="5" placeholder="Max" class="form-input">
+                                    </div>
+                                </div>
+                                <div class="flex-between gap-10 mt-15">
+                                    <button type="submit" class="btn-primary btn-block">Apply</button>
+                                    <button type="button" class="btn-outline btn-block" onclick="clearFilters('games')">Clear</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <button class="btn-outline btn-sm" onclick="toggleDropdown('games-sort-menu')">
+                            <i class="fa-solid fa-sort btn-icon-margin"></i> Sort
+                        </button>
+                        <div id="games-sort-menu" class="dropdown-menu hidden">
+                            <div class="sort-list">
+                                <button class="btn-sort-item active" onclick="handleVisualSort(this, 'games', 'game_id')">ID <i class="fa-solid fa-arrow-up"></i></button>
+                                <button class="btn-sort-item" onclick="handleVisualSort(this, 'games', 'title')">Title (A-Z) <i class="fa-solid fa-sort"></i></button>
+                                <button class="btn-sort-item" onclick="handleVisualSort(this, 'games', 'price')">Price <i class="fa-solid fa-sort"></i></button>
+                                <button class="btn-sort-item" onclick="handleVisualSort(this, 'games', 'calculated_rating')">Rating <i class="fa-solid fa-sort"></i></button>
+                                <button class="btn-sort-item" onclick="handleVisualSort(this, 'games', 'total_reviews')">Reviews Count <i class="fa-solid fa-sort"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="table-responsive">

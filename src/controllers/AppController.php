@@ -46,7 +46,7 @@ class AppController {
     // Render view template with optional variables
     protected function render(string $template = null, array $variables = []) {
         $templatePath = 'public/views/' . $template . '.html';
-        $templatePath404 = 'public/views/404.html';
+        $templatePath404 = 'public/views/errors/404.html';
         $output = "";
 
         // If template exists, load it with passed variables

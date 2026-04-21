@@ -91,6 +91,68 @@ class UserRepository extends Repository {
         );
     }
 
+    // retrieves filtered and sorted users for the admin panel
+    public function getAllUsersFiltered(int $currentUserId, array $filters, string $sortColumn, string $sortDir): array {
+        $sql = "SELECT id, username, email, role, created_at FROM users WHERE id != :currentId";
+        $params = [':currentId' => $currentUserId];
+
+        // dynamic id filtering
+        if (isset($filters['min_id']) && $filters['min_id'] !== '') {
+            $sql .= " AND id >= :min_id";
+            $params[':min_id'] = $filters['min_id'];
+        }
+        if (isset($filters['max_id']) && $filters['max_id'] !== '') {
+            $sql .= " AND id <= :max_id";
+            $params[':max_id'] = $filters['max_id'];
+        }
+
+        // date range filtering
+        if (isset($filters['min_date']) && $filters['min_date'] !== '') {
+            $sql .= " AND DATE(created_at) >= :min_date";
+            $params[':min_date'] = $filters['min_date'];
+        }
+        if (isset($filters['max_date']) && $filters['max_date'] !== '') {
+            $sql .= " AND DATE(created_at) <= :max_date";
+            $params[':max_date'] = $filters['max_date'];
+        }
+
+        // handling role checkboxes
+        $validRoles = [];
+        if (isset($filters['role_user']) && $filters['role_user'] === 'USER') {
+            $validRoles[] = "'USER'";
+        }
+        if (isset($filters['role_admin']) && $filters['role_admin'] === 'ADMIN') {
+            $validRoles[] = "'ADMIN'";
+        }
+
+        // apply role restrictions only if explicit filtering is active via the js flag
+        if (isset($filters['filtered'])) {
+            if (!empty($validRoles)) {
+                $sql .= " AND role IN (" . implode(',', $validRoles) . ")";
+            } else {
+                $sql .= " AND 1=0"; 
+            }
+        }
+
+        // sorting security and default column assignment
+        $allowedColumns = ['id', 'username', 'created_at'];
+        if (!in_array($sortColumn, $allowedColumns)) {
+            $sortColumn = 'id';
+        }
+
+        // force case-insensitive sorting for text columns to prevent ascii value mismatch
+        if ($sortColumn === 'username') {
+            $sql .= " ORDER BY LOWER(username) " . $sortDir;
+        } else {
+            $sql .= " ORDER BY " . $sortColumn . " " . $sortDir;
+        }
+
+        $stmt = $this->database->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     // Inserts a new user into the database and creates an empty profile using Transactions
     public function addUser(User $user): void {
         try {

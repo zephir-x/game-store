@@ -66,6 +66,7 @@ a:hover {
 /* Dark Mode Datepicker */
 input[type="date"].form-input {
     color-scheme: dark;
+    color: rgba(255, 255, 255, 0.20);
 }
 
 input[type="date"].form-input::-webkit-calendar-picker-indicator {

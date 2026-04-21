@@ -13,16 +13,62 @@ class AdminController extends AppController {
         $this->gameRepository = new GameRepository();
     }
 
+    // the main method for displaying the admin dashboard with sorting and filtering
     public function index() {
-        $this->checkAdmin(); // Ensure only admins can access this page
+        $this->checkAdmin();
+        $currentUserId = $_SESSION['user_id'];
+
+        // extract query parameters directly from the uri to bypass router limitations
+        $queryString = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY) ?? '';
+        parse_str($queryString, $queryParams);
+
+        // determine active tab and sorting defaults
+        $activeTab = $queryParams['tab'] ?? 'users';
+        $defaultSort = ($activeTab === 'games') ? 'game_id' : 'id';
         
-        $users = $this->userRepository->getAllUsers($_SESSION['user_id']);
-        $games = $this->gameRepository->getGameStatistics();
-        
-        return $this->render("admins/admin", [
-            "title" => "Admin Panel - GameNest",
-            "users" => $users,
-            "games" => $games
+        $sort = $queryParams['sort'] ?? $defaultSort;
+        $dir = isset($queryParams['dir']) && $queryParams['dir'] === 'desc' ? 'DESC' : 'ASC';
+
+        // prepare filters for games
+        $gameFilters = [
+            'min_id' => $queryParams['min_id'] ?? null,
+            'max_id' => $queryParams['max_id'] ?? null,
+            'min_price' => $queryParams['min_price'] ?? null,
+            'max_price' => $queryParams['max_price'] ?? null,
+            'min_rating' => $queryParams['min_rating'] ?? null,
+            'max_rating' => $queryParams['max_rating'] ?? null,
+            'min_reviews' => $queryParams['min_reviews'] ?? null,
+            'max_reviews' => $queryParams['max_reviews'] ?? null,
+            'filtered' => $queryParams['filtered'] ?? null
+        ];
+
+        // prepare filters for users
+        $userFilters = [
+            'min_id' => $queryParams['min_id'] ?? null,
+            'max_id' => $queryParams['max_id'] ?? null,
+            'min_date' => $queryParams['min_date'] ?? null,
+            'max_date' => $queryParams['max_date'] ?? null,
+            'role_user' => $queryParams['role_user'] ?? null,
+            'role_admin' => $queryParams['role_admin'] ?? null,
+            'filtered' => $queryParams['filtered'] ?? null
+        ];
+
+        $emptyFilters = [];
+
+        // fetch filtered data based on the active section
+        if ($activeTab === 'games') {
+            $games = $this->gameRepository->getAllGamesFiltered($gameFilters, $sort, $dir);
+            $users = $this->userRepository->getAllUsersFiltered($currentUserId, $emptyFilters, 'id', 'ASC');
+        } else {
+            $games = $this->gameRepository->getAllGamesFiltered($emptyFilters, 'game_id', 'ASC');
+            $users = $this->userRepository->getAllUsersFiltered($currentUserId, $userFilters, $sort, $dir);
+        }
+
+        return $this->render('admins/admin', [
+            'title' => 'Admin Panel - GameNest',
+            'games' => $games,
+            'users' => $users,
+            'activeTab' => $activeTab
         ]);
     }
 
@@ -55,7 +101,7 @@ class AdminController extends AppController {
             }
         }
         
-        header("Location: /edit-user/$userId");
+        header("Location: /edit-user/" . ($userId ?? ''));
         exit();
     }
 

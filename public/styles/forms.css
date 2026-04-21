@@ -372,9 +372,30 @@ input:-webkit-autofill:focus, input:-webkit-autofill:active {
     -webkit-text-fill-color: var(--text-main) !important;
 }
 
-/* Padding alignment for file-type inputs */
+/* Custom file input styling */
 .form-input-file {
-    padding: 9px 15px;
+    padding: 8px 12px;
+    background-color: rgba(255, 255, 255, 0.03);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.form-input-file::file-selector-button {
+    background-color: var(--primary);
+    color: var(--bg-body);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+    margin-right: 15px;
+}
+
+.form-input-file::file-selector-button:hover {
+    filter: brightness(1.1);
 }
 
 .input-icon-wrapper input:focus, .form-input:focus {

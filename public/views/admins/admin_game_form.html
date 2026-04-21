@@ -71,30 +71,43 @@
 
                     <div class="form-group mt-15">
                         <label>System Specifications</label>
+                        <?php 
+                            $minSpecs = [];
+                            $recSpecs = [];
+                            if ($game && $game->getSpecification()) { 
+                                $parsed = json_decode($game->getSpecification(), true); 
+                                if (is_array($parsed)) { 
+                                    $minSpecs = $parsed['minimum'] ?? []; $recSpecs = $parsed['recommended'] ?? []; 
+                                }
+                            }
+                            $getVal = function($arr, $key) { 
+                                $val = $arr[$key] ?? ''; return $val === 'not specified' ? '' : htmlspecialchars($val); 
+                            };
+                        ?>
                         <div class="specs-grid-edit">
                             <div></div>
                             <div class="spec-header-label">Minimum</div>
                             <div class="spec-header-label">Recommended</div>
 
                             <div class="spec-row-label">OS <span class="text-error">*</span></div>
-                            <input type="text" name="min_os" class="form-input" placeholder="e.g. Windows 10" required>
-                            <input type="text" name="rec_os" class="form-input" placeholder="e.g. Windows 11">
+                            <input type="text" name="min_os" class="form-input" placeholder="e.g. Windows 10" value="<?= $getVal($minSpecs, 'os') ?>" required>
+                            <input type="text" name="rec_os" class="form-input" placeholder="e.g. Windows 11" value="<?= $getVal($recSpecs, 'os') ?>">
 
                             <div class="spec-row-label">CPU <span class="text-error">*</span></div>
-                            <input type="text" name="min_cpu" class="form-input" placeholder="e.g. i5-8400" required>
-                            <input type="text" name="rec_cpu" class="form-input" placeholder="e.g. i7-12700">
+                            <input type="text" name="min_cpu" class="form-input" placeholder="e.g. i5-8400" value="<?= $getVal($minSpecs, 'cpu') ?>" required>
+                            <input type="text" name="rec_cpu" class="form-input" placeholder="e.g. i7-12700" value="<?= $getVal($recSpecs, 'cpu') ?>">
 
                             <div class="spec-row-label">GPU <span class="text-error">*</span></div>
-                            <input type="text" name="min_gpu" class="form-input" placeholder="e.g. GTX 1060" required>
-                            <input type="text" name="rec_gpu" class="form-input" placeholder="e.g. RTX 3080">
+                            <input type="text" name="min_gpu" class="form-input" placeholder="e.g. GTX 1060" value="<?= $getVal($minSpecs, 'gpu') ?>" required>
+                            <input type="text" name="rec_gpu" class="form-input" placeholder="e.g. RTX 3080" value="<?= $getVal($recSpecs, 'gpu') ?>">
 
                             <div class="spec-row-label">RAM</div>
-                            <input type="text" name="min_ram" class="form-input" placeholder="e.g. 8 GB DDR4">
-                            <input type="text" name="rec_ram" class="form-input" placeholder="e.g. 16 GB DDR5">
+                            <input type="text" name="min_ram" class="form-input" placeholder="e.g. 8 GB DDR4" value="<?= $getVal($minSpecs, 'ram') ?>">
+                            <input type="text" name="rec_ram" class="form-input" placeholder="e.g. 16 GB DDR5" value="<?= $getVal($recSpecs, 'ram') ?>">
 
                             <div class="spec-row-label">Storage</div>
-                            <input type="text" name="min_storage" class="form-input" placeholder="e.g. 100 GB SSD">
-                            <input type="text" name="rec_storage" class="form-input" placeholder="e.g. 250 GB SSD">
+                            <input type="text" name="min_storage" class="form-input" placeholder="e.g. 100 GB SSD" value="<?= $getVal($minSpecs, 'storage') ?>">
+                            <input type="text" name="rec_storage" class="form-input" placeholder="e.g. 250 GB SSD" value="<?= $getVal($recSpecs, 'storage') ?>">
                         </div>
                     </div>
 

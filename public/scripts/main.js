@@ -1,6 +1,7 @@
 import * as utils from './utils.js';
 import * as game from './game.js';
 import * as ui from './ui-handlers.js';
+import * as filters from './filters.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     utils.initAlerts();
@@ -17,6 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Admin: Users and Games (3 at a time)
     utils.setupLoadMore('load-more-users-btn', '.admin-table-row', 'hidden-admin-row', 3);
     utils.setupLoadMore('load-more-admin-games-btn', '.admin-table-row', 'hidden-admin-row', 3);
+
+    // Listener: clicking outside the dropdown area closes it
+    document.addEventListener('click', filters.closeDropdownsOnClickOutside);
+    filters.restoreState();
 });
 
 // We expose functions to Window so that HTML (onclick) can see them
@@ -31,3 +36,7 @@ window.toggleSecurityForm = ui.toggleSecurityForm;
 window.toggleReviewForm = ui.toggleReviewForm;
 window.selectAvatar = ui.selectAvatar;
 window.toggleEditMode = ui.toggleEditMode;
+window.toggleDropdown = filters.toggleDropdown;
+window.clearFilters = filters.clearFilters;
+window.handleVisualSort = filters.handleVisualSort;
+window.applyFilters = filters.applyFilters;
