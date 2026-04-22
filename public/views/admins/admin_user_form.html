@@ -29,7 +29,7 @@
                             <img src="/public/resources/avatars/<?= $av ?>" 
                                  class="avatar-option <?= ($details['avatar'] ?? 'gaming-console.jpg') === $av ? 'selected' : '' ?>" 
                                  onclick="selectAvatar('<?= $av ?>')" 
-                                 alt="avatar option">
+                                 alt="avatar option" loading="lazy">
                         <?php endforeach; ?>
                     </div>
                 </div>

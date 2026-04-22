@@ -9,7 +9,7 @@
     
     <main class="store-layout">
         <div class="game-hero">
-            <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" alt="<?= htmlspecialchars($game->getTitle()); ?>">
+            <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" alt="<?= htmlspecialchars($game->getTitle()); ?>" loading="lazy">
         </div>
 
         <div class="game-content-grid">
@@ -215,7 +215,7 @@
                             <div class="review-card-header">
                                 <div class="review-user">
                                     <div class="review-avatar">
-                                        <img src="/public/resources/avatars/<?= htmlspecialchars($review->getAvatar() ?? 'gaming-console.jpg') ?>" alt="Avatar">
+                                        <img src="/public/resources/avatars/<?= htmlspecialchars($review->getAvatar() ?? 'gaming-console.jpg') ?>" alt="Avatar" loading="lazy">
                                     </div>
                                     <div class="review-user-info">
                                         <strong><?= htmlspecialchars($review->getUsername()) ?></strong>
@@ -284,8 +284,6 @@
         </div>
     </div>
 
-    <footer class="main-footer">
-        &copy; 2026 GameNest &mdash; Built for players, not publishers.
-    </footer>
+    <?php include __DIR__ . '/partials/footer.html'; ?>
   </body>
 </html>

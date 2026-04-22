@@ -16,7 +16,7 @@
         </div>
 
         <div class="section-header">
-            <h2><i class="fa-solid fa-border-all btn-icon-margin"></i> Purchased Titles</h2>
+            <h2><i class="fa-solid fa-border-all btn-icon-margin"></i> Owned Titles</h2>
         </div>
 
         <?php if(empty($library)): ?>
@@ -31,7 +31,7 @@
                 <?php foreach($library as $game): ?>
                     <a href="/game/<?= $game['game_id'] ?>" class="game-card">
                         <div class="game-card-image-wrapper">
-                            <img src="/public/resources/covers/<?= htmlspecialchars($game['graphics'] ?? 'default.jpg'); ?>" alt="<?= htmlspecialchars($game['title']); ?>">
+                            <img src="/public/resources/covers/<?= htmlspecialchars($game['graphics'] ?? 'default.jpg'); ?>" alt="<?= htmlspecialchars($game['title']); ?>" loading="lazy">
                         </div>
                         <div class="game-card-content">
                             <h3 class="game-card-title"><?= htmlspecialchars($game['title']); ?></h3>
@@ -61,7 +61,7 @@
                 <?php foreach($wishlist as $w_game): ?>
                     <a href="/game/<?= $w_game['game_id'] ?>" class="game-card">
                         <div class="game-card-image-wrapper">
-                            <img src="/public/resources/covers/<?= htmlspecialchars($w_game['graphics'] ?? 'default.jpg'); ?>" alt="<?= htmlspecialchars($w_game['title']); ?>">
+                            <img src="/public/resources/covers/<?= htmlspecialchars($w_game['graphics'] ?? 'default.jpg'); ?>" alt="<?= htmlspecialchars($w_game['title']); ?>" loading="lazy">
                         </div>
                         <div class="game-card-content">
                             <div class="game-card-meta">
@@ -81,8 +81,6 @@
         <?php endif; ?>
     </main>
 
-    <footer class="main-footer">
-        &copy; 2026 GameNest &mdash; Built for players, not publishers.
-    </footer>
+    <?php include __DIR__ . '/partials/footer.html'; ?>
   </body>
 </html>

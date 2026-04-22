@@ -32,7 +32,7 @@
         <div class="nav-user">
             <?php if(isset($_SESSION['user_id'])): ?>
                 <a href="/dashboard" class="nav-avatar-link">
-                    <img src="/public/resources/avatars/<?= htmlspecialchars($_SESSION['user_avatar'] ?? 'gaming-console.jpg') ?>" alt="Profile">
+                    <img src="/public/resources/avatars/<?= htmlspecialchars($_SESSION['user_avatar'] ?? 'gaming-console.jpg') ?>" alt="Profile" loading="lazy">
                 </a>
                 <a href="/logout" class="nav-logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
             <?php else: ?>

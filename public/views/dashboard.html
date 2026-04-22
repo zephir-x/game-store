@@ -16,7 +16,7 @@
             <div id="profile-view">
                 <div class="profile-card">
                     <div class="profile-info-row">
-                        <img src="/public/resources/avatars/<?= htmlspecialchars($details['avatar'] ?? 'gaming-console.jpg') ?>" alt="Avatar" class="profile-avatar-large">
+                        <img src="/public/resources/avatars/<?= htmlspecialchars($details['avatar'] ?? 'gaming-console.jpg') ?>" alt="Avatar" class="profile-avatar-large" loading="lazy">
                         <div class="profile-text-content">
                             <h2 class="profile-name">
                                 <?php if(!empty($details['name']) || !empty($details['surname'])): ?>
@@ -62,7 +62,7 @@
                                 <?php foreach($avatars as $av): ?>
                                     <img src="/public/resources/avatars/<?= $av ?>" 
                                          class="avatar-option <?= ($details['avatar'] ?? 'gaming-console.jpg') === $av ? 'selected' : '' ?>" 
-                                         onclick="selectAvatar('<?= $av ?>')" alt="avatar option">
+                                         onclick="selectAvatar('<?= $av ?>')" alt="avatar option" loading="lazy">
                                 <?php endforeach; ?>
                             </div>
                         </div>
@@ -167,8 +167,6 @@
         </div>
     </main>
 
-    <footer class="main-footer">
-        &copy; 2026 GameNest &mdash; Built for players, not publishers.
-    </footer>
+    <?php include __DIR__ . '/partials/footer.html'; ?>
   </body>
 </html>

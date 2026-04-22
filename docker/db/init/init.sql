@@ -147,7 +147,9 @@ INSERT INTO users (email, password_hash, username, role) VALUES
 
 INSERT INTO user_details (user_id, name, surname, bio, avatar) VALUES 
 (1, 'System', 'Administrator', 'I rule this place ;D', 'gaming-guy.jpg'),
-(2, 'Just', 'User', 'I love RPG games.', 'gaming-girl.jpg');
+(2, 'Just', 'User', 'I love RPG games.', 'gaming-girl.jpg'),
+(3, 'Casual', 'Gamer', 'Here for the fun and good times!', 'animal.jpg'),
+(4, 'Pixel', 'Fan', 'Retro games are the best!', 'pixel.jpg');
 
 INSERT INTO games (title, description, category, price, graphics, developer, release_date, specification, is_featured) VALUES 
 -- [ID 1-4] LATEST RELEASES (Low ID, no reviews)
@@ -178,6 +180,7 @@ INSERT INTO user_library (user_id, game_id) VALUES
 
 -- Wishlist for regular users (games they don't own)
 INSERT INTO wishlist (user_id, game_id) VALUES 
+(1, 5), (1, 6),          -- Admin is waiting for the upcoming releases
 (2, 5), (2, 6),          -- User 2 is waiting for the upcoming releases
 (3, 1), (3, 2),          -- User 3 wants the latest releases
 (4, 3), (4, 4);          -- User 4 wants the latest releases
@@ -197,3 +200,6 @@ INSERT INTO reviews (user_id, game_id, rating, content) VALUES
 
 -- ID 10 Game (Pixel Legends) - 1 review
 (4, 10, 4, 'A lovely throwback to the classic 16-bit era. Precise platforming and great music.');
+
+INSERT INTO review_likes (user_id, review_id) VALUES 
+(2, 2), (2, 3), (2, 5), (3, 1), (3, 4), (3, 7), (4, 1), (4, 4), (4, 6); 
