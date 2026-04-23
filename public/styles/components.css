@@ -72,6 +72,7 @@
 /* Game Grid */
 .game-grid {
     display: grid;
+    align-items: start;
     grid-template-columns: repeat(4, 1fr);
     gap: 25px;
 }
@@ -95,9 +96,10 @@
 
 .game-card-image-wrapper {
     width: 100%;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
     background-color: #000;
+    position: relative !important;
 }
 
 .game-card-image-wrapper img {
@@ -152,6 +154,8 @@
     color: var(--text-main);
 }
 
+.clickable-card { cursor: pointer !important; }
+
 /* Hero Banner */
 .hero-banner {
     position: relative;
@@ -174,6 +178,32 @@
     position: relative;
     z-index: 2;
     max-width: 50%;
+}
+
+.badge-status {
+    position: absolute !important;
+    bottom: 8px !important;
+    right: 8px !important;
+    z-index: 10 !important;
+    font-size: 0.7rem !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+    font-weight: bold !important;
+    background-color: rgba(13, 17, 23, 0.85) !important;
+    border: 1px solid transparent !important;
+    backdrop-filter: blur(4px) !important;
+}
+
+.badge-status.real, .badge-status.prototype {
+    border-color: var(--border-focus) !important;
+    color: var(--primary) !important;
+}
+
+/* Solid badge for Hero Banner */
+.badge-real-solid {
+    background-color: var(--primary) !important;
+    color: var(--bg-body) !important;
+    margin-left: 10px !important;
 }
 
 .badge-featured {

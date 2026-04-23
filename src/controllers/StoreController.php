@@ -73,7 +73,8 @@ class StoreController extends AppController {
                     (float)$data['calculated_rating'],
                     $data['specification'],
                     $data['developer'],
-                    $data['release_date']
+                    $data['release_date'],
+                    $data['game_file'] ?? null
                 );
             }
         }

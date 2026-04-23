@@ -39,7 +39,8 @@ CREATE TABLE games (
     specification TEXT,
     developer VARCHAR(255) DEFAULT 'Unknown Studio',
     release_date DATE DEFAULT CURRENT_DATE,
-    is_featured BOOLEAN DEFAULT FALSE
+    is_featured BOOLEAN DEFAULT FALSE,
+    game_file VARCHAR(255) DEFAULT NULL
 );
 
 CREATE TABLE reviews (
@@ -92,6 +93,7 @@ SELECT
     g.title,
     g.category,
     g.graphics,
+    g.game_file,
     ul.purchased_at
 FROM user_library ul
 JOIN games g ON ul.game_id = g.id;
@@ -110,7 +112,7 @@ GROUP BY g.id, g.title, g.price;
 
 -- View 3: For automatically fetching the 4 newest released (and available) games
 CREATE OR REPLACE VIEW v_recommended_games AS
-SELECT g.id, g.title, g.description, g.category, g.price, g.graphics, g.specification, g.developer, g.release_date,
+SELECT g.id, g.title, g.description, g.category, g.price, g.graphics, g.specification, g.developer, g.release_date, g.game_file,
        COALESCE(v.calculated_rating, 0.0) AS average_rating
 FROM games g
 LEFT JOIN v_game_statistics v ON g.id = v.game_id

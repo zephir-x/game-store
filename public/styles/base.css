@@ -85,7 +85,17 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
 }
 
-.flex-col { display: flex; flex-direction: column; }
+.flex-col-content { 
+    display: flex !important; 
+    flex-direction: column !important;
+    height: 100% !important;
+}
+
+.flex-col { 
+    display: flex; 
+    flex-direction: column; 
+}
+
 .flex-wrap { flex-wrap: wrap; }
 .flex-spacer { flex-grow: 1; }
 .flex-1 { flex: 1; }

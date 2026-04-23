@@ -8,7 +8,6 @@
     <?php include __DIR__ . '/partials/nav.html'; ?>
 
     <main class="store-layout">
-        
         <?php if($searchQuery): ?>
             <div class="section-header">
                 <h2>Results: "<?= htmlspecialchars($searchQuery) ?>"</h2>
@@ -23,33 +22,171 @@
                 </div>
             <?php endif; ?>
             
-        <?php else: ?>
-            <?php if($featuredGame): ?>
-                <?php $heroBg = $featuredGame->getGraphics() ? $featuredGame->getGraphics() : 'default.jpg'; ?>
-                <div class="hero-banner" style="background-image: linear-gradient(to right, rgba(13, 17, 23, 0.95) 20%, rgba(13, 17, 23, 0.4) 80%), url('/public/resources/covers/<?= htmlspecialchars($heroBg); ?>');">
-                    <div class="hero-content">
-                        <span class="badge badge-featured"><i class="fa-solid fa-star"></i> Featured</span>
-                        <h1 class="hero-title"><?= htmlspecialchars($featuredGame->getTitle()); ?></h1>
-                        <p class="hero-description"><?= htmlspecialchars($featuredGame->getDescription()); ?></p>
-                        <div class="hero-actions">
-                            <div class="hero-pricing">
-                                <span class="hero-price"><?= $featuredGame->getFormattedPrice(); ?></span>
+            <?php else: ?>
+                <?php if($featuredGame): ?>
+                    <?php $heroBg = $featuredGame->getGraphics() ? $featuredGame->getGraphics() : 'default.jpg'; ?>
+                    <div class="hero-banner" style="background-image: linear-gradient(to right, rgba(13, 17, 23, 0.95) 20%, rgba(13, 17, 23, 0.4) 80%), url('/public/resources/covers/<?= htmlspecialchars($heroBg); ?>');">
+                        <div class="hero-content">
+                            <span class="badge badge-featured"><i class="fa-solid fa-star"></i> Featured</span>
+                            
+                            <?php if($featuredGame->isRealGame()): ?>
+                                <span class="badge badge-real-solid"><i class="fa-solid fa-check-circle"></i> Playable</span>
+                            <?php endif; ?>
+                            
+                            <h1 class="hero-title"><?= htmlspecialchars($featuredGame->getTitle()); ?></h1>
+                            <p class="hero-description"><?= htmlspecialchars($featuredGame->getDescription()); ?></p>
+                            <div class="hero-actions">
+                                <div class="hero-pricing">
+                                    <span class="hero-price"><?= $featuredGame->getFormattedPrice(); ?></span>
+                                </div>
+                                <a href="/game/<?= $featuredGame->getId(); ?>" class="btn-primary btn-lg">Get Now</a>
                             </div>
-                            <a href="/game/<?= $featuredGame->getId(); ?>" class="btn-primary btn-lg">Get Now</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <?php if(!empty($topRatedGames)): ?>
+                    <div class="section-header flex-between mt-40 mb-25">
+                        <h2><i class="fa-solid fa-thumbs-up text-primary mr-10"></i> Highly Recommended</h2>
+                    </div>
+                    <div class="game-grid">
+                        <?php foreach($topRatedGames as $game): ?>
+                            <a href="/game/<?= $game->getId() ?>" class="game-card">
+                                <div class="game-card-image-wrapper">
+                                    <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" alt="<?= htmlspecialchars($game->getTitle()); ?>" loading="lazy">
+                                    
+                                    <?php if($game->isRealGame()): ?>
+                                        <span class="badge-status real"><i class="fa-solid fa-check"></i> Real</span>
+                                    <?php else: ?>
+                                        <span class="badge-status prototype"><i class="fa-solid fa-flask"></i> Prototype</span>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="game-card-content">
+                                    <div class="game-card-meta">
+                                        <span class="game-card-category"><?= htmlspecialchars($game->getCategory()); ?></span>
+                                        <span class="game-card-rating"><i class="fa-solid fa-star"></i> <?= number_format($game->getAverageRating(), 1); ?></span>
+                                    </div>
+                                    <h3 class="game-card-title"><?= htmlspecialchars($game->getTitle()); ?></h3>
+                                    <p class="game-card-price"><?= $game->getFormattedPrice(); ?></p>
+                                </div>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if(!empty($recommendedGames)): ?>
+                    <div class="section-header flex-between mt-40 mb-25">
+                        <h2><i class="fa-solid fa-fire text-primary mr-10"></i> Latest Releases</h2>
+                    </div>
+                    <div class="game-grid">
+                        <?php foreach($recommendedGames as $game): ?>
+                            <a href="/game/<?= $game->getId() ?>" class="game-card">
+                                <div class="game-card-image-wrapper">
+                                    <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" alt="<?= htmlspecialchars($game->getTitle()); ?>" loading="lazy">
+                                    
+                                    <?php if($game->isRealGame()): ?>
+                                        <span class="badge-status real"><i class="fa-solid fa-check"></i> Real</span>
+                                    <?php else: ?>
+                                        <span class="badge-status prototype"><i class="fa-solid fa-flask"></i> Prototype</span>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="game-card-content">
+                                    <div class="game-card-meta">
+                                        <span class="game-card-category"><?= htmlspecialchars($game->getCategory()); ?></span>
+                                        <span class="game-card-rating"><i class="fa-solid fa-star"></i> <?= number_format($game->getAverageRating(), 1); ?></span>
+                                    </div>
+                                    <h3 class="game-card-title"><?= htmlspecialchars($game->getTitle()); ?></h3>
+                                    <p class="game-card-price"><?= $game->getFormattedPrice(); ?></p>
+                                </div>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="section-header flex-between mt-60 mb-20">
+                    <h2>Browse All Games</h2>
+                    
+                    <div class="controls-wrapper">
+                        <div class="dropdown">
+                            <button class="btn-outline btn-sm" onclick="toggleDropdown('store-filter-menu')">
+                                <i class="fa-solid fa-filter btn-icon-margin"></i> Filter
+                            </button>
+                            <div id="store-filter-menu" class="dropdown-menu hidden w-340">
+                                <form class="clean-form" id="form-filter-store" onsubmit="event.preventDefault(); applyFilters(this, 'store');">
+                                    <div class="filter-row">
+                                        <span class="filter-label">Availability</span>
+                                        <div class="checkbox-group">
+                                            <label class="checkbox-label"><input type="checkbox" name="type_free" value="1" checked> Free</label>
+                                            <label class="checkbox-label"><input type="checkbox" name="type_paid" value="1" checked> Paid</label>
+                                            <label class="checkbox-label"><input type="checkbox" name="type_upcoming" value="1" checked> Coming Soon</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="filter-row">
+                                        <span class="filter-label">Categories</span>
+                                        <div class="checkbox-group category-group flex-wrap gap-10">
+                                            <label class="checkbox-label"><input type="checkbox" name="cat_all" value="all" id="cb-cat-all" checked> All</label>
+                                            <?php foreach($categories as $cat): ?>
+                                                <label class="checkbox-label"><input type="checkbox" name="categories[]" value="<?= htmlspecialchars($cat) ?>" class="cb-cat-item"> <?= htmlspecialchars($cat) ?></label>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="filter-row">
+                                        <span class="filter-label">Price Range (PLN)</span>
+                                        <div class="filter-inputs-inline">
+                                            <input type="number" name="min_price" min="0" step="0.01" placeholder="Min" class="form-input">
+                                            <span>-</span>
+                                            <input type="number" name="max_price" min="0" step="0.01" placeholder="Max" class="form-input">
+                                        </div>
+                                    </div>
+
+                                    <div class="filter-row">
+                                        <span class="filter-label">Rating (1-5)</span>
+                                        <div class="filter-inputs-inline">
+                                            <input type="number" name="min_rating" step="0.1" min="1" max="5" placeholder="Min" class="form-input">
+                                            <span>-</span>
+                                            <input type="number" name="max_rating" step="0.1" min="1" max="5" placeholder="Max" class="form-input">
+                                        </div>
+                                    </div>
+                                    
+                                    <input type="hidden" name="filtered" value="1">
+                                    <div class="flex-between gap-10 mt-15">
+                                        <button type="button" class="btn-outline btn-block" onclick="clearFilters('store')">Clear</button>
+                                        <button type="submit" class="btn-primary btn-block">Apply</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="dropdown">
+                            <button class="btn-outline btn-sm" onclick="toggleDropdown('store-sort-menu')">
+                                <i class="fa-solid fa-sort btn-icon-margin"></i> Sort
+                            </button>
+                            <div id="store-sort-menu" class="dropdown-menu hidden">
+                                <div class="sort-list">
+                                    <button class="btn-sort-item active" onclick="handleVisualSort(this, 'store', 'game_id')">ID <i class="fa-solid fa-arrow-up"></i></button>
+                                    <button class="btn-sort-item" onclick="handleVisualSort(this, 'store', 'title')">Title (A-Z) <i class="fa-solid fa-sort"></i></button>
+                                    <button class="btn-sort-item" onclick="handleVisualSort(this, 'store', 'calculated_rating')">Rating <i class="fa-solid fa-sort"></i></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             <?php endif; ?>
 
-            <?php if(!empty($topRatedGames)): ?>
-                <div class="section-header flex-between mt-40 mb-25">
-                    <h2><i class="fa-solid fa-thumbs-up text-primary mr-10"></i> Highly Recommended</h2>
-                </div>
-                <div class="game-grid">
-                    <?php foreach($topRatedGames as $game): ?>
-                        <a href="/game/<?= $game->getId() ?>" class="game-card">
+            <?php if(!empty($games)): ?>
+                <div class="game-grid" id="store-grid">
+                    <?php foreach($games as $index => $game): ?>
+                        <a href="/game/<?= $game->getId() ?>" class="game-card <?= ($index >= 4 && empty($searchQuery)) ? 'hidden-game' : '' ?>" style="animation-delay: '<?= ($index % 8) * 0.05 ?>s'">
                             <div class="game-card-image-wrapper">
                                 <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" alt="<?= htmlspecialchars($game->getTitle()); ?>" loading="lazy">
+                                
+                                <?php if($game->isRealGame()): ?>
+                                    <span class="badge-status real"><i class="fa-solid fa-check"></i> Real</span>
+                                <?php else: ?>
+                                    <span class="badge-status prototype"><i class="fa-solid fa-flask"></i> Prototype</span>
+                                <?php endif; ?>
                             </div>
                             <div class="game-card-content">
                                 <div class="game-card-meta">
@@ -62,131 +199,15 @@
                         </a>
                     <?php endforeach; ?>
                 </div>
-            <?php endif; ?>
 
-            <?php if(!empty($recommendedGames)): ?>
-                <div class="section-header flex-between mt-40 mb-25">
-                    <h2><i class="fa-solid fa-fire text-primary mr-10"></i> Latest Releases</h2>
-                </div>
-                <div class="game-grid">
-                    <?php foreach($recommendedGames as $game): ?>
-                        <a href="/game/<?= $game->getId() ?>" class="game-card">
-                            <div class="game-card-image-wrapper">
-                                <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" alt="<?= htmlspecialchars($game->getTitle()); ?>" loading="lazy">
-                            </div>
-                            <div class="game-card-content">
-                                <div class="game-card-meta">
-                                    <span class="game-card-category"><?= htmlspecialchars($game->getCategory()); ?></span>
-                                    <span class="game-card-rating"><i class="fa-solid fa-star"></i> <?= number_format($game->getAverageRating(), 1); ?></span>
-                                </div>
-                                <h3 class="game-card-title"><?= htmlspecialchars($game->getTitle()); ?></h3>
-                                <p class="game-card-price"><?= $game->getFormattedPrice(); ?></p>
-                            </div>
-                        </a>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-
-            <div class="section-header flex-between mt-60 mb-20">
-                <h2>Browse All Games</h2>
-                
-                <div class="controls-wrapper">
-                    <div class="dropdown">
-                        <button class="btn-outline btn-sm" onclick="toggleDropdown('store-filter-menu')">
-                            <i class="fa-solid fa-filter btn-icon-margin"></i> Filter
-                        </button>
-                        <div id="store-filter-menu" class="dropdown-menu hidden w-340">
-                            <form class="clean-form" id="form-filter-store" onsubmit="event.preventDefault(); applyFilters(this, 'store');">
-                                
-                                <div class="filter-row">
-                                    <span class="filter-label">Availability</span>
-                                    <div class="checkbox-group">
-                                        <label class="checkbox-label"><input type="checkbox" name="type_free" value="1" checked> Free</label>
-                                        <label class="checkbox-label"><input type="checkbox" name="type_paid" value="1" checked> Paid</label>
-                                        <label class="checkbox-label"><input type="checkbox" name="type_upcoming" value="1" checked> Coming Soon</label>
-                                    </div>
-                                </div>
-
-                                <div class="filter-row">
-                                    <span class="filter-label">Categories</span>
-                                    <div class="checkbox-group category-group flex-wrap gap-10">
-                                        <label class="checkbox-label"><input type="checkbox" name="cat_all" value="all" id="cb-cat-all" checked> All</label>
-                                        <?php foreach($categories as $cat): ?>
-                                            <label class="checkbox-label"><input type="checkbox" name="categories[]" value="<?= htmlspecialchars($cat) ?>" class="cb-cat-item"> <?= htmlspecialchars($cat) ?></label>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
-
-                                <div class="filter-row">
-                                    <span class="filter-label">Price Range (PLN)</span>
-                                    <div class="filter-inputs-inline">
-                                        <input type="number" name="min_price" min="0" step="0.01" placeholder="Min" class="form-input">
-                                        <span>-</span>
-                                        <input type="number" name="max_price" min="0" step="0.01" placeholder="Max" class="form-input">
-                                    </div>
-                                </div>
-
-                                <div class="filter-row">
-                                    <span class="filter-label">Rating (1-5)</span>
-                                    <div class="filter-inputs-inline">
-                                        <input type="number" name="min_rating" step="0.1" min="1" max="5" placeholder="Min" class="form-input">
-                                        <span>-</span>
-                                        <input type="number" name="max_rating" step="0.1" min="1" max="5" placeholder="Max" class="form-input">
-                                    </div>
-                                </div>
-                                
-                                <input type="hidden" name="filtered" value="1">
-                                <div class="flex-between gap-10 mt-15">
-                                    <button type="button" class="btn-outline btn-block" onclick="clearFilters('store')">Clear</button>
-                                    <button type="submit" class="btn-primary btn-block">Apply</button>
-                                </div>
-                            </form>
-                        </div>
+                <?php if(count($games) > 4 && empty($searchQuery)): ?>
+                    <div class="load-more-wrapper">
+                        <button id="load-more-btn" class="btn-load-more">Load More Games <i class="fa-solid fa-chevron-down"></i></button>
                     </div>
-
-                    <div class="dropdown">
-                        <button class="btn-outline btn-sm" onclick="toggleDropdown('store-sort-menu')">
-                            <i class="fa-solid fa-sort btn-icon-margin"></i> Sort
-                        </button>
-                        <div id="store-sort-menu" class="dropdown-menu hidden">
-                            <div class="sort-list">
-                                <button class="btn-sort-item active" onclick="handleVisualSort(this, 'store', 'game_id')">ID <i class="fa-solid fa-arrow-up"></i></button>
-                                <button class="btn-sort-item" onclick="handleVisualSort(this, 'store', 'title')">Title (A-Z) <i class="fa-solid fa-sort"></i></button>
-                                <button class="btn-sort-item" onclick="handleVisualSort(this, 'store', 'calculated_rating')">Rating <i class="fa-solid fa-sort"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <?php endif; ?>
-
-        <?php if(!empty($games)): ?>
-            <div class="game-grid" id="store-grid">
-                <?php foreach($games as $index => $game): ?>
-                    <a href="/game/<?= $game->getId() ?>" class="game-card <?= ($index >= 4 && empty($searchQuery)) ? 'hidden-game' : '' ?>" style="animation-delay: '<?= ($index % 8) * 0.05 ?>s'">
-                        <div class="game-card-image-wrapper">
-                            <img src="/public/resources/covers/<?= htmlspecialchars($game->getGraphics() ?: 'default.jpg'); ?>" alt="<?= htmlspecialchars($game->getTitle()); ?>" loading="lazy">
-                        </div>
-                        <div class="game-card-content">
-                            <div class="game-card-meta">
-                                <span class="game-card-category"><?= htmlspecialchars($game->getCategory()); ?></span>
-                                <span class="game-card-rating"><i class="fa-solid fa-star"></i> <?= number_format($game->getAverageRating(), 1); ?></span>
-                            </div>
-                            <h3 class="game-card-title"><?= htmlspecialchars($game->getTitle()); ?></h3>
-                            <p class="game-card-price"><?= $game->getFormattedPrice(); ?></p>
-                        </div>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-
-            <?php if(count($games) > 4 && empty($searchQuery)): ?>
-                <div class="load-more-wrapper">
-                    <button id="load-more-btn" class="btn-load-more">Load More Games <i class="fa-solid fa-chevron-down"></i></button>
-                </div>
+                <?php endif; ?>
             <?php endif; ?>
-        <?php endif; ?>
-    </main>
+        </main>
 
-    <?php include __DIR__ . '/partials/footer.html'; ?>
-  </body>
+        <?php include __DIR__ . '/partials/footer.html'; ?>
+    </body>
 </html>

@@ -12,9 +12,10 @@ class Game {
     private ?string $specification;
     private string $developer;
     private string $releaseDate;
+    private ?string $gameFile;
 
     // Game constructor
-    public function __construct(int $id, string $title, string $description, string $category, float $price, string $graphics, float $averageRating, ?string $specification, string $developer, string $releaseDate) {
+    public function __construct(int $id, string $title, string $description, string $category, float $price, string $graphics, float $averageRating, ?string $specification, string $developer, string $releaseDate, ?string $gameFile) {
         $this->id = $id;
         $this->title = $title;
         $this->description = $description;
@@ -25,6 +26,7 @@ class Game {
         $this->specification = $specification;
         $this->developer = $developer;
         $this->releaseDate = $releaseDate;
+        $this->gameFile = $gameFile;
     }
 
     // Getters
@@ -38,6 +40,7 @@ class Game {
     public function getSpecification(): ?string { return $this->specification; }
     public function getDeveloper(): string { return $this->developer; }
     public function getReleaseDate(): string { return $this->releaseDate; }
+    public function getGameFile(): ?string { return $this->gameFile; }
 
     // Helpers
 
@@ -54,5 +57,10 @@ class Game {
     // Returns the formatted price (e.g., "Free" or "199.99 PLN")
     public function getFormattedPrice(): string { 
         return $this->isFree() ? 'Free' : number_format($this->price, 2) . ' PLN'; 
+    }
+
+    // Checks if the game has an associated game file (indicating it's a real game, not just a placeholder)
+    public function isRealGame(): bool { 
+        return !empty($this->gameFile); 
     }
 }

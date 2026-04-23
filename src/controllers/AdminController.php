@@ -262,8 +262,27 @@ class AdminController extends AppController {
                 $graphics = $newGraphics;
             }
 
+            // Game Executable File Support
+            $gameFile = !empty($_POST['existing_game_file']) ? trim($_POST['existing_game_file']) : null;
+            
+            if (isset($_FILES['game_executable']) && $_FILES['game_executable']['error'] === UPLOAD_ERR_OK) {
+                $newGameFile = $this->handleGameFileUpload($_FILES['game_executable']);
+                
+                // If a new file was uploaded, remove the old one to save space
+                if ($gameFile && $newGameFile && $gameFile !== $newGameFile) {
+                    $oldFilePath = __DIR__ . '/../../public/resources/downloads/' . $gameFile;
+                    if (is_file($oldFilePath)) { 
+                        unlink($oldFilePath); 
+                    }
+                }
+                
+                if ($newGameFile) {
+                    $gameFile = $newGameFile;
+                }
+            }
+            
             // We create an object (the average rating at the start is 0.0, the trigger in the database will overwrite it if necessary)
-            $game = new Game($id ?? 0, $title, $description, $category, $price, $graphics, 0.0, $specification, $developer, $releaseDate);
+            $game = new Game($id ?? 0, $title, $description, $category, $price, $graphics, 0.0, $specification, $developer, $releaseDate, $gameFile);
 
             try {
                 if ($id) {
@@ -286,23 +305,24 @@ class AdminController extends AppController {
         exit();
     }
 
-    // Updates the featured game displayed on the store front page
-    public function updateFeaturedGame() {
-        $this->checkAdmin();
+    // Helper function: Saves game executable/zip to disk
+    private function handleGameFileUpload(array $file): ?string {
+        $uploadDir = __DIR__ . '/../../public/resources/downloads/';
         
-        if ($this->isPost() && isset($_POST['game_id'])) {
-            $gameId = (int)$_POST['game_id'];
-            
-            try {
-                $this->gameRepository->setFeaturedGame($gameId);
-                $_SESSION['success_message'] = "Featured game has been successfully updated.";
-            } catch (PDOException $e) {
-                $_SESSION['error_message'] = "Failed to update the featured game.";
-            }
+        // Ensure directory exists
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
         }
         
-        header("Location: /admin");
-        exit();
+        $fileExt = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $fileName = uniqid('gamefile_') . '.' . $fileExt;
+        $destination = $uploadDir . $fileName;
+
+        if (move_uploaded_file($file['tmp_name'], $destination)) {
+            return $fileName;
+        }
+        
+        return null;
     }
 
     // Helper function: Saves a file to disk and returns its new name
@@ -325,6 +345,25 @@ class AdminController extends AppController {
         return 'default.jpg'; // in case of a write error
     }
 
+    // Updates the featured game displayed on the store front page
+    public function updateFeaturedGame() {
+        $this->checkAdmin();
+        
+        if ($this->isPost() && isset($_POST['game_id'])) {
+            $gameId = (int)$_POST['game_id'];
+            
+            try {
+                $this->gameRepository->setFeaturedGame($gameId);
+                $_SESSION['success_message'] = "Featured game has been successfully updated.";
+            } catch (PDOException $e) {
+                $_SESSION['error_message'] = "Failed to update the featured game.";
+            }
+        }
+        
+        header("Location: /admin");
+        exit();
+    }
+
     public function deleteGame() {
         $this->checkAdmin();
         if ($this->isPost() && isset($_POST['game_id'])) {
@@ -342,9 +381,14 @@ class AdminController extends AppController {
                 // Delete the file from the disk (if it's not the default image)
                 if ($graphics && $graphics !== 'default.jpg') {
                     $filePath = __DIR__ . '/../../public/resources/covers/' . $graphics;
-                    if (file_exists($filePath)) {
-                        unlink($filePath);
-                    }
+                    if (file_exists($filePath)) { unlink($filePath); }
+                }
+
+                // Delete game executable file
+                $gameFile = $game->getGameFile();
+                if ($gameFile) {
+                    $exePath = __DIR__ . '/../../public/resources/downloads/' . $gameFile;
+                    if (file_exists($exePath)) { unlink($exePath); }
                 }
             }
         }

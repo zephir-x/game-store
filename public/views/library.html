@@ -29,15 +29,36 @@
         <?php else: ?>
             <div class="game-grid mb-60">
                 <?php foreach($library as $game): ?>
-                    <a href="/game/<?= $game['game_id'] ?>" class="game-card">
+                    <div data-href="/game/<?= $game['game_id'] ?>" onclick="window.location.href = this.dataset.href;" class="game-card clickable-card">
+                        
                         <div class="game-card-image-wrapper">
                             <img src="/public/resources/covers/<?= htmlspecialchars($game['graphics'] ?? 'default.jpg'); ?>" alt="<?= htmlspecialchars($game['title']); ?>" loading="lazy">
+                            
+                            <?php if(!empty($game['game_file'])): ?>
+                                <span class="badge-status real"><i class="fa-solid fa-check"></i> Real</span>
+                            <?php else: ?>
+                                <span class="badge-status prototype"><i class="fa-solid fa-flask"></i> Prototype</span>
+                            <?php endif; ?>
                         </div>
-                        <div class="game-card-content">
+
+                        <div class="game-card-content flex-col-content">
                             <h3 class="game-card-title"><?= htmlspecialchars($game['title']); ?></h3>
-                            <p class="game-card-meta-green">Added: <?= date('d M Y', strtotime($game['purchased_at'])) ?></p>
+                            <p class="game-card-meta-green mb-15">Added: <?= date('d M Y', strtotime($game['purchased_at'])) ?></p>
+                            
+                            <div class="mt-15">
+                                <?php if(!empty($game['game_file'])): ?>
+                                    <a href="/public/resources/downloads/<?= htmlspecialchars($game['game_file']) ?>" class="btn-primary btn-sm btn-block text-center" download onclick="event.stopPropagation();">
+                                        <i class="fa-solid fa-download"></i> Download
+                                    </a>
+                                <?php else: ?>
+                                    <button disabled class="btn-outline btn-sm btn-block btn-disabled" onclick="event.stopPropagation();">
+                                        <i class="fa-solid fa-ban"></i> Unavailable
+                                    </button>
+                                <?php endif; ?>
+                            </div>
                         </div>
-                    </a>
+                        
+                    </div>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
@@ -60,9 +81,17 @@
             <div class="game-grid">
                 <?php foreach($wishlist as $w_game): ?>
                     <a href="/game/<?= $w_game['game_id'] ?>" class="game-card">
+                        
                         <div class="game-card-image-wrapper">
                             <img src="/public/resources/covers/<?= htmlspecialchars($w_game['graphics'] ?? 'default.jpg'); ?>" alt="<?= htmlspecialchars($w_game['title']); ?>" loading="lazy">
+                            
+                            <?php if(!empty($w_game['game_file'])): ?>
+                                <span class="badge-status real"><i class="fa-solid fa-check"></i> Real</span>
+                            <?php else: ?>
+                                <span class="badge-status prototype"><i class="fa-solid fa-flask"></i> Prototype</span>
+                            <?php endif; ?>
                         </div>
+
                         <div class="game-card-content">
                             <div class="game-card-meta">
                                 <span class="game-card-category"><?= htmlspecialchars($w_game['category']); ?></span>

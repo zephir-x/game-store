@@ -8,7 +8,7 @@ class GameRepository extends Repository {
     // Retrieves all games from the database
     public function getGames(?string $searchString = null): array {
         $baseQuery = '
-            SELECT g.id, g.title, g.description, g.category, g.price, g.graphics, g.specification, g.developer, g.release_date,
+            SELECT g.id, g.title, g.description, g.category, g.price, g.graphics, g.specification, g.developer, g.release_date, g.game_file,
                    v.calculated_rating AS average_rating
             FROM games g
             LEFT JOIN v_game_statistics v ON g.id = v.game_id
@@ -45,7 +45,8 @@ class GameRepository extends Repository {
                 (float)($game['average_rating'] ?? 0),
                 $game['specification'],
                 $game['developer'], 
-                $game['release_date']
+                $game['release_date'],
+                $game['game_file'] ?? null
             );
         }
 
@@ -79,7 +80,8 @@ class GameRepository extends Repository {
             (float)($game['average_rating'] ?? 0),
             $game['specification'],
             $game['developer'],
-            $game['release_date']
+            $game['release_date'],
+            $game['game_file'] ?? null
         );
     }
 
@@ -192,8 +194,8 @@ class GameRepository extends Repository {
     // Adds a new game to the database
     public function addGame(Game $game): void {
         $stmt = $this->database->prepare('
-            INSERT INTO games (title, description, category, price, graphics, specification, developer, release_date)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO games (title, description, category, price, graphics, specification, developer, release_date, game_file)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ');
         $stmt->execute([
             $game->getTitle(),
@@ -203,7 +205,8 @@ class GameRepository extends Repository {
             $game->getGraphics(),
             $game->getSpecification(),
             $game->getDeveloper(),
-            $game->getReleaseDate()
+            $game->getReleaseDate(),
+            $game->getGameFile()
         ]);
     }
 
@@ -211,7 +214,7 @@ class GameRepository extends Repository {
     public function updateGame(Game $game): void {
         $stmt = $this->database->prepare('
             UPDATE games 
-            SET title = ?, description = ?, category = ?, price = ?, graphics = ?, specification = ?, developer = ?, release_date = ?
+            SET title = ?, description = ?, category = ?, price = ?, graphics = ?, specification = ?, developer = ?, release_date = ?, game_file = ?
             WHERE id = ?
         ');
         $stmt->execute([
@@ -223,6 +226,7 @@ class GameRepository extends Repository {
             $game->getSpecification(),
             $game->getDeveloper(),
             $game->getReleaseDate(),
+            $game->getGameFile(),
             $game->getId()
         ]);
     }
@@ -301,14 +305,15 @@ class GameRepository extends Repository {
             (float)($game['average_rating'] ?? 0),
             $game['specification'],
             $game['developer'],
-            $game['release_date']
+            $game['release_date'],
+            $game['game_file'] ?? null
         );
     }
 
     // Retrieves top 4 highly rated games based on rating, review count, and price
     public function getTopRatedGames(): array {
         $stmt = $this->database->prepare('
-            SELECT g.id, g.title, g.description, g.category, g.price, g.graphics, g.specification, g.developer, g.release_date,
+            SELECT g.id, g.title, g.description, g.category, g.price, g.graphics, g.specification, g.developer, g.release_date, g.game_file,
                    COALESCE(v.calculated_rating, 0.0) AS average_rating
             FROM games g
             LEFT JOIN v_game_statistics v ON g.id = v.game_id
@@ -332,7 +337,8 @@ class GameRepository extends Repository {
                 (float)$game['average_rating'],
                 $game['specification'],
                 $game['developer'], 
-                $game['release_date']
+                $game['release_date'],
+                $game['game_file'] ?? null
             );
         }
         return $result;
@@ -357,7 +363,8 @@ class GameRepository extends Repository {
                 (float)$game['average_rating'],
                 $game['specification'],
                 $game['developer'], 
-                $game['release_date']
+                $game['release_date'],
+                $game['game_file'] ?? null
             );
         }
 
