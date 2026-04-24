@@ -124,11 +124,11 @@
 
                     <div class="form-grid-2 mt-15">
                         <div class="form-group">
-                            <label>Developer</label>
+                            <label>Developer *</label>
                             <input type="text" name="developer" value="<?= $game ? htmlspecialchars($game->getDeveloper()) : '' ?>" class="form-input" placeholder="Studio name" required>
                         </div>
                         <div class="form-group">
-                            <label>Release Date</label>
+                            <label>Release Date *</label>
                             <?php 
                                 $minDate = $game ? $game->getReleaseDate() : date('Y-m-d'); 
                             ?>

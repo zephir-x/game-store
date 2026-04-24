@@ -360,45 +360,7 @@ input[type="date"].form-input::-webkit-calendar-picker-indicator {
 
 .lock-msg { font-size: 0.9rem; }
 
-/* ==========================================================================
-   DESKTOP NAVBAR FIX - Kuloodporny Flexbox 
-   ========================================================================== */
-@media (min-width: 769px) {
-    /* 1. Wrapper zajmuje całą wolną przestrzeń obok wyszukiwarki */
-    .nav-menu-wrapper {
-        display: flex !important;
-        flex: 1; /* Rozciąga się do końca ekranu */
-        max-height: none !important;
-        opacity: 1 !important;
-        overflow: visible !important;
-    }
-
-    /* 2. Wewnętrzny pojemnik ustawiamy poziomo */
-    .nav-menu-inner {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center;
-        width: 100%;
-        padding: 0 !important;
-        margin: 0 !important;
-        border: none !important;
-    }
-
-    /* 3. MAGIA: Linki wypychamy na IDEALNY środek */
-    .nav-links {
-        display: flex !important;
-        flex-direction: row !important;
-        gap: 30px;
-        margin-left: auto !important; /* Pcha od lewej */
-        margin-right: auto !important; /* Pcha od prawej - efekt: idealny środek! */
-    }
-
-    /* 4. Profil doklejamy twardo do prawej krawędzi */
-    .nav-user {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center;
-        gap: 15px;
-        margin-left: 0 !important;
-    }
+/*By default (on PC) we hide the mobile button */
+.mobile-download-btn {
+    display: none !important;
 }

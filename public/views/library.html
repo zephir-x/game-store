@@ -47,9 +47,14 @@
                             
                             <div class="mt-15">
                                 <?php if(!empty($game['game_file'])): ?>
-                                    <a href="/public/resources/downloads/<?= htmlspecialchars($game['game_file']) ?>" class="btn-primary btn-sm btn-block text-center" download onclick="event.stopPropagation();">
+                                    <a href="/public/resources/downloads/<?= htmlspecialchars($game['game_file']) ?>" class="btn-primary btn-sm btn-block text-center desktop-download-btn" download onclick="event.stopPropagation();">
                                         <i class="fa-solid fa-download"></i> Download
                                     </a>
+                                    
+                                    <button disabled class="btn-outline btn-sm btn-block btn-disabled mobile-download-btn" onclick="event.stopPropagation();">
+                                        <i class="fa-solid fa-desktop"></i> Download on PC
+                                    </button>
+
                                 <?php else: ?>
                                     <button disabled class="btn-outline btn-sm btn-block btn-disabled" onclick="event.stopPropagation();">
                                         <i class="fa-solid fa-ban"></i> Unavailable

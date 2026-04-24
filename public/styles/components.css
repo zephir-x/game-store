@@ -184,7 +184,7 @@
     position: absolute !important;
     bottom: 8px !important;
     right: 8px !important;
-    z-index: 10 !important;
+    z-index: 2;
     font-size: 0.7rem !important;
     padding: 4px 8px !important;
     border-radius: 4px !important;

@@ -573,4 +573,54 @@
     }
 
     #payment-modal-content .form-grid-2 button { width: 100% !important; }
+
+    /* 13. Download Buttons - Mobile-First Approach */
+    .desktop-download-btn { display: none !important; }
+    
+    .mobile-download-btn {
+        display: inline-flex !important;
+        width: 100%;
+        white-space: nowrap;
+        font-size: 0.75rem;
+    }
+}
+
+/* Desktop Navbar Fix */
+@media (min-width: 769px) {
+    /* Wrapper takes up all the free space next to the search engine */
+    .nav-menu-wrapper {
+        display: flex !important;
+        flex: 1;
+        max-height: none !important;
+        opacity: 1 !important;
+        overflow: visible !important;
+    }
+
+    /* Place the inner container horizontally */
+    .nav-menu-inner {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center;
+        width: 100%;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+    }
+
+    .nav-links {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 30px;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    /* We glue the profile firmly to the right edge */
+    .nav-user {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center;
+        gap: 15px;
+        margin-left: 0 !important;
+    }
 }
