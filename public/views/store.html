@@ -29,10 +29,6 @@
                         <div class="hero-content">
                             <span class="badge badge-featured"><i class="fa-solid fa-star"></i> Featured</span>
                             
-                            <?php if($featuredGame->isRealGame()): ?>
-                                <span class="badge badge-real-solid"><i class="fa-solid fa-check-circle"></i> Playable</span>
-                            <?php endif; ?>
-                            
                             <h1 class="hero-title"><?= htmlspecialchars($featuredGame->getTitle()); ?></h1>
                             <p class="hero-description"><?= htmlspecialchars($featuredGame->getDescription()); ?></p>
                             <div class="hero-actions">

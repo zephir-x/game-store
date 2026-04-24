@@ -64,6 +64,13 @@ class AdminController extends AppController {
             $users = $this->userRepository->getAllUsersFiltered($currentUserId, $userFilters, $sort, $dir);
         }
 
+        // Security: We filter out the Super Admin (ID: 1) and the currently logged-in admin from the users list
+        $users = array_filter($users, function($user) use ($currentUserId) {
+            return $user['id'] !== 1 && $user['id'] !== $currentUserId;
+        });
+        
+        $users = array_values($users);
+
         // Fetch current featured game and a lightweight list of all games for the dropdown
         $featuredGame = $this->gameRepository->getFeaturedGame();
         $allGamesList = $this->gameRepository->getGameStatistics();
@@ -151,6 +158,12 @@ class AdminController extends AppController {
             $userId = (int)$_POST['user_id'];
             $newRole = $_POST['role'];
             
+            if ($userId === 1) {
+                $_SESSION['error_message'] = "Action denied: You cannot modify the privileges of the Super Administrator!";
+                header("Location: /admin");
+                exit();
+            }
+
             // Security: Admin cannot change role to himself
             if ($userId !== $_SESSION['user_id'] && in_array($newRole, ['USER', 'ADMIN'])) {
                 $this->userRepository->updateUserRole($userId, $newRole);
@@ -166,8 +179,8 @@ class AdminController extends AppController {
         if ($this->isPost() && isset($_POST['user_id'])) {
             $userIdToDelete = (int)$_POST['user_id'];
             
-            // Security: Admin cannot delete himself
-            if ($userIdToDelete !== $_SESSION['user_id']) {
+            // Security: Admin cannot delete himself and cannot delete the Super Admin (ID: 1)
+            if ($userIdToDelete !== $_SESSION['user_id'] && $userIdToDelete !== 1) {
                 $this->userRepository->deleteUser($userIdToDelete);
             }
         }

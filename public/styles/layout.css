@@ -176,6 +176,8 @@
     align-items: center;
     padding: 20px 40px;
     position: absolute;
+    width: 100%;
+    box-sizing: border-box;
     top: 0;
     left: 0;
     right: 0;

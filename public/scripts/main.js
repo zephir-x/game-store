@@ -15,8 +15,8 @@ function initDynamicContent() {
     utils.setupLoadMore('load-more-reviews-btn', '.review-card', 'hidden-review', 3);
 
     // Admin: Users and Games (3 at a time)
-    utils.setupLoadMore('load-more-users-btn', '.admin-table-row', 'hidden-admin-row', 3);
-    utils.setupLoadMore('load-more-admin-games-btn', '.admin-table-row', 'hidden-admin-row', 3);
+    utils.setupLoadMore('load-more-users-btn', '.user-row', 'hidden-admin-row', 3);
+utils.setupLoadMore('load-more-admin-games-btn', '.game-row', 'hidden-admin-row', 3);
 
     filters.restoreState();
 }
