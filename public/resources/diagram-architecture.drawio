@@ -1,0 +1,136 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 OPR/130.0.0.0">
+  <diagram name="Strona-1" id="8f_3Oj3vj5kYm7Bgx5se">
+    <mxGraphModel dx="2111" dy="1162" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-26" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#bac8d3;strokeColor=#23445d;" value="" vertex="1">
+          <mxGeometry height="1350" width="1350" x="114.5" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-1" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;fontStyle=1;spacingRight=650;spacingTop=-600;" value="DOCKER ENVIRONMENT" vertex="1">
+          <mxGeometry height="861" width="999" x="290" y="486.5" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-2" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" value="Warstwa Danych" vertex="1">
+          <mxGeometry height="128" width="185" x="330" y="1182" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-3" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#e51400;strokeColor=#B20000;fontColor=#ffffff;spacingRight=-220;spacingTop=-300;fontStyle=1" value="PHP MVC APPLICATION LAYER" vertex="1">
+          <mxGeometry height="609" width="695" x="535" y="701" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-4" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;align=right;spacingRight=20;spacing=3;fontStyle=1" value="HTTP SERVER LAYER" vertex="1">
+          <mxGeometry height="128" width="499" x="650" y="499" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-5" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#60a917;strokeColor=#2D7600;fontColor=#ffffff;spacingRight=-450;fontStyle=1" value="CUSTOMER LAYER" vertex="1">
+          <mxGeometry height="330" width="698" x="591" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-6" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#008a00;strokeColor=#005700;fontColor=#ffffff;fontStyle=1" value="Browser (HTML5, CSS3, JS)" vertex="1">
+          <mxGeometry height="78" width="260" x="776" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-7" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#008a00;strokeColor=#005700;fontColor=#ffffff;fontStyle=1" value="Fetch API (Asynchronous Requests)" vertex="1">
+          <mxGeometry height="78" width="260" x="737" y="297" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-8" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;fontStyle=1" value="Nginx (Reverse Proxy / Port 80)" vertex="1">
+          <mxGeometry height="78" width="260" x="689" y="524" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-9" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#fa6800;strokeColor=#C73500;fontColor=#000000;fontStyle=1" value="Routing.php (Front Controller)" vertex="1">
+          <mxGeometry height="78" width="260" x="621" y="726" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-10" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#fa6800;strokeColor=#C73500;fontColor=#000000;fontStyle=1" value="Controllers (e.g. StoreController)" vertex="1">
+          <mxGeometry height="78" width="260" x="621" y="878" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-11" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#fa6800;strokeColor=#C73500;fontColor=#000000;fontStyle=1" value="Repositories (Repository Pattern)" vertex="1">
+          <mxGeometry height="78" width="260" x="618" y="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-12" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#fa6800;strokeColor=#C73500;fontColor=#000000;fontStyle=1" value="Models (Domain Objects)" vertex="1">
+          <mxGeometry height="78" width="260" x="775" y="1207" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-13" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#fa6800;strokeColor=#C73500;fontColor=#000000;fontStyle=1" value="Views (.html files / Rendering)" vertex="1">
+          <mxGeometry height="78" width="260" x="931" y="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-14" parent="1" style="shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;strokeWidth=2;whiteSpace=wrap;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;fontStyle=1" value="PostgreSQL 16" vertex="1">
+          <mxGeometry height="75" width="115" x="365" y="1209" as="geometry" />
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-15" edge="1" parent="1" source="b74OpbtnLakRBU2lhRoJ-6" style="curved=1;startArrow=none;endArrow=block;exitX=0;exitY=1;entryX=0.11;entryY=0;rounded=0;fillColor=#60a917;strokeColor=#2D7600;" target="b74OpbtnLakRBU2lhRoJ-8" value="HTTP Request">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="652" y="260" />
+              <mxPoint x="652" y="499" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-16" edge="1" parent="1" source="b74OpbtnLakRBU2lhRoJ-6" style="curved=1;startArrow=none;endArrow=block;exitX=0.42;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="b74OpbtnLakRBU2lhRoJ-7" value="AJAX/JSON">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="867" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-17" edge="1" parent="1" source="b74OpbtnLakRBU2lhRoJ-7" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.61;entryY=0;rounded=0;" target="b74OpbtnLakRBU2lhRoJ-8" value="HTTP Request">
+          <mxGeometry relative="1" x="-0.4218" y="3" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="867" y="499" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-18" edge="1" parent="1" source="b74OpbtnLakRBU2lhRoJ-8" style="curved=1;startArrow=none;endArrow=block;exitX=0.34;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="b74OpbtnLakRBU2lhRoJ-9" value="Forwarding the request">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="751" y="627" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-19" edge="1" parent="1" source="b74OpbtnLakRBU2lhRoJ-9" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="b74OpbtnLakRBU2lhRoJ-10" value="Initialization">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-20" edge="1" parent="1" source="b74OpbtnLakRBU2lhRoJ-10" style="curved=1;startArrow=none;endArrow=block;exitX=0.49;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="b74OpbtnLakRBU2lhRoJ-11" value="Downloading data">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="748" y="993" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-21" edge="1" parent="1" source="b74OpbtnLakRBU2lhRoJ-11" style="curved=1;startArrow=none;endArrow=block;exitX=0.81;exitY=1;entryX=0.5;entryY=0;rounded=0;" target="b74OpbtnLakRBU2lhRoJ-12" value="Creating objects">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="905" y="1145" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-22" edge="1" parent="1" source="b74OpbtnLakRBU2lhRoJ-11" style="curved=1;startArrow=block;endArrow=block;exitX=0.34;exitY=1;entryX=1;entryY=0.29;rounded=0;" target="b74OpbtnLakRBU2lhRoJ-14" value="SQL / PDO queries">
+          <mxGeometry relative="1" x="0.0021" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="665" y="1145" />
+              <mxPoint x="665" y="1182" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-23" edge="1" parent="1" source="b74OpbtnLakRBU2lhRoJ-10" style="curved=1;startArrow=none;endArrow=block;exitX=0.95;exitY=1;entryX=0.34;entryY=0;rounded=0;" target="b74OpbtnLakRBU2lhRoJ-13" value="Data transfer">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="981" y="993" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-24" edge="1" parent="1" source="b74OpbtnLakRBU2lhRoJ-13" style="curved=1;startArrow=none;endArrow=block;exitX=0.59;exitY=0;entryX=1;entryY=0.87;rounded=0;" target="b74OpbtnLakRBU2lhRoJ-8" value="Returning HTML">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1108" y="993" />
+              <mxPoint x="1108" y="627" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b74OpbtnLakRBU2lhRoJ-25" edge="1" parent="1" source="b74OpbtnLakRBU2lhRoJ-8" style="curved=1;startArrow=none;endArrow=block;exitX=1;exitY=0.1;entryX=0.85;entryY=1;rounded=0;" target="b74OpbtnLakRBU2lhRoJ-6" value="HTTP Response">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1085" y="499" />
+              <mxPoint x="1085" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
