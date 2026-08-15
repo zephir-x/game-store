@@ -5,7 +5,8 @@ ENV RUN_DEPS \
     libzip \
     libpng \
     libjpeg-turbo \
-    postgresql-libs
+    postgresql-libs \
+    postgresql-client
 
 ENV BUILD_DEPS \
     zlib-dev \
