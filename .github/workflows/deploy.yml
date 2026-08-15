@@ -1,0 +1,53 @@
+name: Build and Deploy GameNest
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  ACR_NAME: "acrmthubdev"
+  RG_NAME: "rg-mthub-dev"
+  APP_NAME: "app-gamenest-dev"
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to Azure via Managed Identity
+        run: az login --identity
+
+      - name: Login to Azure Container Registry
+        run: az acr login --name ${{ env.ACR_NAME }}
+
+      # --- Build Images ---
+      - name: Build and Push PHP Image
+        run: |
+          docker build -t ${{ env.ACR_NAME }}.azurecr.io/gamenest-php:${{ github.sha }} -f ./docker/php/Dockerfile .
+          docker push ${{ env.ACR_NAME }}.azurecr.io/gamenest-php:${{ github.sha }}
+
+      - name: Build and Push Nginx Image
+        run: |
+          docker build -t ${{ env.ACR_NAME }}.azurecr.io/gamenest-nginx:${{ github.sha }} -f ./docker/nginx/Dockerfile .
+          docker push ${{ env.ACR_NAME }}.azurecr.io/gamenest-nginx:${{ github.sha }}
+
+      # --- Deploy ---
+      - name: Deploy GameNest PHP to Container Apps
+        run: |
+          az containerapp update \
+            --name ${{ env.APP_NAME }} \
+            --resource-group ${{ env.RG_NAME }} \
+            --container-name php \
+            --image ${{ env.ACR_NAME }}.azurecr.io/gamenest-php:${{ github.sha }}
+
+      - name: Deploy GameNest Nginx to Container Apps
+        run: |
+          az containerapp update \
+            --name ${{ env.APP_NAME }} \
+            --resource-group ${{ env.RG_NAME }} \
+            --container-name nginx \
+            --image ${{ env.ACR_NAME }}.azurecr.io/gamenest-nginx:${{ github.sha }}
