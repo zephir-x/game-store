@@ -16,7 +16,7 @@ if [ -n "$DB_HOST" ] && [ -n "$DB_NAME" ] && [ -n "$DB_USER" ]; then
     
     if [ -z "$TABLE_EXISTS" ] || [ "$TABLE_EXISTS" = "" ]; then
         echo "Database is empty. Importing structure and data from init.sql..."
-        PGPASSWORD="$DB_PASS" psql -h "$DB_HOST" -p "${DB_PORT:-5432}" -U "$DB_USER" -d "$DB_NAME" -f /app/db/init/init.sql
+        PGPASSWORD="$DB_PASS" psql -h "$DB_HOST" -p "${DB_PORT:-5432}" -U "$DB_USER" -d "$DB_NAME" -f /app/docker/db/init/init.sql
         echo "Database initialization completed successfully."
     else
         echo "Database is already initialized."
