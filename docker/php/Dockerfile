@@ -41,7 +41,7 @@ WORKDIR /app
 
 # Added entrypoint script to support dynamic .env creation
 COPY docker/php/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["sh", "/entrypoint.sh"]
 CMD ["php-fpm"]
