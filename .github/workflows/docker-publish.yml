@@ -1,0 +1,45 @@
+name: Build and Publish GameNest
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare GHCR Registry Names
+        run: echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push PHP App
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./docker/php/Dockerfile
+          push: true
+          tags: ghcr.io/${{ env.OWNER_LC }}/gamenest-php:latest
+
+      - name: Build and push Nginx
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./docker/nginx/Dockerfile
+          push: true
+          tags: ghcr.io/${{ env.OWNER_LC }}/gamenest-nginx:latest
