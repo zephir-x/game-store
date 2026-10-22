@@ -31,8 +31,8 @@ RUN apk add --no-cache --virtual .build-deps $BUILD_DEPS \
 RUN apk add --no-cache --virtual .run-deps $RUN_DEPS
 
 RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini; \
-    echo 'upload_max_filesize = 50M' >> /usr/local/etc/php/conf.d/uploads.ini; \
-    echo 'post_max_size = 50M' >> /usr/local/etc/php/conf.d/uploads.ini;
+    echo 'upload_max_filesize = 100M' >> /usr/local/etc/php/conf.d/uploads.ini; \
+    echo 'post_max_size = 100M' >> /usr/local/etc/php/conf.d/uploads.ini;
 
 COPY . /app
 
@@ -46,3 +46,7 @@ RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["sh", "/entrypoint.sh"]
 CMD ["php-fpm"]
+
+# Creating folders and setting permissions for uploaded files
+RUN mkdir -p /app/public/resources/covers /app/public/resources/downloads \
+    && chown -R www-data:www-data /app/public/resources

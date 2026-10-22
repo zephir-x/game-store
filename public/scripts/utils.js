@@ -30,10 +30,10 @@ export function initFileSizeProtection() {
     const fileInputs = document.querySelectorAll('input[type="file"]');
     fileInputs.forEach(input => {
         input.addEventListener('change', function() {
-            const maxSize = 50 * 1024 * 1024; // limit 50MB
+            const maxSize = 100 * 1024 * 1024; // limit 100MB
             if (this.files && this.files[0]) {
                 if (this.files[0].size > maxSize) {
-                    alert('File is too large! Maximum allowed size is 50MB.');
+                    alert('File is too large! Maximum allowed size is 100MB.');
                     this.value = ''; // clears the selected file
                 }
             }
